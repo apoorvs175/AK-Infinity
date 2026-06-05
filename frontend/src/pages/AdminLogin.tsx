@@ -15,7 +15,7 @@ export default function AdminLogin() {
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>()
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (_data: LoginFormData) => {
     setIsLoading(true)
     // Simulate login
     setTimeout(() => {

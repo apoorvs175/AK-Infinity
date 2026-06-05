@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, LogOut, Trash2, Search, Filter } from 'lucide-react'
-import Button from '../components/Button'
+import { LayoutDashboard, Users, LogOut, Trash2, Search } from 'lucide-react'
 
 interface Lead {
   id: string

@@ -1,5 +1,5 @@
 import { motion, useAnimation, useInView } from 'framer-motion'
-import { Users, Award, Check, Shield, FileCheck, Building, Clock, Zap, MessageCircle, Star, CheckCircle } from 'lucide-react'
+import { Award, Check, Shield, FileCheck, Building, Clock, Zap, MessageCircle, Star, CheckCircle } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
@@ -39,7 +39,6 @@ const AnimatedCounter = ({ to }: { to: number | string }) => {
       return
     }
 
-    let start = 0
     const duration = 1500
     const startTime = performance.now()
 

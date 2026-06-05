@@ -3,17 +3,13 @@ import { motion } from 'framer-motion'
 import {
   ArrowRight,
   Check,
-  Users,
-  Zap,
   Shield,
   Award,
-  TrendingUp,
   Code2,
   Layers,
   Cpu,
   Globe,
   MessageSquare,
-  ChevronRight,
   Star,
   Building,
   FileCheck
@@ -61,12 +57,7 @@ const services = [
   }
 ]
 
-const stats = [
-  { number: '500+', label: 'Projects Delivered', icon: <Zap className="w-6 h-6" /> },
-  { number: '200+', label: 'Happy Clients', icon: <Users className="w-6 h-6" /> },
-  { number: '10+', label: 'Years Experience', icon: <Award className="w-6 h-6" /> },
-  { number: '98%', label: 'Client Satisfaction', icon: <TrendingUp className="w-6 h-6" /> }
-]
+
 
 const testimonials = [
   {

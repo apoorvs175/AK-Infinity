@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Check, Clock, Building, Globe, Smartphone, ShieldCheck, Award, Shield, Zap, Calendar } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Check, Clock, Building, Globe, Smartphone, ShieldCheck, Award, Shield, Zap } from 'lucide-react'
 import Button from '../components/Button'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'

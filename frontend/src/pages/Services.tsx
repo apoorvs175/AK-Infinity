@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
-import { Check, ChevronRight, Search, Layers, Code2, Smartphone, Cloud, Zap, ArrowRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Check, ChevronRight } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
