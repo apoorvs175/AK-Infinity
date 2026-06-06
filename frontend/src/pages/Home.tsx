@@ -61,22 +61,22 @@ const services = [
 
 const testimonials = [
   {
-    name: 'Sarah Johnson',
-    role: 'CEO, TechCorp',
-    content: 'AK Infinity transformed our business with an incredible digital solution. Their team is professional, responsive, and truly understands enterprise needs.',
-    initial: 'SJ'
+    name: 'Amandeep Singh',
+    role: 'Founder, ZynPay Product',
+    content: 'AK Infinity developed our digital payments and gift card platform exactly as we envisioned. The team delivered a fast, secure, and user-friendly solution with excellent attention to detail. Their professionalism and technical expertise made the entire process smooth and efficient.',
+    initial: 'AS'
   },
   {
-    name: 'Michael Chen',
-    role: 'CTO, Innovate Inc',
-    content: 'Working with AK Infinity was a game-changer. They delivered a scalable platform that exceeded our expectations.',
-    initial: 'MC'
+    name: 'Sharda University',
+    role: 'Academic Innovation Department',
+    content: 'The CodeX Platform developed by AK Infinity has significantly improved the coding and assessment experience for our students. Features such as AI-assisted evaluation, proctor mode, and a modern coding environment have added tremendous value to our academic ecosystem.',
+    initial: 'SU'
   },
   {
-    name: 'Emily Rodriguez',
-    role: 'Founder, StartupX',
-    content: 'From concept to launch, AK Infinity guided us every step of the way. The final product is beyond what we imagined.',
-    initial: 'ER'
+    name: 'Daniel Thompson',
+    role: 'Operations Director, Workforce Connect Ltd.',
+    content: 'AK Infinity built a highly efficient workforce management platform that connects skilled labour with employers seamlessly. The system is intuitive, reliable, and has streamlined our hiring and workforce coordination process. We are extremely satisfied with the results.',
+    initial: 'DT'
   }
 ]
 
