@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Check, Clock, Building, Globe, Smartphone, ShieldCheck, Award, Shield, Zap } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Check, Clock, Building, Globe, Smartphone, ShieldCheck, Shield, Zap } from 'lucide-react'
 import Button from '../components/Button'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import GovtLogo from '../assets/govt of india logo.png'
+import MsmeLogo from '../assets/msme logo.png'
+import UdyamLogo from '../assets/Udyam Logo.png'
+import FourthLogo from '../assets/fourth logo.png'
 
 // Fix Leaflet marker icon issue and create custom gold marker
 delete (L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: string })._getIconUrl
@@ -171,16 +175,26 @@ export default function Contact() {
           >
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               {[
-                { icon: <Award className="w-6 h-6" />, text: "Government of India Registered" },
-                { icon: <Shield className="w-6 h-6" />, text: "MSME Registered Enterprise" },
-                { icon: <ShieldCheck className="w-6 h-6" />, text: "Udyam Certified Business" },
-                { icon: <Building className="w-6 h-6" />, text: "Registered Since 2024" }
+                { logo: GovtLogo, text: "Government of India Registered" },
+                { logo: MsmeLogo, text: "MSME Registered Enterprise" },
+                { logo: UdyamLogo, text: "Udyam Certified Business" },
+                { logo: FourthLogo, text: "Government Officials Registered" }
               ].map((badge, index) => (
-                <motion.div key={index} variants={fadeInUp} className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gold-primary/25 to-gold-deep/15 border border-gold-primary/20 rounded-xl flex items-center justify-center text-gold-primary">
-                    {badge.icon}
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex flex-col items-center gap-3 p-5 bg-bg-card border-2 border-gold-primary/25 rounded-2xl hover:border-gold-primary/70 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)] transition-all duration-300"
+                >
+                  <div
+                    className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
+                      index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
+                    } w-60 h-24`}
+                  >
+                    <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
                   </div>
-                  <span className="font-semibold text-text-primary">{badge.text}</span>
+                  <span className="font-semibold text-text-primary text-center text-sm leading-tight">{badge.text}</span>
                 </motion.div>
               ))}
             </div>

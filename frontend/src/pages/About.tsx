@@ -1,8 +1,12 @@
 import { motion, useAnimation, useInView } from 'framer-motion'
-import { Award, Check, Shield, FileCheck, Building, Clock, Zap, MessageCircle, Star, CheckCircle } from 'lucide-react'
+import { Check, Shield, Clock, Zap, MessageCircle, Star, CheckCircle } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
+import GovtLogo from '../assets/govt of india logo.png'
+import MsmeLogo from '../assets/msme logo.png'
+import UdyamLogo from '../assets/Udyam Logo.png'
+import FourthLogo from '../assets/fourth logo.png'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -217,20 +221,26 @@ export default function About() {
 
             <motion.div variants={fadeInUp} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
               {[
-                { icon: <Shield className="w-7 h-7" />, text: "MSME Registered Enterprise" },
-                { icon: <FileCheck className="w-7 h-7" />, text: "Udyam Certified" },
-                { icon: <Building className="w-7 h-7" />, text: "Micro Enterprise" },
-                { icon: <Award className="w-7 h-7" />, text: "Registered Since 2024" }
-              ].map((item, idx) => (
+                { logo: GovtLogo, text: "Government of India Registered" },
+                { logo: MsmeLogo, text: "MSME Registered Enterprise" },
+                { logo: UdyamLogo, text: "Udyam Certified Business" },
+                { logo: FourthLogo, text: "Government Officials Registered" }
+              ].map((badge, index) => (
                 <motion.div
-                  key={idx}
-                  whileHover={{ y: -4 }}
-                  className="flex items-center gap-4 p-6 bg-bg-card border border-border-primary rounded-2xl hover:border-gold-primary/30 hover:shadow-xl transition-all duration-300"
+                  key={index}
+                  variants={fadeInUp}
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex flex-col items-center gap-3 p-5 bg-bg-card border-2 border-gold-primary/25 rounded-2xl hover:border-gold-primary/70 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)] transition-all duration-300"
                 >
-                  <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold-primary/25 to-gold-deep/15 border border-gold-primary/20 rounded-xl flex items-center justify-center text-gold-primary">
-                    {item.icon}
+                  <div
+                    className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
+                      index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
+                    } w-60 h-24`}
+                  >
+                    <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
                   </div>
-                  <span className="font-semibold text-text-primary text-lg">{item.text}</span>
+                  <span className="font-semibold text-text-primary text-center text-sm leading-tight">{badge.text}</span>
                 </motion.div>
               ))}
             </motion.div>

@@ -11,10 +11,17 @@ import {
   Globe,
   MessageSquare,
   Star,
-  Building,
+  StarHalf,
   FileCheck
 } from 'lucide-react'
 import Button from '../components/Button'
+import ZynpayLogo from '../assets/Zynpay product.png'
+import ShardaLogo from '../assets/Sharda.png'
+import WorkforceLogo from '../assets/Daily wages Workforce.png'
+import GovtLogo from '../assets/govt of india logo.png'
+import MsmeLogo from '../assets/msme logo.png'
+import UdyamLogo from '../assets/Udyam Logo.png'
+import FourthLogo from '../assets/fourth logo.png'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -61,22 +68,28 @@ const services = [
 
 const testimonials = [
   {
-    name: 'Amandeep Singh',
-    role: 'Founder, ZynPay Product',
+    name: 'Aman Pratap Singh',
+    role: 'Founder & CEO, ZynPay Product',
     content: 'AK Infinity developed our digital payments and gift card platform exactly as we envisioned. The team delivered a fast, secure, and user-friendly solution with excellent attention to detail. Their professionalism and technical expertise made the entire process smooth and efficient.',
-    initial: 'AS'
+    initial: 'APS',
+    rating: 4,
+    logo: ZynpayLogo
   },
   {
     name: 'Sharda University',
-    role: 'Academic Innovation Department',
+    role: 'Sharda Launchpad',
     content: 'The CodeX Platform developed by AK Infinity has significantly improved the coding and assessment experience for our students. Features such as AI-assisted evaluation, proctor mode, and a modern coding environment have added tremendous value to our academic ecosystem.',
-    initial: 'SU'
+    initial: 'SL',
+    rating: 5,
+    logo: ShardaLogo
   },
   {
     name: 'Daniel Thompson',
     role: 'Operations Director, Workforce Connect Ltd.',
     content: 'AK Infinity built a highly efficient workforce management platform that connects skilled labour with employers seamlessly. The system is intuitive, reliable, and has streamlined our hiring and workforce coordination process. We are extremely satisfied with the results.',
-    initial: 'DT'
+    initial: 'DT',
+    rating: 4.5,
+    logo: WorkforceLogo
   }
 ]
 
@@ -181,10 +194,10 @@ export default function Home() {
 
             <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-6">
               {[
-                { icon: <Award className="w-6 h-6" />, text: "Government of India Registered" },
-                { icon: <Shield className="w-6 h-6" />, text: "MSME Registered Enterprise" },
-                { icon: <FileCheck className="w-6 h-6" />, text: "Udyam Certified Business" },
-                { icon: <Building className="w-6 h-6" />, text: "Registered Since 2024" }
+                { logo: GovtLogo, text: "Government of India Registered" },
+                { logo: MsmeLogo, text: "MSME Registered Enterprise" },
+                { logo: UdyamLogo, text: "Udyam Certified Business" },
+                { logo: FourthLogo, text: "Government Officials Registered" }
               ].map((badge, index) => (
                 <motion.div
                   key={index}
@@ -193,13 +206,12 @@ export default function Home() {
                   whileTap={{ scale: 0.97 }}
                   className="flex flex-col items-center gap-3 p-5 bg-bg-card border-2 border-gold-primary/25 rounded-2xl hover:border-gold-primary/70 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)] transition-all duration-300"
                 >
-                  <motion.div
-                    animate={{ rotate: [0, -3, 3, -3, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: index * 0.3, repeatDelay: 3 }}
-                    className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold-primary to-gold-deep rounded-2xl flex items-center justify-center text-white shadow-md"
-                  >
-                    {badge.icon}
-                  </motion.div>
+                  <div
+                    className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
+                      index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
+                    } w-60 h-24`}>
+                    <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
+                  </div>
                   <span className="font-semibold text-text-primary text-center text-sm leading-tight">{badge.text}</span>
                 </motion.div>
               ))}
@@ -397,22 +409,48 @@ export default function Home() {
                 className="bg-bg-card border border-border-primary rounded-3xl p-10 hover:border-gold-primary/30 transition-all duration-300"
               >
                 <div className="flex items-center gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className="w-5 h-5 text-gold-primary fill-gold-primary"
-                    />
-                  ))}
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    if (star <= Math.floor(testimonial.rating)) {
+                      return (
+                        <Star
+                          key={star}
+                          className="w-5 h-5 text-gold-primary fill-gold-primary"
+                        />
+                      );
+                    } else if (star - testimonial.rating === 0.5) {
+                      return (
+                        <StarHalf
+                          key={star}
+                          className="w-5 h-5 text-gold-primary fill-gold-primary"
+                        />
+                      );
+                    } else {
+                      return (
+                        <Star
+                          key={star}
+                          className="w-5 h-5 text-gray-400"
+                        />
+                      );
+                    }
+                  })}
                 </div>
                 <p className="text-text-secondary text-lg mb-8 leading-relaxed">
                   "{testimonial.content}"
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary font-semibold">
-                    {testimonial.initial}
+                  <div className={`w-20 h-20 border border-border-primary rounded-full flex items-center justify-center overflow-hidden ${index === 2 ? 'bg-[#2b2a28] border-none' : 'bg-bg-secondary'}`}>
+                    {testimonial.logo ? (
+                      <img
+                        src={testimonial.logo}
+                        alt={`${testimonial.name} logo`}
+                        className={`${index === 2 ? 'w-[110%] h-[110%]' : 'w-full h-full'} object-contain`}
+                      />
+                    ) : (
+                      <span className="text-gold-primary font-semibold">{testimonial.initial}</span>
+                    )}
                   </div>
                   <div>
-                    <p className="font-semibold text-text-primary">{testimonial.name}</p>
+                    <p className="font-semibold text-lg text-text-primary">{testimonial.name}</p>
                     <p className="text-sm text-text-muted">{testimonial.role}</p>
                   </div>
                 </div>
