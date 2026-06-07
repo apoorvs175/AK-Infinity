@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Responsive Fixes */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Custom scrollbar for premium feel */
 ::-webkit-scrollbar {
   width: 8px;

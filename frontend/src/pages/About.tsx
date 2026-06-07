@@ -119,10 +119,10 @@ export default function About() {
               <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
                 About Us
               </span>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-text-primary mb-6 md:mb-8">
                 Building the Future Together
               </h1>
-              <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
                 We are a team of passionate experts dedicated to delivering premium digital solutions that drive real business growth and innovation.
               </p>
             </motion.div>
@@ -236,7 +236,7 @@ export default function About() {
                   <div
                     className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
                       index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
-                    } w-60 h-24`}
+                    } w-full max-w-40 sm:max-w-52 md:max-w-60 h-14 sm:h-20 md:h-24`}
                   >
                     <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
                   </div>

@@ -83,15 +83,15 @@ export default function Header() {
               </motion.div>
             ))}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: navLinks.length * 0.1 }}
-              className="ml-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: navLinks.length * 0.1 }}
+            className="ml-4 md:ml-6"
+          >
+            <Link
+              to="/contact"
+              className="group relative inline-flex items-center gap-2 px-6 md:px-10 py-2.5 md:py-3.5 bg-gradient-to-r from-gold-primary to-gold-deep text-bg-primary rounded-full font-semibold text-sm md:text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(244,197,66,0.4)] hover:scale-105"
             >
-              <Link
-                to="/contact"
-                className="group relative inline-flex items-center gap-2 px-10 py-3.5 bg-gradient-to-r from-gold-primary to-gold-deep text-bg-primary rounded-full font-semibold text-base transition-all duration-300 hover:shadow-[0_0_30px_rgba(244,197,66,0.4)] hover:scale-105"
-              >
                 <span className="relative z-10">Get Started</span>
                 <ChevronRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
                 <div className="absolute inset-0 bg-gradient-to-r from-gold-hover to-gold-primary rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

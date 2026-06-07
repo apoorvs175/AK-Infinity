@@ -104,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-24 md:pt-40 md:pb-32">
+      <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -124,7 +124,7 @@ export default function Home() {
 
             <motion.h1
               variants={fadeInUp}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary mb-8 leading-[1.05] tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-text-primary mb-6 md:mb-8 leading-[1.05] tracking-tight"
             >
               Building the Future
               <span className="block bg-gradient-to-r from-gold-primary to-gold-deep bg-clip-text text-transparent">One Project at a Time</span>
@@ -209,7 +209,7 @@ export default function Home() {
                   <div
                     className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
                       index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
-                    } w-60 h-24`}>
+                    } w-full max-w-40 sm:max-w-52 md:max-w-60 h-16 sm:h-20 md:h-24`}>
                     <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
                   </div>
                   <span className="font-semibold text-text-primary text-center text-sm leading-tight">{badge.text}</span>
@@ -266,24 +266,24 @@ export default function Home() {
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -8 }}
-                className="group bg-bg-card border border-border-primary rounded-3xl p-10 hover:border-gold-primary/30 hover:shadow-[0_0_40px_rgba(244,197,66,0.1)] transition-all duration-500"
+                className="group bg-bg-card border border-border-primary rounded-3xl p-6 md:p-8 lg:p-10 hover:border-gold-primary/30 hover:shadow-[0_0_40px_rgba(244,197,66,0.1)] transition-all duration-500"
               >
-                <div className="flex items-start gap-6">
-                  <div className="flex-shrink-0 w-16 h-16 bg-bg-secondary border border-border-primary rounded-2xl flex items-center justify-center group-hover:border-gold-primary/50 group-hover:shadow-[0_0_20px_rgba(244,197,66,0.2)] transition-all duration-300">
+                <div className="flex items-start gap-4 md:gap-6">
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-bg-secondary border border-border-primary rounded-2xl flex items-center justify-center group-hover:border-gold-primary/50 group-hover:shadow-[0_0_20px_rgba(244,197,66,0.2)] transition-all duration-300">
                     {service.icon}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-text-primary mb-3 group-hover:text-gold-primary transition-colors duration-300">
+                    <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary mb-2 md:mb-3 group-hover:text-gold-primary transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-text-secondary mb-6 leading-relaxed">
+                    <p className="text-text-secondary mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
                       {service.description}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {service.features.map((feature, idx) => (
                         <span
                           key={idx}
-                          className="px-4 py-2 bg-bg-secondary border border-border-primary text-text-secondary rounded-full text-sm font-medium"
+                          className="px-3 py-1.5 md:px-4 md:py-2 bg-bg-secondary border border-border-primary text-text-secondary rounded-full text-xs md:text-sm font-medium"
                         >
                           {feature}
                         </span>

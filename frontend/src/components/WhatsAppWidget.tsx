@@ -12,7 +12,7 @@ export default function WhatsAppWidget() {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-8 right-8 z-50"
+      className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50"
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -27,14 +27,15 @@ export default function WhatsAppWidget() {
           style={{ backgroundColor: '#25D366' }}
         />
         <div 
-          className="relative w-16 h-16 rounded-full flex items-center justify-center"
+          className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center"
           style={{ backgroundColor: '#25D366' }}
         >
           {/* Official WhatsApp SVG Logo (Pixel Perfect) */}
           <svg 
             viewBox="0 0 24 24" 
-            width="32" 
-            height="32" 
+            width="28" 
+            height="28" 
+            className="sm:w-8 sm:h-8"
             fill="white"
             xmlns="http://www.w3.org/2000/svg"
           >

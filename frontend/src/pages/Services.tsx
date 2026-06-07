@@ -235,7 +235,7 @@ export default function Services() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20">
+      <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -246,10 +246,10 @@ export default function Services() {
             <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
               Our Services
             </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-text-primary mb-6 md:mb-8">
               Your Digital Journey
             </h1>
-            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
               A connected, visual journey of premium services designed to transform your vision into reality.
             </p>
           </motion.div>
