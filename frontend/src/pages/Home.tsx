@@ -192,7 +192,7 @@ export default function Home() {
               </span>
             </motion.div>
 
-            <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-6">
+            <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {[
                 { logo: GovtLogo, text: "Government of India Registered" },
                 { logo: MsmeLogo, text: "MSME Registered Enterprise" },
@@ -204,15 +204,15 @@ export default function Home() {
                   variants={fadeInUp}
                   whileHover={{ y: -6, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex flex-col items-center gap-3 p-5 bg-bg-card border-2 border-gold-primary/25 rounded-2xl hover:border-gold-primary/70 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)] transition-all duration-300"
+                  className="flex flex-col items-center gap-2 p-4 bg-bg-card border-2 border-gold-primary/25 rounded-2xl hover:border-gold-primary/70 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)] transition-all duration-300"
                 >
                   <div
                     className={`flex-shrink-0 rounded-2xl flex items-center justify-center shadow-md overflow-hidden ${
                       index === 2 ? 'bg-white border border-gray-100' : 'bg-transparent border-none'
-                    } w-full max-w-40 sm:max-w-52 md:max-w-60 h-16 sm:h-20 md:h-24`}>
+                    } w-full max-w-28 sm:max-w-40 md:max-w-52 h-12 sm:h-16 md:h-20 lg:h-24`}>
                     <img src={badge.logo} alt={badge.text} className="w-full h-full object-contain" />
                   </div>
-                  <span className="font-semibold text-text-primary text-center text-sm leading-tight">{badge.text}</span>
+                  <span className="font-semibold text-text-primary text-center text-xs sm:text-sm leading-tight">{badge.text}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -348,21 +348,21 @@ export default function Home() {
               className="relative"
             >
               <div className="absolute -inset-2 bg-gradient-to-r from-gold-primary/30 to-blue-accent/20 rounded-3xl rotate-1" />
-              <div className="relative bg-bg-card border border-border-primary rounded-3xl p-12 shadow-[0_0_60px_rgba(0,0,0,0.3)]">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gold-primary/10 rounded-full blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-accent/5 rounded-full blur-3xl" />
+              <div className="relative bg-bg-card border border-border-primary rounded-3xl p-6 md:p-10 lg:p-12 shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+                <div className="absolute top-0 right-0 w-20 h-20 md:w-32 md:h-32 bg-gold-primary/10 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 md:w-40 md:h-40 bg-blue-accent/5 rounded-full blur-3xl" />
                 <div className="relative">
-                  <MessageSquare className="w-12 h-12 text-gold-primary/30 mb-8" />
-                  <blockquote className="text-2xl md:text-3xl font-medium text-text-primary mb-10 leading-relaxed">
+                  <MessageSquare className="w-8 h-8 md:w-12 md:h-12 text-gold-primary/30 mb-4 md:mb-8" />
+                  <blockquote className="text-lg md:text-2xl lg:text-3xl font-medium text-text-primary mb-6 md:mb-10 leading-relaxed">
                     "We don't just build software, we build partnerships that last."
                   </blockquote>
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary text-xl font-bold">
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-14 md:h-14 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary text-lg md:text-xl font-bold">
                       AK
                     </div>
                     <div>
-                      <p className="font-semibold text-text-primary">AK Infinity Team</p>
-                      <p className="text-text-muted text-sm">Your Digital Partners</p>
+                      <p className="font-semibold text-sm md:text-base text-text-primary">AK Infinity Team</p>
+                      <p className="text-xs md:text-sm text-text-muted">Your Digital Partners</p>
                     </div>
                   </div>
                 </div>
@@ -399,59 +399,59 @@ export default function Home() {
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-8"
+            className="grid md:grid-cols-3 gap-6 md:gap-8"
           >
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="bg-bg-card border border-border-primary rounded-3xl p-10 hover:border-gold-primary/30 transition-all duration-300"
+                className="bg-bg-card border border-border-primary rounded-3xl p-5 md:p-8 hover:border-gold-primary/30 transition-all duration-300"
               >
-                <div className="flex items-center gap-1 mb-6">
+                <div className="flex items-center gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => {
                     if (star <= Math.floor(testimonial.rating)) {
                       return (
                         <Star
                           key={star}
-                          className="w-5 h-5 text-gold-primary fill-gold-primary"
+                          className="w-4 h-4 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
                         />
                       );
                     } else if (star - testimonial.rating === 0.5) {
                       return (
                         <StarHalf
                           key={star}
-                          className="w-5 h-5 text-gold-primary fill-gold-primary"
+                          className="w-4 h-4 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
                         />
                       );
                     } else {
                       return (
                         <Star
                           key={star}
-                          className="w-5 h-5 text-gray-400"
+                          className="w-4 h-4 md:w-5 md:h-5 text-gray-400"
                         />
                       );
                     }
                   })}
                 </div>
-                <p className="text-text-secondary text-lg mb-8 leading-relaxed">
+                <p className="text-text-secondary text-sm md:text-lg mb-5 md:mb-8 leading-relaxed">
                   "{testimonial.content}"
                 </p>
-                <div className="flex items-center gap-4">
-                  <div className={`w-20 h-20 border border-border-primary rounded-full flex items-center justify-center overflow-hidden ${index === 2 ? 'bg-[#2b2a28] border-none' : 'bg-bg-secondary'}`}>
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className={`w-12 h-12 md:w-16 md:h-16 border border-border-primary rounded-full flex items-center justify-center overflow-hidden ${index === 2 ? 'bg-[#2b2a28] border-none' : 'bg-bg-secondary'}`}>
                     {testimonial.logo ? (
                       <img
                         src={testimonial.logo}
                         alt={`${testimonial.name} logo`}
-                        className={`${index === 2 ? 'w-[110%] h-[110%]' : 'w-full h-full'} object-contain`}
+                        className="w-full h-full object-contain"
                       />
                     ) : (
-                      <span className="text-gold-primary font-semibold">{testimonial.initial}</span>
+                      <span className="text-gold-primary font-semibold text-sm md:text-base">{testimonial.initial}</span>
                     )}
                   </div>
                   <div>
-                    <p className="font-semibold text-lg text-text-primary">{testimonial.name}</p>
-                    <p className="text-sm text-text-muted">{testimonial.role}</p>
+                    <p className="font-semibold text-sm md:text-lg text-text-primary">{testimonial.name}</p>
+                    <p className="text-xs md:text-sm text-text-muted">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>
@@ -468,26 +468,26 @@ export default function Home() {
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
             variants={fadeInUp}
-            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-12 md:p-20 text-center"
+            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-8 md:p-12 lg:p-20 text-center"
           >
             <div className="absolute inset-0">
-              <div className="absolute -top-20 -left-20 w-72 h-72 bg-gold-primary/20 rounded-full blur-3xl" />
-              <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-accent/10 rounded-full blur-3xl" />
+              <div className="absolute -top-16 -left-16 w-56 h-56 md:w-72 md:h-72 bg-gold-primary/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-16 -right-16 w-72 h-72 md:w-96 md:h-96 bg-blue-accent/10 rounded-full blur-3xl" />
             </div>
             <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-text-primary mb-4 md:mb-6">
                 Ready to Transform Your Business?
               </h2>
-              <p className="text-xl text-text-secondary mb-12 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-lg md:text-xl text-text-secondary mb-8 md:mb-12 max-w-2xl mx-auto">
                 Let's discuss your project and build something amazing together.
               </p>
               <Link to="/contact">
                 <Button
                   size="lg"
-                  className="h-16 px-12 text-lg"
+                  className="h-12 md:h-16 px-8 md:px-12 text-sm md:text-lg"
                 >
                   Get Free Consultation
-                  <ArrowRight className="ml-2 w-6 h-6" />
+                  <ArrowRight className="ml-2 w-4 md:w-6 h-4 md:h-6" />
                 </Button>
               </Link>
             </div>

@@ -271,43 +271,38 @@ export default function Services() {
                 transition={{ duration: 0.8 }}
                 className={`mb-32 ${index === roadmapServices.length - 1 ? 'mb-20' : ''}`}
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                  {/* Image Composition */}
-                  <div className={`${!isEven ? 'md:order-2' : ''}`}>
-                    <ImageComposition images={service.images} index={index} />
-                  </div>
-
-                  {/* Text Content */}
-                  <div className={`${isEven ? 'md:order-2' : ''}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+                  {/* Text Content - First on mobile! */}
+                  <div className={`${isEven ? 'md:order-1' : 'md:order-2'}`}>
                     <motion.div
                       initial={{ opacity: 0, x: isEven ? 40 : -40 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true, margin: '-100px' }}
                       transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                      <div className="flex items-center gap-4 mb-6">
-                        <div className="w-16 h-16 bg-bg-secondary border border-border-primary rounded-2xl flex items-center justify-center">
-                          <span className="text-3xl font-bold bg-gradient-to-r from-gold-primary to-gold-deep bg-clip-text text-transparent">
+                      <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-bg-secondary border border-border-primary rounded-2xl flex items-center justify-center">
+                          <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gold-primary to-gold-deep bg-clip-text text-transparent">
                             {service.step}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="w-12 h-[2px] bg-gradient-to-r from-gold-primary to-transparent" />
-                          <span className="text-gold-primary font-semibold tracking-wider uppercase text-sm">
+                          <div className="w-8 h-[2px] md:w-12 bg-gradient-to-r from-gold-primary to-transparent" />
+                          <span className="text-gold-primary font-semibold tracking-wider uppercase text-xs md:text-sm">
                             Step {service.step}
                           </span>
                         </div>
                       </div>
 
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary mb-6">
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary mb-4 md:mb-6">
                         {service.title}
                       </h2>
 
-                      <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10">
+                      <p className="text-sm md:text-lg lg:text-xl text-text-secondary leading-relaxed mb-6 md:mb-10">
                         {service.description}
                       </p>
 
-                      <div className="grid grid-cols-2 gap-4 mb-10">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10">
                         {service.features.map((feature, idx) => (
                           <motion.div
                             key={idx}
@@ -315,16 +310,21 @@ export default function Services() {
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.3 + idx * 0.05 }}
-                            className="flex items-center gap-3"
+                            className="flex items-center gap-2 md:gap-3"
                           >
-                            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 flex items-center justify-center flex-shrink-0">
-                              <Check className="w-4 h-4 text-gold-primary" />
+                            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 flex items-center justify-center flex-shrink-0">
+                              <Check className="w-3 h-3 md:w-4 md:h-4 text-gold-primary" />
                             </div>
-                            <span className="text-text-primary font-medium">{feature}</span>
+                            <span className="text-text-primary font-medium text-sm">{feature}</span>
                           </motion.div>
                         ))}
                       </div>
                     </motion.div>
+                  </div>
+
+                  {/* Image Composition */}
+                  <div className={`${isEven ? 'md:order-2' : 'md:order-1'}`}>
+                    <ImageComposition images={service.images} index={index} />
                   </div>
                 </div>
 
@@ -355,23 +355,23 @@ export default function Services() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-12 md:p-20 text-center"
+            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-8 md:p-12 lg:p-20 text-center"
           >
             <div className="absolute inset-0">
-              <div className="absolute -top-20 -left-20 w-72 h-72 bg-gold-primary/20 rounded-full blur-3xl" />
-              <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-accent/10 rounded-full blur-3xl" />
+              <div className="absolute -top-16 -left-16 w-56 h-56 md:w-72 md:h-72 bg-gold-primary/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-16 -right-16 w-72 h-72 md:w-96 md:h-96 bg-blue-accent/10 rounded-full blur-3xl" />
             </div>
             <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-text-primary mb-4 md:mb-6">
                 Start Your Journey
               </h2>
-              <p className="text-xl text-text-secondary mb-12 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-lg md:text-xl text-text-secondary mb-8 md:mb-12 max-w-2xl mx-auto">
                 Let's discuss your project and walk through the roadmap together to bring your vision to life.
               </p>
               <Link to="/contact">
-                <Button size="lg" className="h-16 px-12 text-lg">
+                <Button size="lg" className="h-12 md:h-16 px-8 md:px-12 text-sm md:text-lg">
                   Schedule a Consultation
-                  <ChevronRight className="ml-2 w-6 h-6" />
+                  <ChevronRight className="ml-2 w-4 md:w-6 h-4 md:h-6" />
                 </Button>
               </Link>
             </div>
