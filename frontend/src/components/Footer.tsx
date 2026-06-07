@@ -156,6 +156,13 @@ export default function Footer() {
                       9044002858
                     </a>
                   </li>
+                  <li className="text-[#BDBDBD] text-xs sm:text-sm">
+                    <span className="block text-[#BDBDBD]/60 text-[10px] sm:text-xs mb-0.5">Address</span>
+                    <span className="block">914K – Solitarian City Building</span>
+                    <span className="block">KP-3, Greater Noida</span>
+                    <span className="block">Gautam Buddh Nagar</span>
+                    <span className="block">Uttar Pradesh, India – 201310</span>
+                  </li>
                 </ul>
               </div>
             </div>
