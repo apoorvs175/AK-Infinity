@@ -300,7 +300,115 @@ export default function Home() {
       {/* Why Choose Us Section */}
       <section className="py-24 md:py-32 bg-bg-secondary/30">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          {/* Mobile-first - 2x2 grid, desktop uses 2 column layout */}
+          <div className="mb-10 md:mb-0">
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={fadeInUp}
+              className="text-center"
+            >
+              <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
+                Why Choose Us
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-text-primary mb-8">
+                Excellence in Every Detail
+              </h2>
+              {/* Gold divider for mobile */}
+              <div className="w-16 h-1 bg-gradient-to-r from-gold-primary to-gold-deep mx-auto md:hidden mb-8" />
+            </motion.div>
+
+            {/* 2x2 Grid for mobile only */}
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={staggerContainer}
+              className="grid grid-cols-2 gap-4 md:hidden mb-10"
+            >
+              {[
+                { title: 'Expert Team', desc: 'Seasoned professionals with 10+ years of industry expertise', icon: 'users' },
+                { title: 'Enterprise Security', desc: 'Bank-level security and scalable infrastructure', icon: 'shield' },
+                { title: 'Agile Process', desc: 'Clear communication and iterative development', icon: 'refresh' },
+                { title: 'Post-launch Support', desc: '24/7 support and maintenance services', icon: 'headset' }
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="flex flex-col items-center justify-center gap-3 p-5 bg-bg-card border border-border-primary rounded-3xl text-center"
+                >
+                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 border border-gold-primary/20 rounded-2xl flex items-center justify-center">
+                    {item.icon === 'users' && (
+                      <svg className="w-8 h-8 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                    )}
+                    {item.icon === 'shield' && (
+                      <svg className="w-8 h-8 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="M9 12l2 2 4-4" />
+                      </svg>
+                    )}
+                    {item.icon === 'refresh' && (
+                      <svg className="w-8 h-8 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                      </svg>
+                    )}
+                    {item.icon === 'headset' && (
+                      <svg className="w-8 h-8 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-text-primary text-base mb-1">{item.title}</h4>
+                    <p className="text-text-secondary text-sm leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Quote Card (mobile only) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              className="relative md:hidden"
+            >
+              <div className="absolute -inset-2 bg-gradient-to-r from-gold-primary/30 to-blue-accent/20 rounded-3xl rotate-1" />
+              <div className="relative bg-bg-card border border-border-primary rounded-3xl p-6 shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gold-primary/10 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-accent/5 rounded-full blur-3xl" />
+                <div className="relative">
+                  <MessageSquare className="w-8 h-8 text-gold-primary/30 mb-4" />
+                  <blockquote className="text-lg font-medium text-text-primary mb-6 leading-relaxed">
+                    "We don't just build software, we build partnerships that last."
+                  </blockquote>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary text-lg font-bold">
+                      AK
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-text-primary">AK Infinity Team</p>
+                      <p className="text-xs text-text-muted">Your Digital Partners</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Desktop/Tablet Layout (unchanged) */}
+          <div className="hidden md:grid md:grid-cols-2 gap-16 items-center">
             <motion.div
               initial="initial"
               whileInView="animate"
