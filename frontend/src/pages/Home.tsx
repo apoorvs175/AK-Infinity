@@ -338,11 +338,11 @@ export default function Home() {
                   variants={fadeInUp}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -4 }}
-                  className="flex flex-col items-center justify-center gap-2 p-4 bg-bg-card border border-border-primary rounded-3xl text-center"
+                  className="flex flex-col items-center justify-center gap-1.5 p-3 bg-bg-card border border-border-primary rounded-2xl text-center"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 border border-gold-primary/20 rounded-2xl flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 border border-gold-primary/20 rounded-xl flex items-center justify-center">
                     {item.icon === 'users' && (
-                      <svg className="w-6 h-6 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-5 h-5 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -350,28 +350,28 @@ export default function Home() {
                       </svg>
                     )}
                     {item.icon === 'shield' && (
-                      <svg className="w-6 h-6 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-5 h-5 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         <path d="M9 12l2 2 4-4" />
                       </svg>
                     )}
                     {item.icon === 'refresh' && (
-                      <svg className="w-6 h-6 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-5 h-5 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="23 4 23 10 17 10" />
                         <polyline points="1 20 1 14 7 14" />
                         <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
                       </svg>
                     )}
                     {item.icon === 'headset' && (
-                      <svg className="w-6 h-6 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-5 h-5 text-gold-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
                         <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
                       </svg>
                     )}
                   </div>
                   <div>
-                    <h4 className="font-semibold text-text-primary text-sm mb-1">{item.title}</h4>
-                    <p className="text-text-secondary text-xs leading-relaxed">{item.desc}</p>
+                    <h4 className="font-semibold text-text-primary text-xs mb-0.5">{item.title}</h4>
+                    <p className="text-text-secondary text-[10px] leading-snug">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
