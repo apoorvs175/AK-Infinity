@@ -819,38 +819,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-bg-secondary/30">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8"
-          >
-            {[
-              { stat: '500+', label: 'Projects Delivered' },
-              { stat: '200+', label: 'Happy Clients' },
-              { stat: '10+', label: 'Years Experience' },
-              { stat: '98%', label: 'Client Satisfaction' }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gold-primary to-gold-deep bg-clip-text text-transparent mb-2">
-                  {item.stat}
-                </div>
-                <p className="text-text-secondary font-medium">{item.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+
 
       {/* CTA Section */}
       <section className="py-20">

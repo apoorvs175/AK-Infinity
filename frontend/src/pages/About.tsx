@@ -1,8 +1,7 @@
-import { motion, useAnimation, useInView } from 'framer-motion'
-import { Check, Shield, Clock, Zap, MessageCircle, Star, CheckCircle } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
+import { Check, Shield, CheckCircle } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
 import GovtLogo from '../assets/govt of india logo.png'
 import MsmeLogo from '../assets/msme logo.png'
 import UdyamLogo from '../assets/Udyam Logo.png'
@@ -22,61 +21,11 @@ const staggerContainer = {
   }
 }
 
-const AnimatedCounter = ({ to }: { to: number | string }) => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const controls = useAnimation()
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start('animate')
-    }
-  }, [isInView, controls])
-
-  const counterRef = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    if (!counterRef.current || !isInView) return
-
-    if (typeof to === 'string') {
-      counterRef.current.textContent = to
-      return
-    }
-
-    const duration = 1500
-    const startTime = performance.now()
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const current = Math.floor(progress * to)
-      counterRef.current!.textContent = `${current}${to === 100 ? '%' : '+'}`
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate)
-      }
-    }
-
-    requestAnimationFrame(animate)
-  }, [to, isInView])
-
-  return (
-    <span ref={counterRef} className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gold-primary to-gold-deep bg-clip-text text-transparent" />
-  )
-}
-
 const team = [
   { name: 'Apoorv Vikram Singh', role: 'CEO & Founder', initial: 'AVS' },
   { name: 'Aman Raj', role: 'Chief Technology Officer (CTO)', initial: 'AR' },
   { name: 'Kashish Sharma', role: 'CFO & Lead Designer', initial: 'KS' },
   { name: 'Naman Singh', role: 'Senior Developer', initial: 'NS' }
-]
-
-const stats = [
-  { number: 50, label: 'Projects Delivered', icon: <Zap className="w-8 h-8" /> },
-  { number: '100%', label: 'Client Satisfaction', icon: <Star className="w-8 h-8" /> },
-  { number: '24/7', label: 'Support Availability', icon: <Clock className="w-8 h-8" /> },
-  { number: 'Within 24 Hours', label: 'Response Time', icon: <MessageCircle className="w-8 h-8" /> }
 ]
 
 const trustPoints = [
@@ -299,52 +248,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Statistics Section */}
-      <section className="py-20">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={staggerContainer}
-            className="text-center mb-16"
-          >
-            <motion.div variants={fadeInUp}>
-              <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
-                Our Impact
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-6">
-                Company Statistics
-              </h2>
-            </motion.div>
-          </motion.div>
 
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={staggerContainer}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                whileHover={{ y: -4 }}
-                className="bg-bg-card border border-border-primary rounded-3xl p-6 md:p-8 text-center hover:border-gold-primary/30 transition-all duration-300"
-              >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-gold-primary/25 to-gold-deep/15 border border-gold-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6 text-gold-primary">
-                  {stat.icon}
-                </div>
-                <div className="mb-2">
-                  <AnimatedCounter to={stat.number} />
-                </div>
-                <p className="text-text-secondary font-semibold text-sm md:text-lg">{stat.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* Values Section */}
       <section className="py-20 bg-bg-secondary/30">
