@@ -2,10 +2,10 @@ import { motion } from 'framer-motion'
 import { Check, Shield, CheckCircle, MessageCircle } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
-import GovtLogo from '../assets/govt of india logo.png'
-import MsmeLogo from '../assets/msme logo.png'
-import UdyamLogo from '../assets/Udyam Logo.png'
-import FourthLogo from '../assets/fourth logo.png'
+import GovtLogo from '../assets/badges/govt-india-logo.png'
+import MsmeLogo from '../assets/badges/msme-logo.png'
+import UdyamLogo from '../assets/badges/udyam-logo.png'
+import FourthLogo from '../assets/badges/government-officials-logo.png'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },

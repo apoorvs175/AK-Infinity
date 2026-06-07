@@ -15,13 +15,13 @@ import {
   FileCheck
 } from 'lucide-react'
 import Button from '../components/Button'
-import ZynpayLogo from '../assets/Zynpay product.png'
-import ShardaLogo from '../assets/Sharda.png'
-import WorkforceLogo from '../assets/Daily wages Workforce.png'
-import GovtLogo from '../assets/govt of india logo.png'
-import MsmeLogo from '../assets/msme logo.png'
-import UdyamLogo from '../assets/Udyam Logo.png'
-import FourthLogo from '../assets/fourth logo.png'
+import ZynpayLogo from '../assets/testimonials/zynpay-logo.png'
+import ShardaLogo from '../assets/testimonials/sharda-university-logo.png'
+import WorkforceLogo from '../assets/testimonials/daily-wages-workforce-logo.png'
+import GovtLogo from '../assets/badges/govt-india-logo.png'
+import MsmeLogo from '../assets/badges/msme-logo.png'
+import UdyamLogo from '../assets/badges/udyam-logo.png'
+import FourthLogo from '../assets/badges/government-officials-logo.png'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },

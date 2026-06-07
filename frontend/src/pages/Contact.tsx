@@ -6,10 +6,10 @@ import Button from '../components/Button'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import GovtLogo from '../assets/govt of india logo.png'
-import MsmeLogo from '../assets/msme logo.png'
-import UdyamLogo from '../assets/Udyam Logo.png'
-import FourthLogo from '../assets/fourth logo.png'
+import GovtLogo from '../assets/badges/govt-india-logo.png'
+import MsmeLogo from '../assets/badges/msme-logo.png'
+import UdyamLogo from '../assets/badges/udyam-logo.png'
+import FourthLogo from '../assets/badges/government-officials-logo.png'
 
 // Fix Leaflet marker icon issue and create custom gold marker
 delete (L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: string })._getIconUrl

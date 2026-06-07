@@ -4,6 +4,25 @@ import Button from '../components/Button'
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 
+// Import service images
+import Discovery1 from '../assets/services/discovery-1.jpg'
+import Discovery2 from '../assets/services/discovery-2.jpg'
+import Discovery3 from '../assets/services/discovery-3.jpg'
+import Design1 from '../assets/services/design-1.jpg'
+import Design2 from '../assets/services/design-2.jpg'
+import Web1 from '../assets/services/web-1.jpg'
+import Web2 from '../assets/services/web-2.jpg'
+import Web3 from '../assets/services/web-3.jpg'
+import Mobile1 from '../assets/services/mobile-1.jpg'
+import Mobile2 from '../assets/services/mobile-2.jpg'
+import Mobile3 from '../assets/services/mobile-3.jpg'
+import Cloud1 from '../assets/services/cloud-1.jpg'
+import Cloud2 from '../assets/services/cloud-2.jpg'
+import Cloud3 from '../assets/services/cloud-3.jpg'
+import Support1 from '../assets/services/support-1.jpg'
+import Support2 from '../assets/services/support-2.jpg'
+import Support3 from '../assets/services/support-3.jpg'
+
 const roadmapServices = [
   {
     id: 'discovery',
@@ -18,11 +37,7 @@ const roadmapServices = [
       'Timeline Definition',
       'Budget Estimation'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Discovery1, Discovery2, Discovery3]
   },
   {
     id: 'design',
@@ -37,11 +52,7 @@ const roadmapServices = [
       'Usability Testing',
       'Accessibility Focus'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1487014679447-9f833a70028f?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Design1, Design2, Design2]
   },
   {
     id: 'web',
@@ -56,11 +67,7 @@ const roadmapServices = [
       'SEO Integration',
       'PWA Support'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Web1, Web2, Web3]
   },
   {
     id: 'mobile',
@@ -75,11 +82,7 @@ const roadmapServices = [
       'App Store Optimization',
       'Analytics Integration'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1480694313141-fce5e697ee25?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Mobile1, Mobile2, Mobile3]
   },
   {
     id: 'cloud',
@@ -94,11 +97,7 @@ const roadmapServices = [
       'Monitoring & Logging',
       'Enterprise Security'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Cloud1, Cloud2, Cloud3]
   },
   {
     id: 'support',
@@ -113,11 +112,7 @@ const roadmapServices = [
       'Security Patches',
       'Scalability Planning'
     ],
-    images: [
-      'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80'
-    ]
+    images: [Support1, Support2, Support3]
   }
 ]
 
