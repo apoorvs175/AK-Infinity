@@ -259,31 +259,31 @@ export default function Home() {
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
           >
             {services.map((service, index) => (
               <motion.div
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -8 }}
-                className="group bg-bg-card border border-border-primary rounded-3xl p-6 md:p-8 lg:p-10 hover:border-gold-primary/30 hover:shadow-[0_0_40px_rgba(244,197,66,0.1)] transition-all duration-500"
+                className="group bg-bg-card border border-border-primary rounded-3xl p-4 md:p-8 lg:p-10 hover:border-gold-primary/30 hover:shadow-[0_0_40px_rgba(244,197,66,0.1)] transition-all duration-500"
               >
-                <div className="flex items-start gap-4 md:gap-6">
-                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-bg-secondary border border-border-primary rounded-2xl flex items-center justify-center group-hover:border-gold-primary/50 group-hover:shadow-[0_0_20px_rgba(244,197,66,0.2)] transition-all duration-300">
+                <div className="flex items-start gap-3 md:gap-6">
+                  <div className="flex-shrink-0 w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-bg-secondary border border-border-primary rounded-xl md:rounded-2xl flex items-center justify-center group-hover:border-gold-primary/50 group-hover:shadow-[0_0_20px_rgba(244,197,66,0.2)] transition-all duration-300">
                     {service.icon}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary mb-2 md:mb-3 group-hover:text-gold-primary transition-colors duration-300">
+                    <h3 className="text-base md:text-xl lg:text-2xl font-bold text-text-primary mb-1.5 md:mb-3 group-hover:text-gold-primary transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-text-secondary mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
+                    <p className="text-text-secondary mb-3 md:mb-6 leading-relaxed text-xs md:text-base">
                       {service.description}
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 md:gap-2">
                       {service.features.map((feature, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1.5 md:px-4 md:py-2 bg-bg-secondary border border-border-primary text-text-secondary rounded-full text-xs md:text-sm font-medium"
+                          className="px-2.5 py-1 md:px-4 md:py-2 bg-bg-secondary border border-border-primary text-text-secondary rounded-full text-[10px] md:text-sm font-medium"
                         >
                           {feature}
                         </span>
@@ -384,22 +384,22 @@ export default function Home() {
               viewport={{ once: true, margin: '-100px' }}
               className="relative md:hidden"
             >
-              <div className="absolute -inset-2 bg-gradient-to-r from-gold-primary/30 to-blue-accent/20 rounded-3xl rotate-1" />
-              <div className="relative bg-bg-card border border-border-primary rounded-3xl p-6 shadow-[0_0_60px_rgba(0,0,0,0.3)]">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gold-primary/10 rounded-full blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-accent/5 rounded-full blur-3xl" />
+              <div className="absolute -inset-2 bg-gradient-to-r from-gold-primary/30 to-blue-accent/20 rounded-2xl rotate-1" />
+              <div className="relative bg-bg-card border border-border-primary rounded-2xl p-4 shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gold-primary/10 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-blue-accent/5 rounded-full blur-3xl" />
                 <div className="relative">
-                  <MessageSquare className="w-8 h-8 text-gold-primary/30 mb-4" />
-                  <blockquote className="text-lg font-medium text-text-primary mb-6 leading-relaxed">
+                  <MessageSquare className="w-6 h-6 text-gold-primary/30 mb-3" />
+                  <blockquote className="text-base font-medium text-text-primary mb-4 leading-relaxed">
                     "We don't just build software, we build partnerships that last."
                   </blockquote>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary text-lg font-bold">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-bg-secondary border border-border-primary rounded-full flex items-center justify-center text-gold-primary text-base font-bold">
                       AK
                     </div>
                     <div>
-                      <p className="font-semibold text-sm text-text-primary">AK Infinity Team</p>
-                      <p className="text-xs text-text-muted">Your Digital Partners</p>
+                      <p className="font-semibold text-xs text-text-primary">AK Infinity Team</p>
+                      <p className="text-[10px] text-text-muted">Your Digital Partners</p>
                     </div>
                   </div>
                 </div>
@@ -507,46 +507,46 @@ export default function Home() {
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
             variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-6 md:gap-8"
+            className="grid md:grid-cols-3 gap-5 md:gap-8"
           >
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="bg-bg-card border border-border-primary rounded-3xl p-5 md:p-8 hover:border-gold-primary/30 transition-all duration-300"
+                className="bg-bg-card border border-border-primary rounded-3xl p-4 md:p-8 hover:border-gold-primary/30 transition-all duration-300"
               >
-                <div className="flex items-center gap-1 mb-4">
+                <div className="flex items-center gap-1 mb-3 md:mb-4">
                   {[1, 2, 3, 4, 5].map((star) => {
                     if (star <= Math.floor(testimonial.rating)) {
                       return (
                         <Star
                           key={star}
-                          className="w-4 h-4 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
+                          className="w-3.5 h-3.5 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
                         />
                       );
                     } else if (star - testimonial.rating === 0.5) {
                       return (
                         <StarHalf
                           key={star}
-                          className="w-4 h-4 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
+                          className="w-3.5 h-3.5 md:w-5 md:h-5 text-gold-primary fill-gold-primary"
                         />
                       );
                     } else {
                       return (
                         <Star
                           key={star}
-                          className="w-4 h-4 md:w-5 md:h-5 text-gray-400"
+                          className="w-3.5 h-3.5 md:w-5 md:h-5 text-gray-400"
                         />
                       );
                     }
                   })}
                 </div>
-                <p className="text-text-secondary text-sm md:text-lg mb-5 md:mb-8 leading-relaxed">
+                <p className="text-text-secondary text-xs md:text-lg mb-4 md:mb-8 leading-relaxed">
                   "{testimonial.content}"
                 </p>
-                <div className="flex items-center gap-3 md:gap-4">
-                  <div className={`w-12 h-12 md:w-16 md:h-16 border border-border-primary rounded-full flex items-center justify-center overflow-hidden ${index === 2 ? 'bg-[#2b2a28] border-none' : 'bg-bg-secondary'}`}>
+                <div className="flex items-center gap-2.5 md:gap-4">
+                  <div className={`w-10 h-10 md:w-16 md:h-16 border border-border-primary rounded-full flex items-center justify-center overflow-hidden ${index === 2 ? 'bg-[#2b2a28] border-none' : 'bg-bg-secondary'}`}>
                     {testimonial.logo ? (
                       <img
                         src={testimonial.logo}
@@ -554,12 +554,12 @@ export default function Home() {
                         className="w-full h-full object-contain"
                       />
                     ) : (
-                      <span className="text-gold-primary font-semibold text-sm md:text-base">{testimonial.initial}</span>
+                      <span className="text-gold-primary font-semibold text-xs md:text-base">{testimonial.initial}</span>
                     )}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm md:text-lg text-text-primary">{testimonial.name}</p>
-                    <p className="text-xs md:text-sm text-text-muted">{testimonial.role}</p>
+                    <p className="font-semibold text-xs md:text-lg text-text-primary">{testimonial.name}</p>
+                    <p className="text-[10px] md:text-sm text-text-muted">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>
