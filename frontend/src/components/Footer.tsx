@@ -7,20 +7,20 @@ export default function Footer() {
         {/* Mobile Layout */}
         <div className="lg:hidden">
           {/* Logo & Brand Section */}
-          <div className="mb-8">
-            <Link to="/" className="flex items-center gap-2 mb-3">
+          <div className="mb-8 text-center sm:text-left">
+            <Link to="/" className="flex items-center justify-center sm:justify-start gap-2 mb-3">
               <div className="w-10 h-10 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
                 <span className="text-[#D4AF37] font-bold text-xl">AK</span>
               </div>
               <span className="text-lg font-bold text-white">AK Infinity</span>
             </Link>
-            <p className="text-[#BDBDBD] text-xs leading-relaxed">
+            <p className="text-[#BDBDBD] text-xs leading-relaxed text-center sm:text-left">
               Building enterprise-grade digital solutions that drive real business growth and innovation.
             </p>
           </div>
 
           {/* Social Icons */}
-          <div className="flex gap-3 mb-8">
+          <div className="flex justify-center sm:justify-start gap-3 mb-8">
               {[
                 {
                   icon: (
@@ -71,10 +71,10 @@ export default function Footer() {
             </div>
 
           {/* 3 Column Grid for Links */}
-          <div className="grid grid-cols-[1fr_1fr_1.6fr] gap-1 mb-8">
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Quick Links</h3>
-                <ul className="space-y-2">
+          <div className="grid grid-cols-3 gap-4 mb-8 justify-items-center">
+              <div className="w-full">
+                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Quick Links</h3>
+                <ul className="space-y-2 text-center sm:text-left">
                   {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
                     <li key={index}>
                       <Link
@@ -87,9 +87,9 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Services</h3>
-                <ul className="space-y-2">
+              <div className="w-full">
+                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Services</h3>
+                <ul className="space-y-2 text-center sm:text-left">
                   {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
                     <li key={index}>
                       <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]">
@@ -99,9 +99,9 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Contact</h3>
-                <ul className="space-y-2">
+              <div className="w-full">
+                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Contact</h3>
+                <ul className="space-y-2 text-center sm:text-left">
                   <li className="text-[#BDBDBD] text-[11px]">
                     <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Phone</span>
                     <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
@@ -110,11 +110,11 @@ export default function Footer() {
                   </li>
                   <li className="text-[#BDBDBD] text-[11px]">
                     <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Address</span>
-                    <span className="block">914K – Solitarian</span>
-                    <span className="block">City Building,</span>
-                    <span className="block">KP-3, Greater Noida,</span>
-                    <span className="block">Uttar Pradesh,</span>
-                    <span className="block">India – 201310</span>
+                    <span className="block break-words">914K – Solitarian</span>
+                    <span className="block break-words">City Building,</span>
+                    <span className="block break-words">KP-3, Greater Noida,</span>
+                    <span className="block break-words">Uttar Pradesh,</span>
+                    <span className="block break-words">India – 201310</span>
                   </li>
                 </ul>
               </div>
