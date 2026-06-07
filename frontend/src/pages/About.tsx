@@ -1,5 +1,5 @@
-import { motion, useInView } from 'framer-motion'
-import { Check, Shield, CheckCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Check, Shield, CheckCircle, MessageCircle } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
 import GovtLogo from '../assets/govt of india logo.png'
