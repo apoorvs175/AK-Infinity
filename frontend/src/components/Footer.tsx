@@ -7,12 +7,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
-                <span className="text-[#D4AF37] font-bold text-2xl">AK</span>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
+                <span className="text-[#D4AF37] font-bold text-xl sm:text-2xl">AK</span>
               </div>
-              <span className="text-xl font-bold text-white">AK Infinity</span>
+              <span className="text-lg sm:text-xl font-bold text-white">AK Infinity</span>
             </Link>
-            <p className="text-[#BDBDBD] mb-8 text-lg leading-relaxed max-w-md">
+            <p className="text-[#BDBDBD] mb-8 text-xs sm:text-sm md:text-lg leading-relaxed max-w-md">
               Building enterprise-grade digital solutions that drive real business growth and innovation.
             </p>
             <div className="flex gap-4">
