@@ -71,7 +71,7 @@ export default function Footer() {
             </div>
 
           {/* 3 Column Grid for Links */}
-          <div className="grid grid-cols-3 gap-2 mb-8">
+          <div className="grid grid-cols-[1fr_1fr_1.6fr] gap-1 mb-8">
               <div>
                 <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Quick Links</h3>
                 <ul className="space-y-2">
@@ -110,9 +110,11 @@ export default function Footer() {
                   </li>
                   <li className="text-[#BDBDBD] text-[11px]">
                     <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Address</span>
-                    <span className="block whitespace-nowrap">914K – Solitarian City Building,</span>
+                    <span className="block">914K – Solitarian</span>
+                    <span className="block">City Building,</span>
                     <span className="block">KP-3, Greater Noida,</span>
-                    <span className="block">Uttar Pradesh, India – 201310</span>
+                    <span className="block">Uttar Pradesh,</span>
+                    <span className="block">India – 201310</span>
                   </li>
                 </ul>
               </div>
