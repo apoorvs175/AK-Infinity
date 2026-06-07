@@ -70,54 +70,56 @@ export default function Footer() {
               ))}
             </div>
 
-          {/* 3 Column Grid for Links */}
-          <div className="grid grid-cols-3 gap-4 mb-8 justify-items-center">
-              <div className="w-full">
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Quick Links</h3>
-                <ul className="space-y-2 text-center sm:text-left">
-                  {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        to={`/${link.toLowerCase()}`}
-                        className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]"
-                      >
-                        {link}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="w-full">
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Services</h3>
-                <ul className="space-y-2 text-center sm:text-left">
-                  {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
-                    <li key={index}>
-                      <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]">
-                        {service}
+          {/* 3 Column Grid for Links - Centered */}
+          <div className="flex justify-center mb-8">
+            <div className="grid grid-cols-3 gap-4 w-full max-w-lg">
+                <div>
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Quick Links</h3>
+                  <ul className="space-y-2 text-center sm:text-left">
+                    {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
+                      <li key={index}>
+                        <Link
+                          to={`/${link.toLowerCase()}`}
+                          className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]"
+                        >
+                          {link}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Services</h3>
+                  <ul className="space-y-2 text-center sm:text-left">
+                    {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
+                      <li key={index}>
+                        <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]">
+                          {service}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Contact</h3>
+                  <ul className="space-y-2 text-center sm:text-left">
+                    <li className="text-[#BDBDBD] text-[11px]">
+                      <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Phone</span>
+                      <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
+                        9044002858
                       </a>
                     </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="w-full">
-                <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Contact</h3>
-                <ul className="space-y-2 text-center sm:text-left">
-                  <li className="text-[#BDBDBD] text-[11px]">
-                    <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Phone</span>
-                    <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
-                      9044002858
-                    </a>
-                  </li>
-                  <li className="text-[#BDBDBD] text-[11px]">
-                    <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Address</span>
-                    <span className="block break-words">914K – Solitarian</span>
-                    <span className="block break-words">City Building,</span>
-                    <span className="block break-words">KP-3, Greater Noida,</span>
-                    <span className="block break-words">Uttar Pradesh,</span>
-                    <span className="block break-words">India – 201310</span>
-                  </li>
-                </ul>
-              </div>
+                    <li className="text-[#BDBDBD] text-[11px]">
+                      <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Address</span>
+                      <span className="block break-words">914K – Solitarian</span>
+                      <span className="block break-words">City Building,</span>
+                      <span className="block break-words">KP-3, Greater Noida,</span>
+                      <span className="block break-words">Uttar Pradesh,</span>
+                      <span className="block break-words">India – 201310</span>
+                    </li>
+                  </ul>
+                </div>
+            </div>
           </div>
 
           {/* Bottom Section */}
