@@ -74,8 +74,8 @@ export default function Footer() {
           <div className="flex justify-center mb-8">
             <div className="grid grid-cols-3 gap-4 w-full max-w-lg">
                 <div>
-                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Quick Links</h3>
-                  <ul className="space-y-2 text-center sm:text-left">
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Quick Links</h3>
+                  <ul className="space-y-2">
                     {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
                       <li key={index}>
                         <Link
@@ -89,8 +89,8 @@ export default function Footer() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Services</h3>
-                  <ul className="space-y-2 text-center sm:text-left">
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Services</h3>
+                  <ul className="space-y-2">
                     {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
                       <li key={index}>
                         <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]">
@@ -101,8 +101,8 @@ export default function Footer() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3 text-center sm:text-left">Contact</h3>
-                  <ul className="space-y-2 text-center sm:text-left">
+                  <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Contact</h3>
+                  <ul className="space-y-2">
                     <li className="text-[#BDBDBD] text-[11px]">
                       <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Phone</span>
                       <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
