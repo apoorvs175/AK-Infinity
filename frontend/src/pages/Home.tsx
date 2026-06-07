@@ -104,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-12 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -176,7 +176,7 @@ export default function Home() {
       </section>
 
       {/* Premium Trust Bar - Above the Fold */}
-      <section className="py-8 bg-white border-y border-gold-primary/20">
+      <section className="py-6 bg-white border-y border-gold-primary/20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -233,7 +233,7 @@ export default function Home() {
 
 
       {/* Services Section */}
-      <section className="py-16 md:py-32">
+      <section className="py-12 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -298,7 +298,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-16 md:py-32 bg-bg-secondary/30">
+      <section className="py-12 md:py-32 bg-bg-secondary/30">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {/* Mobile-first - 2x2 grid, desktop uses 2 column layout */}
           <div className="mb-10 md:mb-0">
@@ -481,7 +481,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 md:py-32">
+      <section className="py-12 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -569,7 +569,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-32">
+      <section className="py-12 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"

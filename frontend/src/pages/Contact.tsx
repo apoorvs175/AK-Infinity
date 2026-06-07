@@ -140,7 +140,7 @@ export default function Contact() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20">
+      <section className="pt-24 pb-12 sm:pt-32 sm:pb-16 md:pt-32 md:pb-20 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -164,7 +164,7 @@ export default function Contact() {
       </section>
 
       {/* Trust Badges Section */}
-      <section className="pb-10">
+      <section className="pb-8">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -211,7 +211,7 @@ export default function Contact() {
       </section>
 
       {/* Premium Contact Section */}
-      <section className="py-10 pb-24">
+      <section className="py-10 pb-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {/* Map and Form Grid */}
           <div className="grid lg:grid-cols-2 gap-12 mb-12">

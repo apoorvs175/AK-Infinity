@@ -56,7 +56,7 @@ export default function About() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20">
+      <section className="pt-24 pb-12 sm:pt-32 sm:pb-16 md:pt-32 md:pb-20 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -80,7 +80,7 @@ export default function About() {
       </section>
 
       {/* Story Section */}
-      <section className="py-20 bg-bg-secondary/30">
+      <section className="py-12 bg-bg-secondary/30 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -143,7 +143,7 @@ export default function About() {
       </section>
 
       {/* Official Business Registration Section */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -205,7 +205,7 @@ export default function About() {
       </section>
 
       {/* Why Trust AK Infinity Section */}
-      <section className="py-20 bg-bg-secondary/30">
+      <section className="py-12 bg-bg-secondary/30 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -251,7 +251,7 @@ export default function About() {
 
 
       {/* Values Section */}
-      <section className="py-20 bg-bg-secondary/30">
+      <section className="py-12 bg-bg-secondary/30 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -299,7 +299,7 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -347,7 +347,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-bg-secondary/30">
+      <section className="py-12 bg-bg-secondary/30 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"

@@ -235,7 +235,7 @@ export default function Services() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-12 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -257,7 +257,7 @@ export default function Services() {
       </section>
 
       {/* Roadmap Section */}
-      <section className="py-20 relative">
+      <section className="py-12 sm:py-16 md:py-20 relative">
         <RoadmapPath />
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {roadmapServices.map((service, index) => {
@@ -349,7 +349,7 @@ export default function Services() {
 
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
