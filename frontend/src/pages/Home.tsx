@@ -104,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 sm:pt-28 sm:pb-20 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -176,7 +176,7 @@ export default function Home() {
       </section>
 
       {/* Premium Trust Bar - Above the Fold */}
-      <section className="py-12 bg-white border-y border-gold-primary/20">
+      <section className="py-8 bg-white border-y border-gold-primary/20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -233,7 +233,7 @@ export default function Home() {
 
 
       {/* Services Section */}
-      <section className="py-24 md:py-32">
+      <section className="py-16 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
@@ -298,7 +298,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-24 md:py-32 bg-bg-secondary/30">
+      <section className="py-16 md:py-32 bg-bg-secondary/30">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {/* Mobile-first - 2x2 grid, desktop uses 2 column layout */}
           <div className="mb-10 md:mb-0">
@@ -481,13 +481,13 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 md:py-32">
+      <section className="py-16 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
             <motion.div variants={fadeInUp}>
               <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
@@ -569,14 +569,14 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 md:py-32">
+      <section className="py-16 md:py-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: '-100px' }}
             variants={fadeInUp}
-            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-8 md:p-12 lg:p-20 text-center"
+            className="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-bg-elevated to-bg-card border border-border-primary p-6 md:p-12 lg:p-20 text-center"
           >
             <div className="absolute inset-0">
               <div className="absolute -top-16 -left-16 w-56 h-56 md:w-72 md:h-72 bg-gold-primary/20 rounded-full blur-3xl" />
