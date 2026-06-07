@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom'
 export default function Footer() {
   return (
     <footer className="bg-[#111111] border-t border-[#D4AF37]/30">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px] py-12 sm:py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px] py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4 sm:mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
-                <span className="text-[#D4AF37] font-bold text-xl sm:text-2xl">AK</span>
+            <Link to="/" className="flex items-center gap-2 mb-6">
+              <div className="w-12 h-12 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
+                <span className="text-[#D4AF37] font-bold text-2xl">AK</span>
               </div>
-              <span className="text-base sm:text-xl font-bold text-white">AK Infinity</span>
+              <span className="text-xl font-bold text-white">AK Infinity</span>
             </Link>
-            <p className="text-[#BDBDBD] mb-6 sm:mb-8 text-sm sm:text-lg leading-relaxed max-w-md">
+            <p className="text-[#BDBDBD] mb-8 text-lg leading-relaxed max-w-md">
               Building enterprise-grade digital solutions that drive real business growth and innovation.
             </p>
-            <div className="flex gap-3 sm:gap-4">
+            <div className="flex gap-4">
               {[
                 {
                   icon: (
@@ -36,7 +36,7 @@ export default function Footer() {
                         <stop offset="75%" stopColor="#8134AF"/>
                         <stop offset="100%" stopColor="#515BD4"/>
                       </radialGradient>
-                      <path fill="url(#ig)" d="M12 0c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 2.163c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163S15.403 2.163 12 2.163zm0 10.162c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.406-11.845c-.796 0-1.444.648-1.444 1.444s.648 1.444 1.444 1.444c.796 0 1.444-.648 1.444-1.444s-.648-1.444-1.444-1.444z"/>
+                      <path fill="url(#ig)" d="M12 0c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 2.163c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163S15.403 2.163 12 2.163zm0 10.162c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4-1.79 4 4 4zm6.406-11.845c-.796 0-1.444.648-1.444 1.444s.648 1.444 1.444 1.444c.796 0 1.444-.648 1.444-1.444s-.648-1.444-1.444-1.444z"/>
                     </svg>
                   ),
                   name: 'Instagram',
@@ -66,54 +66,47 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-1">
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-0 md:grid-cols-1">
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-lg mb-3 sm:mb-6">Quick Links</h3>
-                <ul className="space-y-2 sm:space-y-4">
-                  {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        to={`/${link.toLowerCase()}`}
-                        className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs sm:text-base"
-                      >
-                        {link}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-lg mb-3 sm:mb-6">Services</h3>
-                <ul className="space-y-2 sm:space-y-4">
-                  {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
-                    <li key={index}>
-                      <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs sm:text-base">
-                        {service}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-lg mb-3 sm:mb-6">Contact</h3>
-                <ul className="space-y-2 sm:space-y-4">
-                  <li className="text-[#BDBDBD] text-xs sm:text-base">
-                    <span className="block text-[#BDBDBD]/60 text-xs sm:text-sm mb-0.5 sm:mb-1">Phone</span>
-                    <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
-                      9044002858
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          {/* Desktop: Quick Links */}
+          <div className="hidden lg:block">
+            <h3 className="text-[#D4AF37] font-semibold text-lg mb-6">Quick Links</h3>
+            <ul className="space-y-4">
+              {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
+                <li key={index}>
+                  <Link
+                    to={`/${link.toLowerCase()}`}
+                    className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300"
+                  >
+                    {link}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
+          {/* Desktop: Services */}
+          <div className="hidden lg:block">
+            <h3 className="text-[#D4AF37] font-semibold text-lg mb-6">Services</h3>
+            <ul className="space-y-4">
+              {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
+                <li key={index}>
+                  <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300">
+                    {service}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Desktop: Contact */}
           <div className="hidden lg:block">
             <h3 className="text-[#D4AF37] font-semibold text-lg mb-6">Contact</h3>
             <ul className="space-y-4">
+              <li className="text-[#BDBDBD]">
+                <span className="block text-[#BDBDBD]/60 text-sm mb-1">Phone</span>
+                <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
+                  9044002858
+                </a>
+              </li>
               <li className="text-[#BDBDBD]">
                 <span className="block text-[#BDBDBD]/60 text-sm mb-1">Address</span>
                 <span className="block">914K – Solitarian City Building</span>
@@ -123,13 +116,58 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
+          {/* Mobile-only 3 column */}
+          <div className="lg:hidden col-span-1 md:col-span-1">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              <div>
+                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-base mb-3">Quick Links</h3>
+                <ul className="space-y-2">
+                  {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={`/${link.toLowerCase()}`}
+                        className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs sm:text-sm"
+                      >
+                        {link}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-base mb-3">Services</h3>
+                <ul className="space-y-2">
+                  {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
+                    <li key={index}>
+                      <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs sm:text-sm">
+                        {service}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-[#D4AF37] font-semibold text-sm sm:text-base mb-3">Contact</h3>
+                <ul className="space-y-2">
+                  <li className="text-[#BDBDBD] text-xs sm:text-sm">
+                    <span className="block text-[#BDBDBD]/60 text-[10px] sm:text-xs mb-0.5">Phone</span>
+                    <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
+                      9044002858
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div className="border-t border-[#D4AF37]/20 mt-10 sm:mt-12 pt-6 sm:pt-8 space-y-3 sm:space-y-4 text-center">
-          <p className="text-[#BDBDBD] text-xs sm:text-sm">
+        <div className="border-t border-[#D4AF37]/20 mt-12 pt-8 space-y-4 text-center">
+          <p className="text-[#BDBDBD] text-sm">
             <span className="text-[#D4AF37] font-medium">MSME Registered Enterprise</span> | Udyam Registration No. UDYAM-UP-28-0222045
           </p>
-          <div className="text-[#BDBDBD] text-xs sm:text-sm flex flex-col md:flex-row gap-3 sm:gap-4 justify-center items-center">
+          <div className="text-[#BDBDBD] text-sm flex flex-col md:flex-row gap-4 justify-center items-center">
             <p>© {new Date().getFullYear()} AK Infinity. All Rights Reserved.</p>
             <span className="hidden md:inline text-[#D4AF37]/40">|</span>
             <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300">
