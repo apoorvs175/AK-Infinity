@@ -104,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-12 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-20 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial="initial"
