@@ -71,7 +71,7 @@ export default function Footer() {
             </div>
 
           {/* 3 Column Grid for Links */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-3 gap-2 mb-8">
               <div>
                 <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Quick Links</h3>
                 <ul className="space-y-2">
@@ -79,7 +79,7 @@ export default function Footer() {
                     <li key={index}>
                       <Link
                         to={`/${link.toLowerCase()}`}
-                        className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs"
+                        className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]"
                       >
                         {link}
                       </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
                 <ul className="space-y-2">
                   {['Web Development', 'Mobile Apps', 'UI/UX Design', 'Cloud Solutions'].map((service, index) => (
                     <li key={index}>
-                      <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-xs">
+                      <a href="#" className="text-[#BDBDBD] hover:text-[#D4AF37] transition-colors duration-300 text-[11px]">
                         {service}
                       </a>
                     </li>
@@ -102,15 +102,15 @@ export default function Footer() {
               <div>
                 <h3 className="text-[#D4AF37] font-semibold text-sm mb-3">Contact</h3>
                 <ul className="space-y-2">
-                  <li className="text-[#BDBDBD] text-xs">
+                  <li className="text-[#BDBDBD] text-[11px]">
                     <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Phone</span>
                     <a href="tel:+919044002858" className="hover:text-[#D4AF37] transition-colors duration-300">
                       9044002858
                     </a>
                   </li>
-                  <li className="text-[#BDBDBD] text-xs">
+                  <li className="text-[#BDBDBD] text-[11px]">
                     <span className="block text-[#BDBDBD]/60 text-[10px] mb-0.5">Address</span>
-                    <span className="block">914K – Solitarian City Building,</span>
+                    <span className="block whitespace-nowrap">914K – Solitarian City Building,</span>
                     <span className="block">KP-3, Greater Noida,</span>
                     <span className="block">Gautam Buddh Nagar,</span>
                     <span className="block">Uttar Pradesh, India – 201310</span>
