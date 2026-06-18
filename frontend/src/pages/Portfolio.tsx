@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue } from 'framer-motion'
 import { Check, ChevronRight, ExternalLink, Zap, Users, TrendingUp, Shield, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
@@ -702,11 +702,7 @@ const PortfolioSlider = () => {
   const totalSingleSetWidth = sliderItems.length * (itemWidth + gap)
   
   const [isPaused, setIsPaused] = useState(false)
-  const [offset, setOffset] = useState(0)
-  const sliderRef = useRef(null)
-  const touchStartX = useRef(0)
-  const touchCurrentX = useRef(0)
-  const isDragging = useRef(false)
+  const x = useMotionValue(0)
   const resumeTimeoutRef = useRef(null)
 
   const pauseAutoScroll = useCallback(() => {
@@ -721,49 +717,26 @@ const PortfolioSlider = () => {
 
   const handleNext = () => {
     pauseAutoScroll()
-    setOffset(prev => prev - (itemWidth + gap))
+    x.set(x.get() - (itemWidth + gap))
   }
 
   const handlePrev = () => {
     pauseAutoScroll()
-    setOffset(prev => prev + (itemWidth + gap))
-  }
-
-  const handleTouchStart = (e) => {
-    isDragging.current = true
-    touchStartX.current = e.touches[0].clientX
-    touchCurrentX.current = e.touches[0].clientX
-    pauseAutoScroll()
-  }
-
-  const handleTouchMove = (e) => {
-    if (!isDragging.current) return
-    touchCurrentX.current = e.touches[0].clientX
-  }
-
-  const handleTouchEnd = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
-    const delta = touchStartX.current - touchCurrentX.current
-    
-    if (Math.abs(delta) > 50) {
-      if (delta > 0) {
-        handleNext()
-      } else {
-        handlePrev()
-      }
-    }
+    x.set(x.get() + (itemWidth + gap))
   }
 
   // Keep offset within bounds for smooth infinite scroll
   useEffect(() => {
-    const maxOffset = -totalSingleSetWidth
-    if (offset <= maxOffset) {
-      setOffset(prev => prev + totalSingleSetWidth)
-    } else if (offset > 0) {
-      setOffset(prev => prev - totalSingleSetWidth)
-    }
-  }, [offset, totalSingleSetWidth])
+    const unsubscribe = x.onChange((latest) => {
+      const maxOffset = -totalSingleSetWidth
+      if (latest <= maxOffset) {
+        x.set(latest + totalSingleSetWidth)
+      } else if (latest > 0) {
+        x.set(latest - totalSingleSetWidth)
+      }
+    })
+    return unsubscribe
+  }, [x, totalSingleSetWidth])
 
   return (
     <section className="py-6 sm:py-10 md:py-12 overflow-hidden relative">
@@ -791,27 +764,25 @@ const PortfolioSlider = () => {
         </div>
 
         <motion.div
-          ref={sliderRef}
           className="flex gap-6 cursor-grab active:cursor-grabbing"
-          animate={{ 
-            x: isPaused 
-              ? offset 
-              : [offset, offset - totalSingleSetWidth]
+          style={{ x }}
+          animate={isPaused ? {} : {
+            x: [x.get(), x.get() - totalSingleSetWidth]
           }}
-          transition={{
+          transition={isPaused ? {} : {
             x: {
-              repeat: isPaused ? 0 : Infinity,
+              repeat: Infinity,
               repeatType: "loop",
-              duration: isPaused ? 0.3 : sliderItems.length * 5,
-              ease: isPaused ? "easeOut" : "linear",
+              duration: sliderItems.length * 5,
+              ease: "linear",
             },
           }}
-          style={{ willChange: "transform" }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={() => pauseAutoScroll()}
-          onMouseUp={() => {
+          drag="x"
+          dragDirectionLock
+          dragElastic={0.1}
+          dragMomentum={false}
+          onDragStart={pauseAutoScroll}
+          onDragEnd={() => {
             if (resumeTimeoutRef.current) {
               clearTimeout(resumeTimeoutRef.current)
             }
@@ -819,6 +790,7 @@ const PortfolioSlider = () => {
               setIsPaused(false)
             }, 2500)
           }}
+          whileDrag={{ cursor: "grabbing" }}
         >
           {allItems.map((item, index) => (
             <a
