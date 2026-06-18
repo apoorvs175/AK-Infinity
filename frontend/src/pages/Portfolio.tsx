@@ -702,8 +702,8 @@ const PortfolioSlider = () => {
   const totalSingleSetWidth = sliderItems.length * (itemWidth + gap)
   
   const [isPaused, setIsPaused] = useState(false)
-  const x = useMotionValue(0)
-  const resumeTimeoutRef = useRef(null)
+  const x = useMotionValue(0 as any)
+  const resumeTimeoutRef = useRef<number | null>(null)
 
   const pauseAutoScroll = useCallback(() => {
     setIsPaused(true)
@@ -727,7 +727,7 @@ const PortfolioSlider = () => {
 
   // Keep offset within bounds for smooth infinite scroll
   useEffect(() => {
-    const unsubscribe = x.onChange((latest) => {
+    const unsubscribe = x.onChange((latest: number) => {
       const maxOffset = -totalSingleSetWidth
       if (latest <= maxOffset) {
         x.set(latest + totalSingleSetWidth)
@@ -737,6 +737,19 @@ const PortfolioSlider = () => {
     })
     return unsubscribe
   }, [x, totalSingleSetWidth])
+
+  const animationProps = !isPaused ? {
+    x: [x.get(), x.get() - totalSingleSetWidth] as any
+  } : {}
+
+  const transitionProps = (!isPaused ? {
+    x: {
+      repeat: Infinity,
+      repeatType: "loop",
+      duration: sliderItems.length * 5,
+      ease: "linear",
+    },
+  } : {}) as any
 
   return (
     <section className="py-6 sm:py-10 md:py-12 overflow-hidden relative">
@@ -766,17 +779,8 @@ const PortfolioSlider = () => {
         <motion.div
           className="flex gap-6 cursor-grab active:cursor-grabbing"
           style={{ x }}
-          animate={!isPaused ? {
-            x: [x.get(), x.get() - totalSingleSetWidth]
-          } as any : undefined}
-          transition={!isPaused ? {
-            x: {
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: sliderItems.length * 5,
-              ease: "linear",
-            },
-          } : undefined}
+          animate={animationProps}
+          transition={transitionProps}
           drag="x"
           dragDirectionLock
           dragElastic={0.1}
