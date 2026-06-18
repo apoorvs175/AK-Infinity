@@ -37,7 +37,7 @@ const portfolioProjects = [
       'Better occupancy management',
       'Streamlined fee tracking'
     ],
-    liveLink: 'https://www.clanzainn.com/',
+    liveLink: 'https://clanzainn.vercel.app/',
     images: [
       'https://images.pexels.com/photos/7114129/pexels-photo-7114129.jpeg?auto=compress&cs=tinysrgb&w=1600',
       'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2069&auto=format&fit=crop',
@@ -635,6 +635,149 @@ const PortfolioRoadmapPath = () => {
   )
 }
 
+const PortfolioSlider = () => {
+  const sliderItems = [
+    {
+      id: 1,
+      title: "Clanza Inn",
+      description: "Modern student accommodation platform.",
+      image: "/Images/Clanza_In_Hostel.png",
+      link: "https://clanzainn.vercel.app/"
+    },
+    {
+      id: 2,
+      title: "MyHostel HMA",
+      description: "Smart hostel operations management.",
+      image: "/Images/HostelManagementPortal_Image.png",
+      link: "https://www.myhostell.site/auth/login"
+    },
+    {
+      id: 3,
+      title: "ZynPay",
+      description: "Digital payment and transaction solution.",
+      image: "/Images/ZynpayPrductImage.png",
+      link: "https://zynpayproduct.vercel.app/"
+    },
+    {
+      id: 4,
+      title: "Atrangi Café",
+      description: "Modern café experience platform.",
+      image: "/Images/atrangiCafe_Image.png",
+      link: "https://cozy-brew-hub-16.preview.emergentagent.com/"
+    },
+    {
+      id: 5,
+      title: "CodeX Platform",
+      description: "Interactive coding and learning ecosystem.",
+      image: "/Images/CodeX_Platform.png",
+      link: "https://codex-platform-one.vercel.app/"
+    },
+    {
+      id: 6,
+      title: "E-Commerce",
+      description: "Premium online shopping experience.",
+      image: "/Images/E_Commerce_Image.png",
+      link: "https://shop-swart-iota.vercel.app/"
+    },
+    {
+      id: 7,
+      title: "Daily Wages Workforce",
+      description: "Workforce and labor management platform.",
+      image: "/Images/DailyWagesWorkforce_image.png",
+      link: "https://daily-wages-workforce-6qef.vercel.app/"
+    },
+    {
+      id: 8,
+      title: "Real Estate",
+      description: "Property listing and management platform.",
+      image: "/Images/RealEastate_Company.png",
+      link: "https://real-estate-self-phi.vercel.app/"
+    }
+  ]
+
+  // Duplicate items for infinite scroll
+  const allItems = [...sliderItems, ...sliderItems, ...sliderItems]
+  const itemWidth = 300
+  const gap = 24
+  const totalSingleSetWidth = sliderItems.length * (itemWidth + gap)
+
+  return (
+    <section className="py-6 sm:py-10 md:py-12 overflow-hidden relative">
+      {/* Decorative gradient elements */}
+      <div className="absolute top-0 left-1/4 w-72 h-72 bg-gold-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-accent/5 rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="relative z-10">
+        <motion.div
+          className="flex gap-6"
+          animate={{ x: [0, -totalSingleSetWidth] }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: sliderItems.length * 5,
+              ease: "linear",
+            },
+          }}
+          style={{ willChange: "transform" }}
+        >
+          {allItems.map((item, index) => (
+            <a
+              key={`${item.id}-${index}`}
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0"
+            >
+              <motion.div
+                className="w-[220px] sm:w-[300px] bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group relative"
+                whileHover={{ 
+                  y: -12, 
+                  transition: { duration: 0.4, ease: "easeOut" }
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                {/* Premium gradient border */}
+                <div className="absolute inset-0 rounded-3xl p-px bg-gradient-to-br from-gold-primary/30 via-amber-100/20 to-slate-200/30 pointer-events-none group-hover:from-gold-primary/50 group-hover:via-amber-100/30 group-hover:to-slate-200/50 transition-all duration-500">
+                  <div className="absolute inset-0 bg-white rounded-[23px]" />
+                </div>
+                <div className="relative z-10">
+                  <div className="relative h-[160px] sm:h-[180px] overflow-hidden">
+                    <motion.img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      whileHover={{ scale: 1.05, transition: { duration: 0.7 } }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent" />
+                    
+                    {/* Subtle overlay on hover */}
+                    <motion.div 
+                      className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300"
+                    />
+                  </div>
+                  
+                  <div className="p-4 sm:p-5">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-1 group-hover:text-gold-primary transition-colors duration-300">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-tight">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </a>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 export default function Portfolio() {
   return (
     <div className="min-h-screen relative">
@@ -646,7 +789,7 @@ export default function Portfolio() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-12 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-20 pb-2 sm:pt-24 sm:pb-4 md:pt-20 md:pb-6 lg:pt-24 lg:pb-8">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -654,21 +797,24 @@ export default function Portfolio() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <span className="inline-block text-gold-primary font-semibold mb-4 tracking-widest uppercase text-sm">
+            <span className="inline-block text-gold-primary font-semibold mb-3 tracking-widest uppercase text-sm">
               Our Portfolio Journey
             </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary mb-8">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary mb-6">
               Success Stories
             </h1>
-            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto leading-relaxed mb-0">
               Explore our journey of transforming businesses through premium digital solutions, one success story at a time.
             </p>
           </motion.div>
         </div>
       </section>
 
+      {/* Portfolio Slider */}
+      <PortfolioSlider />
+
       {/* Portfolio Journey Section */}
-      <section className="py-12 sm:py-16 md:py-20 relative">
+      <section className="py-6 sm:py-10 md:py-12 relative">
         <PortfolioRoadmapPath />
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {portfolioProjects.map((project, index) => {
@@ -680,9 +826,9 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: '-150px' }}
                 transition={{ duration: 0.8 }}
-                className={`mb-32 ${index === portfolioProjects.length - 1 ? 'mb-20' : ''}`}
+                className={`mb-20 sm:mb-32 ${index === portfolioProjects.length - 1 ? 'mb-12 sm:mb-20' : ''}`}
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
                   {/* Image Composition */}
                   <div className={`${!isEven ? 'md:order-2' : ''}`}>
                     <PortfolioImageComposition index={index} images={project.images} />
@@ -717,24 +863,24 @@ export default function Portfolio() {
                         {project.businessType}
                       </p>
 
-                      {/* Client Goal */}
-                      <div className="mb-6">
+                      {/* Client Goal - Hidden on mobile */}
+                      <div className="mb-6 hidden md:block">
                         <h4 className="text-lg font-semibold text-text-primary mb-2 flex items-center gap-2">
                           <Zap className="w-5 h-5 text-gold-primary" /> Client Goal
                         </h4>
                         <p className="text-text-secondary leading-relaxed">{project.clientGoal}</p>
                       </div>
 
-                      {/* Challenge */}
-                      <div className="mb-6">
+                      {/* Challenge - Hidden on mobile */}
+                      <div className="mb-6 hidden md:block">
                         <h4 className="text-lg font-semibold text-text-primary mb-2 flex items-center gap-2">
                           <Shield className="w-5 h-5 text-gold-primary" /> The Challenge
                         </h4>
                         <p className="text-text-secondary leading-relaxed">{project.challenge}</p>
                       </div>
 
-                      {/* Solution */}
-                      <div className="mb-8">
+                      {/* Solution - Hidden on mobile */}
+                      <div className="mb-8 hidden md:block">
                         <h4 className="text-lg font-semibold text-text-primary mb-2 flex items-center gap-2">
                           <Users className="w-5 h-5 text-gold-primary" /> Our Solution
                         </h4>
