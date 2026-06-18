@@ -705,7 +705,7 @@ const PortfolioSlider = () => {
   const x = useMotionValue(0 as any)
   const resumeTimeoutRef = useRef<number | null>(null)
 
-  const pauseAutoScroll = useCallback((resumeDelay = 2500) => {
+  const pauseAutoScroll = useCallback((resumeDelay = 800) => {
     setIsPaused(true)
     if (resumeTimeoutRef.current) {
       clearTimeout(resumeTimeoutRef.current)
@@ -740,7 +740,7 @@ const PortfolioSlider = () => {
 
   const animationProps = !isPaused ? {
     x: [x.get(), x.get() - totalSingleSetWidth] as any
-  } : {}
+  } : undefined
 
   const transitionProps = (!isPaused ? {
     x: {
@@ -749,7 +749,7 @@ const PortfolioSlider = () => {
       duration: sliderItems.length * 5,
       ease: "linear",
     },
-  } : {}) as any
+  } : undefined) as any
 
   return (
     <section className="py-6 sm:py-10 md:py-12 overflow-hidden relative">
@@ -783,16 +783,17 @@ const PortfolioSlider = () => {
           transition={transitionProps}
           drag="x"
           dragDirectionLock
-          dragElastic={0.1}
-          dragMomentum={false}
-          onDragStart={() => pauseAutoScroll(2500)}
+          dragElastic={0.05}
+          dragMomentum={true}
+          dragPropagation={false}
+          onDragStart={() => pauseAutoScroll(800)}
           onDragEnd={() => {
             if (resumeTimeoutRef.current) {
               clearTimeout(resumeTimeoutRef.current)
             }
             resumeTimeoutRef.current = setTimeout(() => {
               setIsPaused(false)
-            }, 2500)
+            }, 800)
           }}
           whileDrag={{ cursor: "grabbing" }}
         >
