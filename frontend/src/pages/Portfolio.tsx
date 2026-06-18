@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { Check, ChevronRight, ExternalLink, Zap, Users, TrendingUp, Shield, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
@@ -766,17 +766,17 @@ const PortfolioSlider = () => {
         <motion.div
           className="flex gap-6 cursor-grab active:cursor-grabbing"
           style={{ x }}
-          animate={isPaused ? {} : {
+          animate={!isPaused ? {
             x: [x.get(), x.get() - totalSingleSetWidth]
-          }}
-          transition={isPaused ? {} : {
+          } as any : undefined}
+          transition={!isPaused ? {
             x: {
               repeat: Infinity,
               repeatType: "loop",
               duration: sliderItems.length * 5,
               ease: "linear",
             },
-          }}
+          } : undefined}
           drag="x"
           dragDirectionLock
           dragElastic={0.1}
