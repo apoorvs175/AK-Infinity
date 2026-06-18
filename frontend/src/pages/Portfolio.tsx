@@ -1,8 +1,8 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Check, ChevronRight, ExternalLink, Zap, Users, TrendingUp, Shield } from 'lucide-react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Check, ChevronRight, ExternalLink, Zap, Users, TrendingUp, Shield, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react'
 import Button from '../components/Button'
 import { Link } from 'react-router-dom'
-import { useRef } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 
 const portfolioProjects = [
   {
@@ -700,6 +700,70 @@ const PortfolioSlider = () => {
   const itemWidth = 300
   const gap = 24
   const totalSingleSetWidth = sliderItems.length * (itemWidth + gap)
+  
+  const [isPaused, setIsPaused] = useState(false)
+  const [offset, setOffset] = useState(0)
+  const sliderRef = useRef(null)
+  const touchStartX = useRef(0)
+  const touchCurrentX = useRef(0)
+  const isDragging = useRef(false)
+  const resumeTimeoutRef = useRef(null)
+
+  const pauseAutoScroll = useCallback(() => {
+    setIsPaused(true)
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current)
+    }
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false)
+    }, 2500)
+  }, [])
+
+  const handleNext = () => {
+    pauseAutoScroll()
+    setOffset(prev => prev - (itemWidth + gap))
+  }
+
+  const handlePrev = () => {
+    pauseAutoScroll()
+    setOffset(prev => prev + (itemWidth + gap))
+  }
+
+  const handleTouchStart = (e) => {
+    isDragging.current = true
+    touchStartX.current = e.touches[0].clientX
+    touchCurrentX.current = e.touches[0].clientX
+    pauseAutoScroll()
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDragging.current) return
+    touchCurrentX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    const delta = touchStartX.current - touchCurrentX.current
+    
+    if (Math.abs(delta) > 50) {
+      if (delta > 0) {
+        handleNext()
+      } else {
+        handlePrev()
+      }
+    }
+  }
+
+  // Keep offset within bounds for smooth infinite scroll
+  useEffect(() => {
+    const maxOffset = -totalSingleSetWidth
+    if (offset <= maxOffset) {
+      setOffset(prev => prev + totalSingleSetWidth)
+    } else if (offset > 0) {
+      setOffset(prev => prev - totalSingleSetWidth)
+    }
+  }, [offset, totalSingleSetWidth])
 
   return (
     <section className="py-6 sm:py-10 md:py-12 overflow-hidden relative">
@@ -708,18 +772,53 @@ const PortfolioSlider = () => {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-accent/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="relative z-10">
+        {/* Navigation Arrows - Desktop/Tablet only */}
+        <div className="hidden sm:flex absolute top-1/2 -translate-y-1/2 left-4 z-20">
+          <button
+            onClick={handlePrev}
+            className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-slate-100 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+          >
+            <ChevronLeft className="w-6 h-6 text-slate-700 group-hover:text-gold-primary transition-colors duration-300" />
+          </button>
+        </div>
+        <div className="hidden sm:flex absolute top-1/2 -translate-y-1/2 right-4 z-20">
+          <button
+            onClick={handleNext}
+            className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-slate-100 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+          >
+            <ChevronRightIcon className="w-6 h-6 text-slate-700 group-hover:text-gold-primary transition-colors duration-300" />
+          </button>
+        </div>
+
         <motion.div
-          className="flex gap-6"
-          animate={{ x: [0, -totalSingleSetWidth] }}
+          ref={sliderRef}
+          className="flex gap-6 cursor-grab active:cursor-grabbing"
+          animate={{ 
+            x: isPaused 
+              ? offset 
+              : [offset, offset - totalSingleSetWidth]
+          }}
           transition={{
             x: {
-              repeat: Infinity,
+              repeat: isPaused ? 0 : Infinity,
               repeatType: "loop",
-              duration: sliderItems.length * 5,
-              ease: "linear",
+              duration: isPaused ? 0.3 : sliderItems.length * 5,
+              ease: isPaused ? "easeOut" : "linear",
             },
           }}
           style={{ willChange: "transform" }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={() => pauseAutoScroll()}
+          onMouseUp={() => {
+            if (resumeTimeoutRef.current) {
+              clearTimeout(resumeTimeoutRef.current)
+            }
+            resumeTimeoutRef.current = setTimeout(() => {
+              setIsPaused(false)
+            }, 2500)
+          }}
         >
           {allItems.map((item, index) => (
             <a
@@ -727,7 +826,7 @@ const PortfolioSlider = () => {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0"
+              className="flex-shrink-0 pointer-events-auto"
             >
               <motion.div
                 className="w-[220px] sm:w-[300px] bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group relative"
