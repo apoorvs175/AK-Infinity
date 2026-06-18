@@ -705,23 +705,23 @@ const PortfolioSlider = () => {
   const x = useMotionValue(0 as any)
   const resumeTimeoutRef = useRef<number | null>(null)
 
-  const pauseAutoScroll = useCallback(() => {
+  const pauseAutoScroll = useCallback((resumeDelay = 2500) => {
     setIsPaused(true)
     if (resumeTimeoutRef.current) {
       clearTimeout(resumeTimeoutRef.current)
     }
     resumeTimeoutRef.current = setTimeout(() => {
       setIsPaused(false)
-    }, 2500)
+    }, resumeDelay)
   }, [])
 
   const handleNext = () => {
-    pauseAutoScroll()
+    pauseAutoScroll(500)
     x.set(x.get() - (itemWidth + gap))
   }
 
   const handlePrev = () => {
-    pauseAutoScroll()
+    pauseAutoScroll(500)
     x.set(x.get() + (itemWidth + gap))
   }
 
@@ -785,7 +785,7 @@ const PortfolioSlider = () => {
           dragDirectionLock
           dragElastic={0.1}
           dragMomentum={false}
-          onDragStart={pauseAutoScroll}
+          onDragStart={() => pauseAutoScroll(2500)}
           onDragEnd={() => {
             if (resumeTimeoutRef.current) {
               clearTimeout(resumeTimeoutRef.current)
