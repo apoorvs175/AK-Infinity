@@ -330,7 +330,7 @@ const portfolioProjects = [
 const PortfolioImageComposition = ({ index, images }: { index: number, images: string[] }) => {
   const isEven = index % 2 === 0
   const isProject01 = index === 0
-  const useMagazineLayout = [2, 3, 4, 5, 6, 7, 8].includes(index) // ZynPay (index2), Atrangi (index3), Codex (index4), E-Commerce (index5), Daily Wages (index6), Real Estate (index7), Heartbeat Hotel (index8)
+  const useMagazineLayout = [1, 2, 3, 4, 5, 6, 7, 8].includes(index) // MyHostel (index1), ZynPay (index2), Atrangi (index3), Codex (index4), E-Commerce (index5), Daily Wages (index6), Real Estate (index7), Heartbeat Hotel (index8)
 
   if (isProject01) {
     return (
