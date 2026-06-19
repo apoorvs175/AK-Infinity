@@ -42,7 +42,7 @@ const portfolioProjects = [
       '/Images/Project Images/ClanzaInn_1.png',
       '/Images/Project Images/ClanzaInn_2.png',
       '/Images/Project Images/ClanzaInn_3.png',
-      '/Images/Project Images/ClanzaInn_3.png'
+      '/Images/Project Images/ClanzaInn_4.png'
     ]
   },
   {
@@ -83,7 +83,7 @@ const portfolioProjects = [
       '/Images/Project Images/MyHostelHMA_1.png',
       '/Images/Project Images/MyHostelHMA_2.png',
       '/Images/Project Images/MyHostelHMA_3.png',
-      '/Images/Project Images/MyHostelHMA_3.png'
+      '/Images/Project Images/MyHostelHMA_4.png'
     ]
   },
   {
@@ -289,6 +289,40 @@ const portfolioProjects = [
       '/Images/Project Images/RealEstate_2.png',
       '/Images/Project Images/RealEstate_3.png',
       '/Images/Project Images/RealEstate_3.png'
+    ]
+  },
+  {
+    id: 9,
+    milestone: '09',
+    title: 'Heartbeat Hotel – Modern Hotel Web Application',
+    businessType: 'Hospitality / Hotel Tech',
+    clientGoal: 'To build a complete, modern, and attractive hotel web application for seamless booking and guest management.',
+    challenge: 'Traditional hotel booking systems are outdated, with poor user experience and limited functionality.',
+    solution: 'We developed a beautiful, modern hotel web application with online room booking, room viewing, guest management, and an elegant user interface.',
+    technologies: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'CSS3', 'Responsive Design'],
+    features: [
+      'Online Room Booking',
+      'Room Gallery & Details',
+      'Guest Management',
+      'Date Selection',
+      'Responsive Interface',
+      'Modern Animations',
+      'SEO Optimized',
+      'Mobile-First Design'
+    ],
+    outcome: 'Created a stunning, user-friendly hotel booking platform that enhances guest experience and streamlines operations.',
+    results: [
+      'Modern, attractive design',
+      'Seamless booking experience',
+      'Mobile-responsive interface',
+      'Improved user engagement'
+    ],
+    liveLink: '#',
+    images: [
+      '/Images/Project Images/heartBeatHotel1.png',
+      '/Images/Project Images/heartBeatHotel2.png',
+      '/Images/Project Images/heartBeatHotel3.png',
+      '/Images/Project Images/heartBeatHotel4.png'
     ]
   }
 ]
@@ -692,6 +726,13 @@ const PortfolioSlider = () => {
       description: "Property listing and management platform.",
       image: "/Images/Slider/RealEastate_Company.png",
       link: "https://real-estate-self-phi.vercel.app/"
+    },
+    {
+      id: 9,
+      title: "Heartbeat Hotel",
+      description: "Complete modern hotel web application.",
+      image: "/Images/Project Images/heartBeatHotel1.png",
+      link: "#"
     }
   ]
 
