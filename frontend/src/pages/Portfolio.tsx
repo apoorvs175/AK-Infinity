@@ -256,7 +256,7 @@ const portfolioProjects = [
       '/Images/Project Images/DailyWages_1.png',
       '/Images/Project Images/DailyWages_2.png',
       '/Images/Project Images/DailyWages_3.png',
-      '/Images/Project Images/DailyWages_3.png'
+      '/Images/Project Images/DailyWages_4.png'
     ]
   },
   {
@@ -288,7 +288,7 @@ const portfolioProjects = [
       '/Images/Project Images/RealEstate_1.png',
       '/Images/Project Images/RealEstate_2.png',
       '/Images/Project Images/RealEstate_3.png',
-      '/Images/Project Images/RealEstate_3.png'
+      '/Images/Project Images/RealEstate_4.png'
     ]
   },
   {
@@ -317,7 +317,7 @@ const portfolioProjects = [
       'Mobile-responsive interface',
       'Improved user engagement'
     ],
-    liveLink: '#',
+    liveLink: 'https://heartbeat-fawn.vercel.app/',
     images: [
       '/Images/Project Images/heartBeatHotel1.png',
       '/Images/Project Images/heartBeatHotel2.png',
@@ -330,9 +330,7 @@ const portfolioProjects = [
 const PortfolioImageComposition = ({ index, images }: { index: number, images: string[] }) => {
   const isEven = index % 2 === 0
   const isProject01 = index === 0
-  const isProject02 = index === 1
-  const isProject03 = index === 2
-  const isProject05 = index === 4
+  const useMagazineLayout = [2, 3, 4, 5, 6, 7, 8].includes(index) // ZynPay (index2), Atrangi (index3), Codex (index4), E-Commerce (index5), Daily Wages (index6), Real Estate (index7), Heartbeat Hotel (index8)
 
   if (isProject01) {
     return (
@@ -412,87 +410,7 @@ const PortfolioImageComposition = ({ index, images }: { index: number, images: s
     )
   }
 
-  if (isProject02) {
-    return (
-      <div className="relative w-full">
-        <motion.div
-          initial={{ opacity: 0, x: isEven ? -40 : 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="relative"
-        >
-          {/* Staggered collage layout for Project 02 */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Left column */}
-            <div className="flex flex-col gap-4">
-              <motion.div
-                whileHover={{ scale: 1.03, y: -4 }}
-                transition={{ duration: 0.3 }}
-                className="relative overflow-hidden rounded-3xl aspect-[4/5]"
-              >
-                <img
-                  src={images[0]}
-                  alt="Project showcase"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.03, y: -4 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-                className="relative overflow-hidden rounded-3xl aspect-[4/5]"
-              >
-                <img
-                  src={images[2]}
-                  alt="Project feature"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </motion.div>
-            </div>
-            {/* Right column - shifted downward */}
-            <div className="flex flex-col gap-4 pt-12">
-              <motion.div
-                whileHover={{ scale: 1.03, y: -4 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-                className="relative overflow-hidden rounded-3xl aspect-[4/5]"
-              >
-                <img
-                  src={images[1]}
-                  alt="Project feature"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.03, y: -4 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                className="relative overflow-hidden rounded-3xl aspect-[4/5]"
-              >
-                <img
-                  src={images[3]}
-                  alt="Project summary"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </motion.div>
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 rounded-full blur-2xl"
-          />
-        </motion.div>
-      </div>
-    )
-  }
-
-  if (isProject03 || isProject05) {
+  if (useMagazineLayout) {
     return (
       <div className="relative w-full">
         <motion.div
@@ -615,6 +533,18 @@ const PortfolioImageComposition = ({ index, images }: { index: number, images: s
               <img
                 src={images[2]}
                 alt="Project feature"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.03, y: -4 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              className="relative overflow-hidden rounded-3xl aspect-square"
+            >
+              <img
+                src={images[3]}
+                alt="Project summary"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
