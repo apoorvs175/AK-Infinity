@@ -641,56 +641,56 @@ const PortfolioSlider = () => {
       id: 1,
       title: "Clanza Inn",
       description: "Modern student accommodation platform.",
-      image: "/Images/Clanza_In_Hostel.png",
+      image: "/Images/Slider/Clanza_In_Hostel.png",
       link: "https://clanzainn.vercel.app/"
     },
     {
       id: 2,
       title: "MyHostel HMA",
       description: "Smart hostel operations management.",
-      image: "/Images/HostelManagementPortal_Image.png",
+      image: "/Images/Slider/HostelManagementPortal_Image.png",
       link: "https://www.myhostell.site/auth/login"
     },
     {
       id: 3,
       title: "ZynPay",
       description: "Digital payment and transaction solution.",
-      image: "/Images/ZynpayPrductImage.png",
+      image: "/Images/Slider/ZynpayPrductImage.png",
       link: "https://zynpayproduct.vercel.app/"
     },
     {
       id: 4,
       title: "Atrangi Café",
       description: "Modern café experience platform.",
-      image: "/Images/atrangiCafe_Image.png",
+      image: "/Images/Slider/atrangiCafe_Image.png",
       link: "https://cozy-brew-hub-16.preview.emergentagent.com/"
     },
     {
       id: 5,
       title: "CodeX Platform",
       description: "Interactive coding and learning ecosystem.",
-      image: "/Images/CodeX_Platform.png",
+      image: "/Images/Slider/CodeX_Platform.png",
       link: "https://codex-platform-one.vercel.app/"
     },
     {
       id: 6,
       title: "E-Commerce",
       description: "Premium online shopping experience.",
-      image: "/Images/E_Commerce_Image.png",
+      image: "/Images/Slider/E_Commerce_Image.png",
       link: "https://shop-swart-iota.vercel.app/"
     },
     {
       id: 7,
       title: "Daily Wages Workforce",
       description: "Workforce and labor management platform.",
-      image: "/Images/DailyWagesWorkforce_image.png",
+      image: "/Images/Slider/DailyWagesWorkforce_image.png",
       link: "https://daily-wages-workforce-6qef.vercel.app/"
     },
     {
       id: 8,
       title: "Real Estate",
       description: "Property listing and management platform.",
-      image: "/Images/RealEastate_Company.png",
+      image: "/Images/Slider/RealEastate_Company.png",
       link: "https://real-estate-self-phi.vercel.app/"
     }
   ]
