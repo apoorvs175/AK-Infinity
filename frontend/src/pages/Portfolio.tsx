@@ -48,47 +48,75 @@ const portfolioProjects = [
   {
     id: 2,
     milestone: '02',
-    title: 'MyHostel HMA (Hostel Management Application)',
-    businessType: 'SaaS / Property Management',
-    clientGoal: 'To create a scalable SaaS platform for managing multiple hostels with role-based access and real-time analytics.',
-    challenge: 'Managing multiple hostels across locations was fragmented, with no centralized system for operations and reporting.',
-    solution: 'We built a multi-tenant SaaS platform with super admin, hostel admin, and student portals with real-time data sync and analytics.',
-    technologies: ['React', 'TypeScript', 'Supabase Cloud Services', 'Supabase PostgreSQL', 'Supabase Auth', 'JWT Security'],
+    title: 'Atrangi Café – Modern Café Experience Platform',
+    businessType: 'Food & Beverage',
+    clientGoal: 'To create a modern café website with digital menu, table booking, and customer engagement features.',
+    challenge: 'The café lacked an online presence, making it difficult for customers to view menus and book tables.',
+    solution: 'We designed a visually engaging platform with digital menu, table booking, event promotion, and interactive animations.',
+    technologies: ['React', 'TypeScript', 'CSS3', 'Modern Animation Libraries'],
     features: [
-      'Role-Based Authentication',
-      'Super Admin Dashboard',
-      'Hostel Admin Dashboard',
-      'Student Portal',
-      'Occupancy Tracking',
-      'Room Allocation',
-      'Bed Management',
-      'Complaint System',
-      'Fee Management',
-      'Attendance Management',
-      'Digital Records',
-      'Real-Time Reporting',
-      'Analytics Dashboard',
-      'Multi-Hostel Support'
+      'Digital Menu',
+      'Table Booking',
+      'Event Promotion',
+      'Contact Integration',
+      'Customer Engagement',
+      'Mobile Responsive Design',
+      'Interactive Animations',
+      'Modern UI/UX',
+      'SEO Optimization'
     ],
-    outcome: 'Centralized hostel operations with scalable SaaS architecture and real-time tracking.',
+    outcome: 'Enhanced brand visibility and improved customer engagement with better online presence.',
     results: [
-      'Centralized hostel operations',
-      'Scalable SaaS architecture',
-      'Reduced paperwork',
-      'Real-time occupancy tracking',
-      'Better hostel administration'
+      'Enhanced brand visibility',
+      'Improved customer engagement',
+      'Better online presence',
+      'Increased booking opportunities'
     ],
-    liveLink: 'https://www.myhostell.site/auth/login',
+    liveLink: 'https://cozy-brew-hub-16.preview.emergentagent.com/',
     images: [
-      '/Images/Project Images/MyHostelHMA_1.png',
-      '/Images/Project Images/MyHostelHMA_2.png',
-      '/Images/Project Images/MyHostelHMA_3.png',
-      '/Images/Project Images/MyHostelHMA_4.png'
+      '/Images/Project Images/AtrangiCafe_1.png',
+      '/Images/Project Images/AtrangiCafe_2.png',
+      '/Images/Project Images/AtrangiCafe_3.png',
+      '/Images/Project Images/AtrangiCafe_4.png'
     ]
   },
   {
     id: 3,
     milestone: '03',
+    title: 'Heartbeat Hotel – Modern Hotel Web Application',
+    businessType: 'Hospitality / Hotel Tech',
+    clientGoal: 'To build a complete, modern, and attractive hotel web application for seamless booking and guest management.',
+    challenge: 'Traditional hotel booking systems are outdated, with poor user experience and limited functionality.',
+    solution: 'We developed a beautiful, modern hotel web application with online room booking, room viewing, guest management, and an elegant user interface.',
+    technologies: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'CSS3', 'Responsive Design'],
+    features: [
+      'Online Room Booking',
+      'Room Gallery & Details',
+      'Guest Management',
+      'Date Selection',
+      'Responsive Interface',
+      'Modern Animations',
+      'SEO Optimized',
+      'Mobile-First Design'
+    ],
+    outcome: 'Created a stunning, user-friendly hotel booking platform that enhances guest experience and streamlines operations.',
+    results: [
+      'Modern, attractive design',
+      'Seamless booking experience',
+      'Mobile-responsive interface',
+      'Improved user engagement'
+    ],
+    liveLink: 'https://heartbeat-fawn.vercel.app/',
+    images: [
+      '/Images/Project Images/heartBeatHotel1.png',
+      '/Images/Project Images/heartBeatHotel2.png',
+      '/Images/Project Images/heartBeatHotel3.png',
+      '/Images/Project Images/heartBeatHotel4.png'
+    ]
+  },
+  {
+    id: 4,
+    milestone: '04',
     title: 'ZynPay – International Digital Payments Platform',
     businessType: 'FinTech',
     clientGoal: 'To build an international payment platform with currency exchange, gift cards, and real-time analytics.',
@@ -120,41 +148,6 @@ const portfolioProjects = [
       '/Images/Project Images/ZynPay_2.png',
       '/Images/Project Images/ZynPay_3.png',
       '/Images/Project Images/ZynPay_4.png'
-    ]
-  },
-  {
-    id: 4,
-    milestone: '04',
-    title: 'Atrangi Café – Modern Café Experience Platform',
-    businessType: 'Food & Beverage',
-    clientGoal: 'To create a modern café website with digital menu, table booking, and customer engagement features.',
-    challenge: 'The café lacked an online presence, making it difficult for customers to view menus and book tables.',
-    solution: 'We designed a visually engaging platform with digital menu, table booking, event promotion, and interactive animations.',
-    technologies: ['React', 'TypeScript', 'CSS3', 'Modern Animation Libraries'],
-    features: [
-      'Digital Menu',
-      'Table Booking',
-      'Event Promotion',
-      'Contact Integration',
-      'Customer Engagement',
-      'Mobile Responsive Design',
-      'Interactive Animations',
-      'Modern UI/UX',
-      'SEO Optimization'
-    ],
-    outcome: 'Enhanced brand visibility and improved customer engagement with better online presence.',
-    results: [
-      'Enhanced brand visibility',
-      'Improved customer engagement',
-      'Better online presence',
-      'Increased booking opportunities'
-    ],
-    liveLink: 'https://cozy-brew-hub-16.preview.emergentagent.com/',
-    images: [
-      '/Images/Project Images/AtrangiCafe_1.png',
-      '/Images/Project Images/AtrangiCafe_2.png',
-      '/Images/Project Images/AtrangiCafe_3.png',
-      '/Images/Project Images/AtrangiCafe_4.png'
     ]
   },
   {
@@ -196,6 +189,47 @@ const portfolioProjects = [
   {
     id: 6,
     milestone: '06',
+    title: 'MyHostel HMA (Hostel Management Application)',
+    businessType: 'SaaS / Property Management',
+    clientGoal: 'To create a scalable SaaS platform for managing multiple hostels with role-based access and real-time analytics.',
+    challenge: 'Managing multiple hostels across locations was fragmented, with no centralized system for operations and reporting.',
+    solution: 'We built a multi-tenant SaaS platform with super admin, hostel admin, and student portals with real-time data sync and analytics.',
+    technologies: ['React', 'TypeScript', 'Supabase Cloud Services', 'Supabase PostgreSQL', 'Supabase Auth', 'JWT Security'],
+    features: [
+      'Role-Based Authentication',
+      'Super Admin Dashboard',
+      'Hostel Admin Dashboard',
+      'Student Portal',
+      'Occupancy Tracking',
+      'Room Allocation',
+      'Bed Management',
+      'Complaint System',
+      'Fee Management',
+      'Attendance Management',
+      'Digital Records',
+      'Real-Time Reporting',
+      'Analytics Dashboard',
+      'Multi-Hostel Support'
+    ],
+    outcome: 'Centralized hostel operations with scalable SaaS architecture and real-time tracking.',
+    results: [
+      'Centralized hostel operations',
+      'Scalable SaaS architecture',
+      'Reduced paperwork',
+      'Real-time occupancy tracking',
+      'Better hostel administration'
+    ],
+    liveLink: 'https://www.myhostell.site/auth/login',
+    images: [
+      '/Images/Project Images/MyHostelHMA_1.png',
+      '/Images/Project Images/MyHostelHMA_2.png',
+      '/Images/Project Images/MyHostelHMA_3.png',
+      '/Images/Project Images/MyHostelHMA_4.png'
+    ]
+  },
+  {
+    id: 7,
+    milestone: '07',
     title: 'AK Infinity E-Commerce Platform',
     businessType: 'Retail & E-Commerce',
     clientGoal: 'To build a modern e-commerce platform with product management, shopping cart, and order tracking.',
@@ -228,8 +262,8 @@ const portfolioProjects = [
     ]
   },
   {
-    id: 7,
-    milestone: '07',
+    id: 8,
+    milestone: '08',
     title: 'Daily Wages Workforce Management System',
     businessType: 'HRTech / Workforce Management',
     clientGoal: 'To create a workforce tracking platform with attendance, wage calculation, and reporting.',
@@ -260,8 +294,8 @@ const portfolioProjects = [
     ]
   },
   {
-    id: 8,
-    milestone: '08',
+    id: 9,
+    milestone: '09',
     title: 'Real Estate Property Management Platform',
     businessType: 'Real Estate',
     clientGoal: 'To build a property listing and management platform with search, filters, and lead management.',
@@ -289,40 +323,6 @@ const portfolioProjects = [
       '/Images/Project Images/RealEstate_2.png',
       '/Images/Project Images/RealEstate_3.png',
       '/Images/Project Images/RealEstate_4.png'
-    ]
-  },
-  {
-    id: 9,
-    milestone: '09',
-    title: 'Heartbeat Hotel – Modern Hotel Web Application',
-    businessType: 'Hospitality / Hotel Tech',
-    clientGoal: 'To build a complete, modern, and attractive hotel web application for seamless booking and guest management.',
-    challenge: 'Traditional hotel booking systems are outdated, with poor user experience and limited functionality.',
-    solution: 'We developed a beautiful, modern hotel web application with online room booking, room viewing, guest management, and an elegant user interface.',
-    technologies: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'CSS3', 'Responsive Design'],
-    features: [
-      'Online Room Booking',
-      'Room Gallery & Details',
-      'Guest Management',
-      'Date Selection',
-      'Responsive Interface',
-      'Modern Animations',
-      'SEO Optimized',
-      'Mobile-First Design'
-    ],
-    outcome: 'Created a stunning, user-friendly hotel booking platform that enhances guest experience and streamlines operations.',
-    results: [
-      'Modern, attractive design',
-      'Seamless booking experience',
-      'Mobile-responsive interface',
-      'Improved user engagement'
-    ],
-    liveLink: 'https://heartbeat-fawn.vercel.app/',
-    images: [
-      '/Images/Project Images/heartBeatHotel1.png',
-      '/Images/Project Images/heartBeatHotel2.png',
-      '/Images/Project Images/heartBeatHotel3.png',
-      '/Images/Project Images/heartBeatHotel4.png'
     ]
   }
 ]
@@ -610,24 +610,24 @@ const PortfolioSlider = () => {
     },
     {
       id: 2,
-      title: "MyHostel HMA",
-      description: "Smart hostel operations management.",
-      image: "/Images/Slider/HostelManagementPortal_Image.png",
-      link: "https://www.myhostell.site/auth/login"
-    },
-    {
-      id: 3,
-      title: "ZynPay",
-      description: "Digital payment and transaction solution.",
-      image: "/Images/Slider/ZynpayPrductImage.png",
-      link: "https://zynpayproduct.vercel.app/"
-    },
-    {
-      id: 4,
       title: "Atrangi Café",
       description: "Modern café experience platform.",
       image: "/Images/Slider/atrangiCafe_Image.png",
       link: "https://cozy-brew-hub-16.preview.emergentagent.com/"
+    },
+    {
+      id: 3,
+      title: "Heartbeat Hotel",
+      description: "Complete modern hotel web application.",
+      image: "/Images/Project Images/heartBeatHotel1.png",
+      link: "https://heartbeat-fawn.vercel.app/"
+    },
+    {
+      id: 4,
+      title: "ZynPay",
+      description: "Digital payment and transaction solution.",
+      image: "/Images/Slider/ZynpayPrductImage.png",
+      link: "https://zynpayproduct.vercel.app/"
     },
     {
       id: 5,
@@ -638,31 +638,31 @@ const PortfolioSlider = () => {
     },
     {
       id: 6,
+      title: "MyHostel HMA",
+      description: "Smart hostel operations management.",
+      image: "/Images/Slider/HostelManagementPortal_Image.png",
+      link: "https://www.myhostell.site/auth/login"
+    },
+    {
+      id: 7,
       title: "E-Commerce",
       description: "Premium online shopping experience.",
       image: "/Images/Slider/E_Commerce_Image.png",
       link: "https://shop-swart-iota.vercel.app/"
     },
     {
-      id: 7,
+      id: 8,
       title: "Daily Wages Workforce",
       description: "Workforce and labor management platform.",
       image: "/Images/Slider/DailyWagesWorkforce_image.png",
       link: "https://daily-wages-workforce-6qef.vercel.app/"
     },
     {
-      id: 8,
+      id: 9,
       title: "Real Estate",
       description: "Property listing and management platform.",
       image: "/Images/Slider/RealEastate_Company.png",
       link: "https://real-estate-self-phi.vercel.app/"
-    },
-    {
-      id: 9,
-      title: "Heartbeat Hotel",
-      description: "Complete modern hotel web application.",
-      image: "/Images/Project Images/heartBeatHotel1.png",
-      link: "#"
     }
   ]
 
