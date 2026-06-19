@@ -39,10 +39,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://clanzainn.vercel.app/',
     images: [
-      'https://images.pexels.com/photos/7114129/pexels-photo-7114129.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2069&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/ClanzaInn_1.png',
+      '/Images/Project Images/ClanzaInn_2.png',
+      '/Images/Project Images/ClanzaInn_3.png',
+      '/Images/Project Images/ClanzaInn_3.png'
     ]
   },
   {
@@ -80,10 +80,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://www.myhostell.site/auth/login',
     images: [
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/MyHostelHMA_1.png',
+      '/Images/Project Images/MyHostelHMA_2.png',
+      '/Images/Project Images/MyHostelHMA_3.png',
+      '/Images/Project Images/MyHostelHMA_3.png'
     ]
   },
   {
@@ -116,10 +116,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://zynpayproduct.vercel.app/',
     images: [
-      'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2071&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/ZynPay_1.png',
+      '/Images/Project Images/ZynPay_2.png',
+      '/Images/Project Images/ZynPay_3.png',
+      '/Images/Project Images/ZynPay_4.png'
     ]
   },
   {
@@ -151,10 +151,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://cozy-brew-hub-16.preview.emergentagent.com/',
     images: [
-      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2071&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop'
+      '/Images/Project Images/AtrangiCafe_1.png',
+      '/Images/Project Images/AtrangiCafe_2.png',
+      '/Images/Project Images/AtrangiCafe_3.png',
+      '/Images/Project Images/AtrangiCafe_4.png'
     ]
   },
   {
@@ -187,10 +187,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://codex-platform-one.vercel.app/',
     images: [
-      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/CodeX_1.png',
+      '/Images/Project Images/CodeX_2.png',
+      '/Images/Project Images/CodeX_3.png',
+      '/Images/Project Images/CodeX_4.png'
     ]
   },
   {
@@ -221,10 +221,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://shop-swart-iota.vercel.app/',
     images: [
-      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1488998427799-e3362cec87c3?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/ECommerce_1.png',
+      '/Images/Project Images/ECommerce_2.png',
+      '/Images/Project Images/ECommerce_3.png',
+      '/Images/Project Images/ECommerce_4.png'
     ]
   },
   {
@@ -253,10 +253,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://daily-wages-workforce-6qef.vercel.app/',
     images: [
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/DailyWages_1.png',
+      '/Images/Project Images/DailyWages_2.png',
+      '/Images/Project Images/DailyWages_3.png',
+      '/Images/Project Images/DailyWages_3.png'
     ]
   },
   {
@@ -285,10 +285,10 @@ const portfolioProjects = [
     ],
     liveLink: 'https://real-estate-self-phi.vercel.app/',
     images: [
-      'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1430285561322-7808604715df?q=80&w=2070&auto=format&fit=crop'
+      '/Images/Project Images/RealEstate_1.png',
+      '/Images/Project Images/RealEstate_2.png',
+      '/Images/Project Images/RealEstate_3.png',
+      '/Images/Project Images/RealEstate_3.png'
     ]
   }
 ]
