@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import AKLogo from '../assets/AK_Main_Logo.webp'
 
 export default function Footer() {
   return (
@@ -9,8 +10,12 @@ export default function Footer() {
           {/* Logo & Brand Section */}
           <div className="mb-8 text-center sm:text-left">
             <Link to="/" className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-              <div className="w-10 h-10 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
-                <span className="text-[#D4AF37] font-bold text-xl">AK</span>
+              <div className="w-10 h-10 bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+                <img
+                  src={AKLogo}
+                  alt="AK Infinity Logo"
+                  className="w-9 h-9 object-cover"
+                />
               </div>
               <span className="text-lg font-bold text-white">AK Infinity</span>
             </Link>
@@ -138,8 +143,12 @@ export default function Footer() {
         <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-[#0F0F0F] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center">
-                <span className="text-[#D4AF37] font-bold text-2xl">AK</span>
+              <div className="w-12 h-12 bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+                <img
+                  src={AKLogo}
+                  alt="AK Infinity Logo"
+                  className="w-11 h-11 object-cover"
+                />
               </div>
               <span className="text-xl font-bold text-white">AK Infinity</span>
             </Link>

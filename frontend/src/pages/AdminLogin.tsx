@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import Button from '../components/Button'
+import AKLogo from '../assets/AK_Main_Logo.webp'
 
 interface LoginFormData {
   email: string
@@ -29,8 +30,8 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-slate-100">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">AK</span>
+          <div className="w-12 h-12 bg-white rounded-xl border border-gray-300 flex items-center justify-center mx-auto mb-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] overflow-hidden">
+            <img src={AKLogo} alt="AK Infinity Logo" className="w-11 h-11 object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Admin Login</h1>
           <p className="text-slate-600">Access the lead management dashboard</p>

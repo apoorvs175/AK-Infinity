@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+import AKLogo from '../assets/AK_Main_Logo.webp'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -41,10 +42,14 @@ export default function Header() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="relative w-12 h-12 bg-bg-card rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
+              className="w-14 h-12 bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-gold-primary/30 to-gold-deep/10" />
-              <span className="text-gold-primary font-bold text-2xl relative z-10">AK</span>
+              <img
+                src={AKLogo}
+                alt="AK Infinity Logo"
+                className="w-12 h-12 object-cover"
+                style={{ transform: 'scale(1.1)' }}
+              />
             </motion.div>
             <div className="flex flex-col">
               <span className="text-xl font-bold text-text-primary tracking-tight">

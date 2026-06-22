@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Users, LogOut, Trash2, Search } from 'lucide-react'
+import AKLogo from '../assets/AK_Main_Logo.webp'
 
 interface Lead {
   id: string
@@ -86,8 +87,8 @@ export default function AdminDashboard() {
         <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
           <div className="p-6 border-b border-slate-200">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">AK</span>
+              <div className="w-10 h-10 bg-white rounded-xl border border-gray-300 flex items-center justify-center overflow-hidden">
+                <img src={AKLogo} alt="AK Infinity Logo" className="w-9 h-9 object-cover" />
               </div>
               <span className="text-xl font-bold text-slate-900">AK Infinity</span>
             </Link>
