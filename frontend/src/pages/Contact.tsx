@@ -55,15 +55,6 @@ export default function Contact() {
   const markerRef = useRef<any>(null)
   const mapRef = useRef<any>(null)
 
-  const handleMapCreated = (map: any) => {
-    mapRef.current = map
-    setTimeout(() => {
-      if (markerRef.current) {
-        markerRef.current.openPopup()
-      }
-    }, 200)
-  }
-
   useEffect(() => {
     setTimeout(() => {
       if (markerRef.current) {
@@ -271,7 +262,7 @@ export default function Contact() {
             >
               <div className="bg-bg-card border-3 border-gray-500 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-500 h-[460px] md:h-[570px] relative z-10" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
                 <MapContainer
-                  whenCreated={handleMapCreated}
+                  ref={mapRef}
                   center={position}
                   zoom={15}
                   scrollWheelZoom={true}
