@@ -142,7 +142,7 @@ const ImageComposition = ({ images, index }: { images: string[], index: number }
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
             />
           </motion.div>
-          <div className="flex flex-col gap-4 pt-8">
+          <div className="flex flex-col gap-4">
             <motion.div
               whileHover={{ scale: 1.03, y: -4 }}
               transition={{ duration: 0.3, delay: 0.1 }}
@@ -230,7 +230,7 @@ export default function Services() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-12 pb-8 sm:pt-16 sm:pb-12 md:pt-32 md:pb-24 lg:pt-40 lg:pb-32">
+      <section className="pt-20 pb-8 sm:pt-24 sm:pb-12 md:pt-24 md:pb-24 lg:pt-28 lg:pb-32">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -252,7 +252,7 @@ export default function Services() {
       </section>
 
       {/* Roadmap Section */}
-      <section className="py-12 sm:py-16 md:py-20 relative">
+      <section className="py-6 sm:py-8 md:py-10 relative">
         <RoadmapPath />
         <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
           {roadmapServices.map((service, index) => {
@@ -264,9 +264,9 @@ export default function Services() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: '-150px' }}
                 transition={{ duration: 0.8 }}
-                className={`mb-32 ${index === roadmapServices.length - 1 ? 'mb-20' : ''}`}
+                className={`mb-16 md:mb-32 ${index === roadmapServices.length - 1 ? 'mb-10 md:mb-20' : ''}`}
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
                   {/* Text Content - First on mobile! */}
                   <div className={`${isEven ? 'md:order-1' : 'md:order-2'}`}>
                     <motion.div

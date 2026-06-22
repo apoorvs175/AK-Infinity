@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Send, Check, Clock, Building, Globe, Smartphone, ShieldCheck, Shield, Zap } from 'lucide-react'
@@ -6,6 +6,7 @@ import Button from '../components/Button'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import emailjs from '@emailjs/browser'
 import GovtLogo from '../assets/badges/govt-india-logo.png'
 import MsmeLogo from '../assets/badges/msme-logo.png'
 import UdyamLogo from '../assets/badges/udyam-logo.png'
@@ -14,9 +15,9 @@ import FourthLogo from '../assets/badges/government-officials-logo.png'
 // Fix Leaflet marker icon issue and create custom gold marker
 delete (L.Icon.Default.prototype as L.Icon.Default & { _getIconUrl?: string })._getIconUrl
 
-// Custom gold marker icon
-const goldIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
+// Custom red marker icon
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -51,16 +52,61 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormData>()
+  const markerRef = useRef<any>(null)
+  const mapRef = useRef<any>(null)
 
-  const onSubmit = async (_data: ContactFormData) => {
-    setIsSubmitting(true)
-    // Simulate API call
+  const handleMapCreated = (map: any) => {
+    mapRef.current = map
     setTimeout(() => {
+      if (markerRef.current) {
+        markerRef.current.openPopup()
+      }
+    }, 200)
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (markerRef.current) {
+        markerRef.current.openPopup()
+      }
+    }, 400)
+  }, [])
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true)
+    
+    try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+      console.log('EmailJS attempt with:', { serviceId, templateId, publicKey, data })
+
+      if (serviceId && templateId && publicKey) {
+        await emailjs.send(
+          serviceId,
+          templateId,
+          {
+            fullName: data.fullName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            businessName: data.businessName,
+            serviceInterested: data.serviceInterested,
+            message: data.message
+          },
+          publicKey
+        )
+      }
+
       setIsSubmitting(false)
       setSubmitSuccess(true)
       reset()
-      setTimeout(() => setSubmitSuccess(false), 5000)
-    }, 1500)
+      setTimeout(() => setSubmitSuccess(false), 8000)
+    } catch (error: any) {
+      console.error('EmailJS error details:', error)
+      setIsSubmitting(false)
+      alert(`Error: ${error.text || error.message || 'Something went wrong'}`)
+    }
   }
 
   const services = [
@@ -74,7 +120,7 @@ export default function Contact() {
   ]
 
   // Coordinates for Solitorian City Building, Knowledge Park III, Greater Noida, India (from Google Maps)
-  const position: [number, number] = [28.4568, 77.4901]
+  const position: [number, number] = [28.48009436176084, 77.48260703003373];
 
   // Fix Leaflet z-index issue - ensure map stays below navbar
   useEffect(() => {
@@ -223,25 +269,32 @@ export default function Contact() {
               variants={fadeInUp}
               className="order-1 lg:order-1"
             >
-              <div className="bg-bg-card border border-border-primary rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-500 h-[460px] md:h-[570px] relative z-10">
+              <div className="bg-bg-card border-3 border-gray-500 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-500 h-[460px] md:h-[570px] relative z-10" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.06)' }}>
                 <MapContainer
+                  whenCreated={handleMapCreated}
                   center={position}
                   zoom={15}
                   scrollWheelZoom={true}
+                  attributionControl={false}
                   style={{ height: '100%', width: '100%', borderRadius: '1.5rem' }}
                 >
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
-                  <Marker position={position} icon={goldIcon}>
-                    <Popup>
-                      <div className="text-center p-3">
-                        <h3 className="font-bold text-lg mb-2">AK Infinity Head Office</h3>
-                        <p className="text-sm">914K – Solitarian City Building</p>
-                        <p className="text-sm">KP-3, Greater Noida</p>
-                        <p className="text-sm">Gautam Buddh Nagar</p>
-                        <p className="text-sm">Uttar Pradesh, India – 201310</p>
+                  <Marker ref={markerRef} position={position} icon={redIcon}>
+                    <Popup className="custom-popup">
+                      <div className="p-4">
+                        <h3 className="font-bold text-xl mb-3 text-gray-900">AK Infinity Head Office</h3>
+                        <div className="text-sm text-gray-700 leading-relaxed space-y-1">
+                          <div className="flex items-start gap-2">
+                            <span className="text-yellow-500 mt-1">📍</span>
+                            <span>914K – Solitarian City Building</span>
+                          </div>
+                          <div className="pl-6">KP-3, Greater Noida</div>
+                          <div className="pl-6">Gautam Buddh Nagar</div>
+                          <div className="pl-6">Uttar Pradesh, India – 201310</div>
+                        </div>
                       </div>
                     </Popup>
                   </Marker>
@@ -322,17 +375,22 @@ export default function Contact() {
               
               <motion.div variants={fadeInUp} className="bg-bg-card border border-border-primary rounded-3xl p-8 md:p-10 shadow-lg hover:shadow-xl transition-shadow duration-500">
                 {submitSuccess ? (
-                  <div className="text-center py-20">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gold-primary/20 to-gold-deep/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-border-primary">
-                      <Check className="w-10 h-10 text-gold-primary" />
-                    </div>
-                    <h3 className="text-3xl font-bold text-text-primary mb-4">
-                      Message Sent!
-                    </h3>
-                    <p className="text-text-secondary text-lg">
-                      Thank you for reaching out. We'll get back to you within 24 hours.
-                    </p>
-                  </div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-center py-20"
+                    >
+                      <div className="w-24 h-24 bg-gradient-to-br from-gold-primary to-gold-deep rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-gold-primary/30">
+                        <Check className="w-12 h-12 text-white" />
+                      </div>
+                      <h3 className="text-4xl font-bold text-text-primary mb-4">
+                        Successfully Email Sent!
+                      </h3>
+                      <p className="text-text-secondary text-xl max-w-md mx-auto">
+                        Thank you for reaching out! We've received your message and will connect with you within 24 hours.
+                      </p>
+                    </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div>
