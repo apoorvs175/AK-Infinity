@@ -15,6 +15,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!supabase) {
+      // Demo mode - set a dummy user
+      setUser({ id: 'demo-user', email: 'demo@akinfinity.com' })
       setLoading(false)
       return
     }
