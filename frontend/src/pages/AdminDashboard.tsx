@@ -87,8 +87,8 @@ export default function AdminDashboard() {
         <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
           <div className="p-6 border-b border-slate-200">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-[46px] h-[40px] bg-white rounded-xl border border-gray-300 flex items-center justify-center overflow-hidden">
-                <img src={AKLogo} alt="AK Infinity Logo" className="w-[42px] h-[43px] object-contain" style={{ transform: 'scale(1.1)' }} />
+              <div className="w-[50px] h-[44px] bg-white rounded-xl border border-gray-300 flex items-center justify-center overflow-hidden">
+                <img src={AKLogo} alt="AK Infinity Logo" className="w-[46px] h-[47px] object-contain" />
               </div>
               <span className="text-xl font-bold text-slate-900">AK Infinity</span>
             </Link>
