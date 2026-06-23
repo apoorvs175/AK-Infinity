@@ -10,11 +10,12 @@ export default function Footer() {
           {/* Logo & Brand Section */}
           <div className="mb-8 text-center sm:text-left">
             <Link to="/" className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-              <div className="w-10 h-10 bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+              <div className="w-[46px] h-[40px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
                 <img
                   src={AKLogo}
                   alt="AK Infinity Logo"
-                  className="w-9 h-9 object-cover"
+                  className="w-[42px] h-[43px] object-contain"
+                  style={{ transform: 'scale(1.1)' }}
                 />
               </div>
               <span className="text-lg font-bold text-white">AK Infinity</span>
@@ -143,11 +144,12 @@ export default function Footer() {
         <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+              <div className="w-[56px] h-[48px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
                 <img
                   src={AKLogo}
                   alt="AK Infinity Logo"
-                  className="w-11 h-11 object-cover"
+                  className="w-[51px] h-[52px] object-contain"
+                  style={{ transform: 'scale(1.1)' }}
                 />
               </div>
               <span className="text-xl font-bold text-white">AK Infinity</span>
