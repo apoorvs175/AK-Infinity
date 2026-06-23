@@ -9,6 +9,21 @@ export interface Lead {
   updated_at: string;
 }
 
+export interface Visitor {
+  id: string;
+  ip_address?: string;
+  user_agent?: string;
+  device_type?: string;
+  browser?: string;
+  os?: string;
+  page_visited?: string;
+  referrer?: string;
+  time_spent?: number;
+  session_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Service {
   id: string;
   title: string;
