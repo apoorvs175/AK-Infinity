@@ -4,44 +4,34 @@ import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001
 
 // Check if Supabase is configured
 let supabase = null
-if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim() && process.env.SUPABASE_ANON_KEY && process.env.SUPABASE_ANON_KEY.trim()) {
+if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim() && process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY.trim()) {
   try {
     supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_ANON_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY
     )
     console.log('Supabase configured')
   } catch (err) {
-    console.log('Supabase not configured, using in-memory storage')
+    console.log('Supabase not configured')
   }
 }
 
 app.use(cors())
 app.use(express.json())
 
-// In-memory data
-let leads = [
-  {
-    id: '1',
-    name: 'John Smith',
-    email: 'john@example.com',
-    phone: '+1 555-0100',
-    message: 'Looking for web development services',
-    status: 'new',
-    created_at: new Date(Date.now() - 86400000),
-    updated_at: new Date(Date.now() - 86400000)
-  }
-]
-
-let visitors = []
-
 app.get('/', (req, res) => {
   res.json({ message: 'AK Infinity API' })
 })
+
+// Store in-memory data for demo purposes when Supabase isn't configured
+let demoLeads = []
+let demoVisitors = []
+let nextLeadId = 1
+let nextVisitorId = 1
 
 // Get all leads
 app.get('/api/leads', async (req, res) => {
@@ -50,11 +40,12 @@ app.get('/api/leads', async (req, res) => {
       .from('leads')
       .select('*')
       .order('created_at', { ascending: false })
-    if (!error && data.length > 0) {
-      return res.json(data)
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    return res.json(data)
   }
-  res.json(leads)
+  res.json(demoLeads)
 })
 
 // Create a new lead
@@ -71,23 +62,23 @@ app.post('/api/leads', async (req, res) => {
       .insert([{ name, email, phone, message }])
       .select()
     
-    if (!error) {
-      return res.status(201).json(data[0])
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    return res.status(201).json(data[0])
   }
   
   const newLead = {
-    id: Date.now().toString(),
+    id: nextLeadId++,
     name,
     email,
     phone,
     message,
     status: 'new',
-    created_at: new Date(),
-    updated_at: new Date()
+    created_at: new Date().toISOString()
   }
-  leads.push(newLead)
-  return res.status(201).json(newLead)
+  demoLeads.unshift(newLead)
+  res.status(201).json(newLead)
 })
 
 // Update lead status
@@ -102,24 +93,21 @@ app.put('/api/leads/:id', async (req, res) => {
       .eq('id', id)
       .select()
     
-    if (!error && data.length > 0) {
-      return res.json(data[0])
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: 'Lead not found' })
+    }
+    return res.json(data[0])
   }
   
-  const leadIndex = leads.findIndex(l => l.id === id)
-  
+  const leadIndex = demoLeads.findIndex(lead => lead.id == id)
   if (leadIndex === -1) {
     return res.status(404).json({ error: 'Lead not found' })
   }
-
-  leads[leadIndex] = {
-    ...leads[leadIndex],
-    status,
-    updated_at: new Date()
-  }
-
-  res.json(leads[leadIndex])
+  demoLeads[leadIndex].status = status
+  res.json(demoLeads[leadIndex])
 })
 
 // Delete lead
@@ -132,18 +120,17 @@ app.delete('/api/leads/:id', async (req, res) => {
       .delete()
       .eq('id', id)
     
-    if (!error) {
-      return res.json({ message: 'Lead deleted successfully' })
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    return res.json({ message: 'Lead deleted successfully' })
   }
 
-  const initialLength = leads.length
-  leads = leads.filter(l => l.id !== id)
-  
-  if (leads.length === initialLength) {
+  const initialLength = demoLeads.length
+  demoLeads = demoLeads.filter(lead => lead.id != id)
+  if (demoLeads.length === initialLength) {
     return res.status(404).json({ error: 'Lead not found' })
   }
-
   res.json({ message: 'Lead deleted successfully' })
 })
 
@@ -154,12 +141,50 @@ app.get('/api/visitors', async (req, res) => {
       .from('visitors')
       .select('*')
       .order('created_at', { ascending: false })
-    if (!error) {
-      return res.json(data)
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    return res.json(data)
   }
-  res.json(visitors)
+  res.json(demoVisitors)
 })
+
+// Reverse geocoding function using OpenStreetMap Nominatim
+async function reverseGeocode(lat, lon) {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
+      {
+        headers: {
+          'User-Agent': 'AK-Infinity-Visitor-Tracker/1.0'
+        }
+      }
+    )
+    
+    if (!response.ok) {
+      return null
+    }
+    
+    const data = await response.json()
+    if (!data || !data.address) {
+      return null
+    }
+    
+    const address = data.address
+    return {
+      full_address: data.display_name,
+      locality: address.suburb || address.neighbourhood || address.village || address.town || address.city || '',
+      city: address.city || address.town || address.village || '',
+      district: address.county || address.state_district || '',
+      state: address.state || '',
+      country: address.country || '',
+      postal_code: address.postcode || ''
+    }
+  } catch (error) {
+    console.error('Reverse geocoding error:', error)
+    return null
+  }
+}
 
 app.post('/api/visitors', async (req, res) => {
   const {
@@ -170,31 +195,20 @@ app.post('/api/visitors', async (req, res) => {
     os,
     page_visited,
     referrer,
-    session_id
+    session_id,
+    latitude,
+    longitude,
+    accuracy,
+    location_permission
   } = req.body
   
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('visitors')
-      .insert([{
-        ip_address,
-        user_agent,
-        device_type,
-        browser,
-        os,
-        page_visited,
-        referrer,
-        session_id
-      }])
-      .select()
-    
-    if (!error) {
-      return res.status(201).json(data[0])
-    }
-  }
+  console.log('📥 Received visitor data:', {
+    page_visited,
+    location_permission,
+    hasLocation: !!(latitude && longitude)
+  })
   
-  const newVisitor = {
-    id: Date.now().toString(),
+  let visitorData = {
     ip_address,
     user_agent,
     device_type,
@@ -203,11 +217,50 @@ app.post('/api/visitors', async (req, res) => {
     page_visited,
     referrer,
     session_id,
-    time_spent: 0,
-    created_at: new Date(),
-    updated_at: new Date()
+    location_permission: location_permission || 'not_requested'
   }
-  visitors.push(newVisitor)
+  
+  // If we have coordinates, try to reverse geocode
+  if (latitude && longitude) {
+    console.log('📍 Reverse geocoding coordinates:', { latitude, longitude })
+    
+    visitorData.latitude = latitude
+    visitorData.longitude = longitude
+    visitorData.accuracy = accuracy
+    visitorData.google_maps_url = `https://www.google.com/maps?q=${latitude},${longitude}`
+    
+    const addressData = await reverseGeocode(latitude, longitude)
+    if (addressData) {
+      console.log('🏠 Address found:', addressData)
+      visitorData = { ...visitorData, ...addressData }
+    } else {
+      console.log('❌ No address found from reverse geocoding')
+    }
+  }
+  
+  if (supabase) {
+    console.log('💾 Saving to Supabase...')
+    const { data, error } = await supabase
+      .from('visitors')
+      .insert([visitorData])
+      .select()
+    
+    if (error) {
+      console.error('❌ Supabase error:', error)
+      return res.status(500).json({ error: error.message })
+    }
+    console.log('✅ Visitor saved to Supabase:', data[0].id)
+    return res.status(201).json(data[0])
+  }
+  
+  const newVisitor = {
+    id: nextVisitorId++,
+    ...visitorData,
+    time_spent: 0,
+    created_at: new Date().toISOString()
+  }
+  demoVisitors.unshift(newVisitor)
+  console.log('✅ Visitor saved to demo storage:', newVisitor.id)
   res.status(201).json(newVisitor)
 })
 
@@ -222,22 +275,21 @@ app.put('/api/visitors/:id', async (req, res) => {
       .eq('id', id)
       .select()
     
-    if (!error) {
-      return res.json(data[0])
+    if (error) {
+      return res.status(500).json({ error: error.message })
     }
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: 'Visitor not found' })
+    }
+    return res.json(data[0])
   }
   
-  const visitorIndex = visitors.findIndex(v => v.id === id)
-  if (visitorIndex !== -1) {
-    visitors[visitorIndex] = {
-      ...visitors[visitorIndex],
-      time_spent,
-      updated_at: new Date()
-    }
-    return res.json(visitors[visitorIndex])
+  const visitorIndex = demoVisitors.findIndex(visitor => visitor.id == id)
+  if (visitorIndex === -1) {
+    return res.status(404).json({ error: 'Visitor not found' })
   }
-  
-  res.status(404).json({ error: 'Visitor not found' })
+  demoVisitors[visitorIndex].time_spent = time_spent
+  res.json(demoVisitors[visitorIndex])
 })
 
 app.listen(PORT, () => {

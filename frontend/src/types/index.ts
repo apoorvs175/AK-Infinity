@@ -20,6 +20,18 @@ export interface Visitor {
   referrer?: string;
   time_spent?: number;
   session_id?: string;
+  latitude?: number;
+  longitude?: number;
+  accuracy?: number;
+  full_address?: string;
+  locality?: string;
+  city?: string;
+  district?: string;
+  state?: string;
+  country?: string;
+  postal_code?: string;
+  location_permission?: string;
+  google_maps_url?: string;
   created_at: string;
   updated_at: string;
 }

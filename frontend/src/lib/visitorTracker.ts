@@ -40,9 +40,55 @@ function parseUserAgent(userAgent: string) {
 // Track page visit
 export async function trackVisit(pageVisited: string) {
   try {
+    console.log('🔍 Tracking visit to:', pageVisited)
+    
     const userAgent = navigator.userAgent
     const { browser, os, deviceType } = parseUserAgent(userAgent)
     const referrer = document.referrer || 'Direct'
+    
+    let locationData = {}
+    let locationPermission = 'not_requested'
+    
+    // Try to get geolocation
+    if ('geolocation' in navigator) {
+      console.log('📍 Requesting location permission...')
+      
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 300000
+          })
+        })
+        
+        locationPermission = 'granted'
+        locationData = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        }
+        
+        console.log('✅ Location obtained:', locationData)
+      } catch (geoError) {
+        console.log('❌ Geolocation error:', geoError)
+        
+        if (geoError.code === 1) {
+          locationPermission = 'denied'
+          console.log('🔒 User denied location permission')
+        } else if (geoError.code === 2) {
+          locationPermission = 'unavailable'
+          console.log('⚠️ Location unavailable')
+        } else if (geoError.code === 3) {
+          locationPermission = 'timeout'
+          console.log('⏱️ Location request timed out')
+        }
+      }
+    } else {
+      console.log('⚠️ Geolocation not supported in this browser')
+    }
+    
+    console.log('📤 Sending visitor data with permission:', locationPermission)
     
     const response = await fetch(API_URL + '/api/visitors', {
       method: 'POST',
@@ -56,17 +102,22 @@ export async function trackVisit(pageVisited: string) {
         os,
         page_visited: pageVisited,
         referrer,
-        session_id: sessionId
+        session_id: sessionId,
+        location_permission: locationPermission,
+        ...locationData
       })
     })
     
     if (response.ok) {
       const data = await response.json()
+      console.log('✅ Visitor tracked successfully:', data.id)
       visitorId = data.id
       startTime = Date.now()
+    } else {
+      console.error('❌ Error tracking visit:', response.status)
     }
   } catch (error) {
-    console.error('Error tracking visit:', error)
+    console.error('❌ Error tracking visit:', error)
   }
 }
 

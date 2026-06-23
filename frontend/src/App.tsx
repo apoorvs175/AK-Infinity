@@ -11,6 +11,8 @@ import Contact from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import ScrollToTop from './components/ScrollToTop'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './lib/auth'
 import { trackVisit, updateTimeSpent } from './lib/visitorTracker'
 
 // Component to handle page tracking
@@ -43,31 +45,40 @@ function PageTracker() {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <PageTracker />
-      <Routes>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="*" element={
-          <div className="min-h-screen flex flex-col bg-bg-primary text-text-primary font-sans antialiased">
-            <Header />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Navigate to="/" replace />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/portfolio" element={<Portfolio />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-              </Routes>
-            </main>
-            <Footer />
-            <WhatsAppWidget />
-          </div>
-        } />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <PageTracker />
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={
+            <div className="min-h-screen flex flex-col bg-bg-primary text-text-primary font-sans antialiased">
+              <Header />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/home" element={<Navigate to="/" replace />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/portfolio" element={<Portfolio />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                </Routes>
+              </main>
+              <Footer />
+              <WhatsAppWidget />
+            </div>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
   )
 }
 
