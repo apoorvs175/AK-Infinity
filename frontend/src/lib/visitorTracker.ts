@@ -46,7 +46,11 @@ export async function trackVisit(pageVisited: string) {
     const { browser, os, deviceType } = parseUserAgent(userAgent)
     const referrer = document.referrer || 'Direct'
     
-    let locationData = {}
+    let locationData: {
+      latitude?: number
+      longitude?: number
+      accuracy?: number
+    } = {}
     let locationPermission = 'not_requested'
     
     // Try to get geolocation
@@ -54,7 +58,7 @@ export async function trackVisit(pageVisited: string) {
       console.log('📍 Requesting location permission...')
       
       try {
-        const position = await new Promise((resolve, reject) => {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             enableHighAccuracy: true,
             timeout: 15000,
@@ -73,13 +77,13 @@ export async function trackVisit(pageVisited: string) {
       } catch (geoError) {
         console.log('❌ Geolocation error:', geoError)
         
-        if (geoError.code === 1) {
+        if ((geoError as GeolocationPositionError).code === 1) {
           locationPermission = 'denied'
           console.log('🔒 User denied location permission')
-        } else if (geoError.code === 2) {
+        } else if ((geoError as GeolocationPositionError).code === 2) {
           locationPermission = 'unavailable'
           console.log('⚠️ Location unavailable')
-        } else if (geoError.code === 3) {
+        } else if ((geoError as GeolocationPositionError).code === 3) {
           locationPermission = 'timeout'
           console.log('⏱️ Location request timed out')
         }
