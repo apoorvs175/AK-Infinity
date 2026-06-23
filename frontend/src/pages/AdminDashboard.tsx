@@ -21,7 +21,7 @@ import AKLogo from '../assets/AK_Main_Logo.webp'
 import type { Lead, Visitor } from '../types'
 import { useAuth } from '../lib/auth'
 
-const API_URL = import.meta.env.VITE_API_URL || ''
+const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com'
 
 export default function AdminDashboard() {
   const navigate = useNavigate()

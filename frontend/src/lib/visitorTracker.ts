@@ -5,7 +5,7 @@ localStorage.setItem('visitorSessionId', sessionId)
 let visitorId: string | null = null
 let startTime = Date.now()
 
-const API_URL = import.meta.env.VITE_API_URL || ''
+const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com'
 
 // Parse user agent to get browser and OS info
 function parseUserAgent(userAgent: string) {
