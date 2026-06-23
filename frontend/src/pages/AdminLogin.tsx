@@ -30,23 +30,30 @@ export default function AdminLogin() {
     setIsLoading(true)
     setError(null)
 
+    console.log('🔑 Attempting login with:', { email: data.email, hasSupabase: !!supabase })
+
     try {
       if (!supabase) {
-        // If Supabase isn't configured, just allow login for demo
+        console.log('⚠️ Supabase not configured! Allowing demo login')
         navigate('/admin')
         return
       }
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       })
 
+      console.log('📋 Login response:', { authData, error })
+
       if (error) {
+        console.error('❌ Login error:', error)
         setError(error.message)
       } else {
+        console.log('✅ Login successful!', authData)
         navigate('/admin')
       }
     } catch (err) {
+      console.error('💥 Unexpected login error:', err)
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)
