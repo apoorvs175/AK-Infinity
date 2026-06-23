@@ -45,10 +45,11 @@ export default function Header() {
               className="w-[56px] h-[48px] bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
             >
               <img
-                  src={AKLogo}
-                  alt="AK Infinity Logo"
-                  className="w-[51px] h-[52px] object-contain"
-                />
+                src={AKLogo}
+                alt="AK Infinity Logo"
+                className="w-[51px] h-[52px] object-contain"
+                style={{ transform: 'scale(1.1)' }}
+              />
             </motion.div>
             <div className="flex flex-col">
               <span className="text-xl font-bold text-text-primary tracking-tight">

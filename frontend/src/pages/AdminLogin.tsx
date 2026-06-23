@@ -31,7 +31,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-slate-100">
         <div className="text-center mb-8">
           <div className="w-[56px] h-[48px] bg-white rounded-xl border border-gray-300 flex items-center justify-center mx-auto mb-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] overflow-hidden">
-            <img src={AKLogo} alt="AK Infinity Logo" className="w-[51px] h-[52px] object-contain" />
+            <img src={AKLogo} alt="AK Infinity Logo" className="w-[51px] h-[52px] object-contain" style={{ transform: 'scale(1.1)' }} />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Admin Login</h1>
           <p className="text-slate-600">Access the lead management dashboard</p>
