@@ -20,7 +20,22 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim() && process.env.S
   }
 }
 
-app.use(cors())
+const allowedOrigins = [
+  'https://akinfinity.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:5174'
+]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}))
 app.use(express.json())
 
 app.get('/', (req, res) => {
