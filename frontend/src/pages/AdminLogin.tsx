@@ -106,7 +106,11 @@ export default function AdminLogin() {
             {errors.password && <p className="text-red-500 text-xs md:text-sm mt-1">{errors.password.message}</p>}
           </div>
 
-          {error && <p className="text-red-500 text-xs md:text-sm text-center">{error}</p>}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 md:p-4">
+              <p className="text-red-700 text-xs md:text-sm text-center font-medium">{error}</p>
+            </div>
+          )}
 
           <Button type="submit" size="md" className="w-full" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign In'}
