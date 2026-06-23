@@ -10,11 +10,11 @@ export default function Footer() {
           {/* Logo & Brand Section */}
           <div className="mb-8 text-center sm:text-left">
             <Link to="/" className="flex items-center justify-center sm:justify-start gap-2 mb-3">
-              <div className="w-[50px] h-[44px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+              <div className="w-[46px] h-[40px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
                 <img
                   src={AKLogo}
                   alt="AK Infinity Logo"
-                  className="w-[46px] h-[47px] object-contain"
+                  className="w-[42px] h-[43px] object-contain"
                 />
               </div>
               <span className="text-lg font-bold text-white">AK Infinity</span>
@@ -143,11 +143,11 @@ export default function Footer() {
         <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-[60px] h-[52px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
+              <div className="w-[56px] h-[48px] bg-[#0F0F0F] rounded-xl border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden">
                 <img
                   src={AKLogo}
                   alt="AK Infinity Logo"
-                  className="w-[56px] h-[57px] object-contain"
+                  className="w-[51px] h-[52px] object-contain"
                 />
               </div>
               <span className="text-xl font-bold text-white">AK Infinity</span>

@@ -42,12 +42,12 @@ export default function Header() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-[60px] h-[52px] bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
+              className="w-[56px] h-[48px] bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
             >
               <img
                   src={AKLogo}
                   alt="AK Infinity Logo"
-                  className="w-[56px] h-[57px] object-contain"
+                  className="w-[51px] h-[52px] object-contain"
                 />
             </motion.div>
             <div className="flex flex-col">
