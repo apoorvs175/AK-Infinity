@@ -38,21 +38,21 @@ export default function Header() {
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1600px]">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center gap-2 md:gap-3">
+          <Link to="/" className="flex items-center gap-2">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-14 h-12 md:w-16 md:h-14 bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
+              className="w-[56px] h-[48px] bg-[#FAF7F2] rounded-2xl flex items-center justify-center border border-border-primary overflow-hidden"
             >
               <img
                 src={AKLogo}
                 alt="AK Infinity Logo"
-                className="w-12 h-12 md:w-14 md:h-14 object-cover"
+                className="w-[51px] h-[52px] object-contain"
                 style={{ transform: 'scale(1.1)' }}
               />
             </motion.div>
             <div className="flex flex-col">
-              <span className="text-xl md:text-2xl font-bold text-text-primary tracking-tight">
+              <span className="text-xl font-bold text-text-primary tracking-tight">
                 AK Infinity
               </span>
             </div>
