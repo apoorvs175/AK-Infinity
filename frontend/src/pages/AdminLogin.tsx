@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Button from '../components/Button'
 import AKLogo from '../assets/AK_Main_Logo.webp'
 import { supabase } from '../lib/supabase'
@@ -30,33 +30,33 @@ export default function AdminLogin() {
     setIsLoading(true)
     setError(null)
 
-    console.log('🔑 Attempting login with:', { email: data.email, hasSupabase: !!supabase })
-
     try {
       if (!supabase) {
-        console.log('⚠️ Supabase not configured! Allowing demo login')
-        // Set demo session
-        const demoUser = { id: 'demo-user', email: data.email }
-        sessionStorage.setItem('ak_infinity_session', JSON.stringify(demoUser))
-        navigate('/admin')
+        setError('Authentication service unavailable')
         return
       }
-      const { data: authData, error } = await supabase.auth.signInWithPassword({
+      
+      const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       })
 
-      console.log('📋 Login response:', { authData, error })
-
       if (error) {
-        console.error('❌ Login error:', error)
-        setError(error.message)
+        // Provide user-friendly error messages
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password')
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Please confirm your email address')
+        } else if (error.message.includes('User not found')) {
+          setError('User not found')
+        } else {
+          setError('An error occurred during login')
+        }
       } else {
-        console.log('✅ Login successful!', authData)
+        // Redirect on success
         navigate('/admin')
       }
     } catch (err) {
-      console.error('💥 Unexpected login error:', err)
       setError('An unexpected error occurred')
     } finally {
       setIsLoading(false)
@@ -128,10 +128,17 @@ export default function AdminLogin() {
           <Button 
             type="submit" 
             size="md" 
-            className="w-full !bg-[#EAB308] hover:!bg-[#d4a207] !text-[#0B132B] transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5" 
+            className="w-full !bg-[#EAB308] hover:!bg-[#d4a207] !text-[#0B132B] transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2" 
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Signing In...
+              </>
+            ) : (
+              'Sign In'
+            )}
           </Button>
         </form>
       </div>

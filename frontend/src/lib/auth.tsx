@@ -14,29 +14,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Clear any leftover sessionStorage on load
+    sessionStorage.removeItem('ak_infinity_session')
+
     if (!supabase) {
-      // Demo mode - check if we have a session in sessionStorage
-      const hasSession = sessionStorage.getItem('ak_infinity_session')
-      if (hasSession) {
-        try {
-          setUser(JSON.parse(hasSession))
-        } catch (error) {
-          setUser(null)
-        }
-      } else {
-        setUser(null)
-      }
+      console.error('Supabase not configured')
       setLoading(false)
       return
     }
 
-    // Get initial session
+    // Get initial session from Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
-      // Store session in sessionStorage
-      if (session?.user) {
-        sessionStorage.setItem('ak_infinity_session', JSON.stringify(session.user))
-      }
       setLoading(false)
     })
 
@@ -45,12 +34,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
-      // Update sessionStorage on auth change
-      if (session?.user) {
-        sessionStorage.setItem('ak_infinity_session', JSON.stringify(session.user))
-      } else {
-        sessionStorage.removeItem('ak_infinity_session')
-      }
       setLoading(false)
     })
 
@@ -61,7 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (supabase) {
       await supabase.auth.signOut()
     }
-    sessionStorage.removeItem('ak_infinity_session')
     setUser(null)
   }
 
