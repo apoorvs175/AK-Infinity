@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.removeItem('ak_infinity_session')
 
     if (!supabase) {
-      console.error('Supabase not configured')
+      console.error('Supabase not configured - check environment variables')
       setLoading(false)
       return
     }
@@ -26,6 +26,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Get initial session from Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
+      setLoading(false)
+    }).catch(() => {
       setLoading(false)
     })
 
