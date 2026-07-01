@@ -15,8 +15,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!supabase) {
-      // Demo mode - set a dummy user
-      setUser({ id: 'demo-user', email: 'demo@akinfinity.com' })
+      // Demo mode - check if we have a session in sessionStorage
+      const hasSession = sessionStorage.getItem('ak_infinity_session')
+      if (hasSession) {
+        try {
+          setUser(JSON.parse(hasSession))
+        } catch (error) {
+          setUser(null)
+        }
+      } else {
+        setUser(null)
+      }
       setLoading(false)
       return
     }
@@ -24,6 +33,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
+      // Store session in sessionStorage
+      if (session?.user) {
+        sessionStorage.setItem('ak_infinity_session', JSON.stringify(session.user))
+      }
       setLoading(false)
     })
 
@@ -32,6 +45,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      // Update sessionStorage on auth change
+      if (session?.user) {
+        sessionStorage.setItem('ak_infinity_session', JSON.stringify(session.user))
+      } else {
+        sessionStorage.removeItem('ak_infinity_session')
+      }
       setLoading(false)
     })
 
@@ -42,6 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (supabase) {
       await supabase.auth.signOut()
     }
+    sessionStorage.removeItem('ak_infinity_session')
     setUser(null)
   }
 

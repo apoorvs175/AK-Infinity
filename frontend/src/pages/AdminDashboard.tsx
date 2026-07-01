@@ -106,6 +106,27 @@ export default function AdminDashboard() {
     return `${mins}m ${secs}s`
   }
 
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString)
+    
+    // Format date: MM/DD/YYYY
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const year = date.getFullYear()
+    
+    // Format time: 12-hour with AM/PM
+    let hours = date.getHours()
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const seconds = String(date.getSeconds()).padStart(2, '0')
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    
+    hours = hours % 12
+    hours = hours ? hours : 12 // 0 becomes 12
+    const formattedHours = String(hours).padStart(2, '0')
+    
+    return `${month}/${day}/${year}, ${formattedHours}:${minutes}:${seconds} ${ampm}`
+  }
+
   const getDeviceIcon = (deviceType?: string) => {
     if (deviceType === 'Mobile') return <Smartphone className="w-4 h-4" />
     if (deviceType === 'Tablet') return <Monitor className="w-4 h-4" />
@@ -149,10 +170,10 @@ export default function AdminDashboard() {
 
   const getPageTitle = () => {
     switch (activeSection) {
-      case 'dashboard': return 'Dashboard'
+      case 'dashboard': return 'Admin Panel'
       case 'leads': return 'Lead Management'
       case 'visitors': return 'Visitor Analytics'
-      default: return 'Dashboard'
+      default: return 'Admin Panel'
     }
   }
 
@@ -283,7 +304,6 @@ export default function AdminDashboard() {
                 <div>
                   <h1 className="text-lg md:text-2xl font-bold text-[#0B132B]">{getPageTitle()}</h1>
                   <p className="text-xs md:text-sm text-slate-500">
-                    {activeSection === 'dashboard' && 'Welcome back! Here\'s your overview.'}
                     {activeSection === 'leads' && 'Manage and track your leads'}
                     {activeSection === 'visitors' && 'Track and analyze website visitors'}
                   </p>
@@ -602,232 +622,87 @@ export default function AdminDashboard() {
 
               {activeSection === 'visitors' && (
                 <>
-                  {/* Visitors - Mobile View as Cards */}
-                  <div className="lg:hidden space-y-2">
-                    {loading ? (
-                      Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="bg-white rounded-xl p-3 shadow-sm border border-slate-100 animate-pulse">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="w-7 h-7 bg-slate-200 rounded-full" />
-                            <div className="flex-1">
-                              <div className="h-3 bg-slate-200 rounded w-32 mb-1" />
-                              <div className="h-2.5 bg-slate-200 rounded w-24" />
-                            </div>
-                            <div className="h-6 bg-slate-200 rounded w-14" />
-                          </div>
-                          <div className="h-2.5 bg-slate-200 rounded w-40 mb-1.5" />
-                          <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                            <div className="h-2.5 bg-slate-200 rounded w-28" />
-                            <div className="h-2.5 bg-slate-200 rounded w-24" />
-                            <div className="h-2.5 bg-slate-200 rounded w-24" />
-                            <div className="h-2.5 bg-slate-200 rounded w-28" />
-                            <div className="h-2.5 bg-slate-200 rounded w-24" />
-                            <div className="h-2.5 bg-slate-200 rounded w-32" />
-                          </div>
-                        </div>
-                      ))
-                    ) : visitors.length > 0 ? (
-                      visitors.map((visitor) => (
-                        <div key={visitor.id} className="bg-white rounded-xl p-3 shadow-sm border border-slate-100">
-                          {/* Top Section */}
-                          <div className="flex items-start gap-2 mb-2">
-                            <div className="w-7 h-7 rounded-full bg-[#EAB308]/10 flex items-center justify-center text-[#EAB308] flex-shrink-0">
-                              {getDeviceIcon(visitor.device_type)}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex justify-between items-start">
-                                <div>
-                                  <p className="text-xs font-semibold text-[#0B132B]">
-                                    {visitor.browser} on {visitor.os}
-                                  </p>
-                                </div>
-                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#EAB308]/10 text-[#0B132B] flex-shrink-0 ml-2">
-                                  {formatTimeSpent(visitor.time_spent || 0)}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Page Visited */}
-                          <div className="mb-2">
-                            <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Page</p>
-                            <p className="text-xs text-slate-600 truncate">
-                              {visitor.page_visited || '-'}
-                            </p>
-                          </div>
-
-                          {/* Location Section (if available) */}
-                          {visitor.latitude && visitor.longitude && (
-                            <div className="mb-2 p-2 bg-blue-50 rounded-lg border border-blue-100">
-                              <p className="text-[10px] text-blue-700 font-semibold uppercase tracking-wider mb-0.5">📍 Location</p>
-                              {visitor.full_address ? (
-                                <p className="text-xs text-blue-800 mb-1">{visitor.full_address}</p>
-                              ) : (
-                                <p className="text-xs text-blue-700 mb-1">{visitor.latitude.toFixed(6)}, {visitor.longitude.toFixed(6)}</p>
-                              )}
-                              {visitor.google_maps_url && (
-                                <a 
-                                  href={visitor.google_maps_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-[10px] text-blue-600 hover:text-blue-800 font-medium"
-                                >
-                                  <Globe className="w-3 h-3" />
-                                  View on Map
-                                </a>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Location permission status if no coordinates */}
-                          {!visitor.latitude && visitor.location_permission && visitor.location_permission !== 'granted' && (
-                            <div className="mb-2 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                              <p className="text-[10px] text-slate-500">
-                                Location: {visitor.location_permission === 'denied' ? 'Permission Denied' : 
-                                         visitor.location_permission === 'unavailable' ? 'Unavailable' : 
-                                         visitor.location_permission === 'timeout' ? 'Timeout' : 'Not Requested'}
-                              </p>
-                            </div>
-                          )}
-
-                          {/* Details Grid */}
-                          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Device</p>
-                              <p className="text-xs text-slate-600">
-                                {visitor.device_type || 'Unknown'}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Browser</p>
-                              <p className="text-xs text-slate-600">
-                                {visitor.browser || '-'}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">OS</p>
-                              <p className="text-xs text-slate-600">
-                                {visitor.os || '-'}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Referrer</p>
-                              <p className="text-xs text-slate-600 truncate">
-                                {visitor.referrer || 'Direct'}
-                              </p>
-                            </div>
-                            {visitor.city && (
-                              <div>
-                                <p className="text-[10px] text-slate-400 uppercase tracking-wider">City</p>
-                                <p className="text-xs text-slate-600">
-                                  {visitor.city}
-                                </p>
-                              </div>
-                            )}
-                            {visitor.state && (
-                              <div>
-                                <p className="text-[10px] text-slate-400 uppercase tracking-wider">State</p>
-                                <p className="text-xs text-slate-600">
-                                  {visitor.state}
-                                </p>
-                              </div>
-                            )}
-                            {visitor.country && (
-                              <div>
-                                <p className="text-[10px] text-slate-400 uppercase tracking-wider">Country</p>
-                                <p className="text-xs text-slate-600">
-                                  {visitor.country}
-                                </p>
-                              </div>
-                            )}
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Date</p>
-                              <p className="text-xs text-slate-600">
-                                {new Date(visitor.created_at).toLocaleDateString()}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Time</p>
-                              <p className="text-xs text-slate-600">
-                                {new Date(visitor.created_at).toLocaleTimeString()}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="bg-white rounded-xl p-8 text-center shadow-sm border border-slate-100">
-                        <Globe className="w-10 h-10 mx-auto text-slate-200 mb-3" />
-                        <p className="text-sm text-slate-500 font-medium">No visitors yet</p>
-                        <p className="text-xs text-slate-400 mt-1">Start promoting your site!</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Visitors Table - Desktop View */}
-                  <div className="hidden lg:block bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-slate-50 border-b border-slate-100">
+                  {/* Visitors Table - All Devices */}
+                  <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <style>{`
+                      .custom-scrollbar::-webkit-scrollbar {
+                        height: 6px;
+                        width: 6px;
+                      }
+                      .custom-scrollbar::-webkit-scrollbar-track {
+                        background: #f1f5f9;
+                        border-radius: 3px;
+                      }
+                      .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: #cbd5e1;
+                        border-radius: 3px;
+                      }
+                      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                        background: #94a3b8;
+                      }
+                    `}</style>
+                    <div className="overflow-auto max-h-[calc(100vh-200px)] custom-scrollbar">
+                      <table className="w-full min-w-[800px]">
+                        <thead className="bg-slate-50 border-b border-slate-100 sticky top-0 z-10">
                           <tr>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Device</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Browser</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">OS</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Page</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Location</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Map</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Time Spent</th>
-                            <th className="text-left px-6 py-3.5 text-sm font-semibold text-[#0B132B]">Date</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Device</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Browser</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">OS</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Page</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Location</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Map</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Time Spent</th>
+                            <th className="text-left px-3 py-2.5 text-xs md:text-sm font-semibold text-[#0B132B] whitespace-nowrap">Date</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                           {loading ? (
                             Array.from({ length: 5 }).map((_, i) => (
                               <tr key={i}>
-                                <td className="px-6 py-3.5">
+                                <td className="px-3 py-2.5">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-7 h-7 bg-slate-200 rounded-full animate-pulse" />
-                                    <div className="h-3.5 bg-slate-200 rounded w-24 animate-pulse" />
+                                    <div className="w-6 h-6 bg-slate-200 rounded-full animate-pulse" />
+                                    <div className="h-3 bg-slate-200 rounded w-20 animate-pulse" />
                                   </div>
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-28 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-20 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-20 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-16 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-32 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-24 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-40 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-32 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-20 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-12 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-16 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-12 animate-pulse" />
                                 </td>
-                                <td className="px-6 py-3.5">
-                                  <div className="h-3.5 bg-slate-200 rounded w-32 animate-pulse" />
+                                <td className="px-3 py-2.5">
+                                  <div className="h-3 bg-slate-200 rounded w-24 animate-pulse" />
                                 </td>
                               </tr>
                             ))
-                          ) : (
+                          ) : visitors.length > 0 ? (
                             visitors.map((visitor) => (
-                              <tr key={visitor.id} className="hover:bg-slate-50 transition-colors">
-                                <td className="px-6 py-3.5">
-                                  <div className="flex items-center gap-2.5">
-                                    <div className="w-8 h-8 rounded-full bg-[#EAB308]/10 flex items-center justify-center text-[#EAB308]">
+                              <tr key={visitor.id} className="hover:bg-slate-50 transition-colors active:bg-slate-100">
+                                <td className="px-3 py-2.5">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-7 h-7 rounded-full bg-[#EAB308]/10 flex items-center justify-center text-[#EAB308]">
                                       {getDeviceIcon(visitor.device_type)}
                                     </div>
-                                    <span className="text-sm text-[#0B132B] font-medium">{visitor.device_type || 'Unknown'}</span>
+                                    <span className="text-xs md:text-sm text-[#0B132B] font-medium">{visitor.device_type || 'Unknown'}</span>
                                   </div>
                                 </td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600">{visitor.browser || '-'}</td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600">{visitor.os || '-'}</td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600">{visitor.page_visited || '-'}</td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600 max-w-xs">
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600">{visitor.browser || '-'}</td>
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600">{visitor.os || '-'}</td>
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600 truncate max-w-[150px]">{visitor.page_visited || '-'}</td>
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600 max-w-[200px]">
                                   {visitor.full_address ? (
                                     <span className="line-clamp-2">{visitor.full_address}</span>
                                   ) : visitor.city && visitor.country ? (
@@ -838,27 +713,35 @@ export default function AdminDashboard() {
                                     <span className="text-slate-400">-</span>
                                   )}
                                 </td>
-                                <td className="px-6 py-3.5">
+                                <td className="px-3 py-2.5">
                                   {visitor.google_maps_url ? (
                                     <a 
                                       href={visitor.google_maps_url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                      className="inline-flex items-center gap-1 text-xs md:text-sm text-blue-600 hover:text-blue-800 font-medium"
                                     >
-                                      <Globe className="w-4 h-4" />
+                                      <Globe className="w-3.5 h-3.5 md:w-4 md:h-4" />
                                       View
                                     </a>
                                   ) : (
-                                    <span className="text-slate-400">-</span>
+                                    <span className="text-slate-400 text-xs">-</span>
                                   )}
                                 </td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600 font-medium">{formatTimeSpent(visitor.time_spent || 0)}</td>
-                                <td className="px-6 py-3.5 text-sm text-slate-600">
-                                  {new Date(visitor.created_at).toLocaleString()}
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600 font-medium">{formatTimeSpent(visitor.time_spent || 0)}</td>
+                                <td className="px-3 py-2.5 text-xs md:text-sm text-slate-600 whitespace-nowrap">
+                                  {formatDateTime(visitor.created_at)}
                                 </td>
                               </tr>
                             ))
+                          ) : (
+                            <tr>
+                              <td colSpan={8} className="px-6 py-12 text-center">
+                                <Globe className="w-10 h-10 mx-auto text-slate-200 mb-3" />
+                                <p className="text-sm text-slate-500 font-medium">No visitors yet</p>
+                                <p className="text-xs text-slate-400 mt-1">Start promoting your site!</p>
+                              </td>
+                            </tr>
                           )}
                         </tbody>
                       </table>

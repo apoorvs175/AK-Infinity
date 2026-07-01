@@ -342,6 +342,9 @@ app.post('/api/clients', async (req, res) => {
     google_maps_link,
     owner_contact_number,
     first_call: false,
+    description: '',
+    website: false,
+    collaboration: false,
     first_meeting: false,
     agreement_signed: false,
     project_delivered: false
@@ -376,6 +379,9 @@ app.put('/api/clients/:id', async (req, res) => {
     google_maps_link,
     owner_contact_number,
     first_call,
+    description,
+    website,
+    collaboration,
     first_meeting,
     agreement_signed,
     payment_amount,
@@ -390,6 +396,9 @@ app.put('/api/clients/:id', async (req, res) => {
   if (google_maps_link !== undefined) updateData.google_maps_link = google_maps_link;
   if (owner_contact_number !== undefined) updateData.owner_contact_number = owner_contact_number;
   if (first_call !== undefined) updateData.first_call = first_call;
+  if (description !== undefined) updateData.description = description;
+  if (website !== undefined) updateData.website = website;
+  if (collaboration !== undefined) updateData.collaboration = collaboration;
   if (first_meeting !== undefined) updateData.first_meeting = first_meeting;
   if (agreement_signed !== undefined) updateData.agreement_signed = agreement_signed;
   if (payment_amount !== undefined) updateData.payment_amount = payment_amount;

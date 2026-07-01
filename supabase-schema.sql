@@ -47,6 +47,9 @@ CREATE TABLE IF NOT EXISTS clients (
   google_maps_link TEXT,
   owner_contact_number TEXT,
   first_call BOOLEAN DEFAULT FALSE,
+  description TEXT,
+  website BOOLEAN DEFAULT FALSE,
+  collaboration BOOLEAN DEFAULT FALSE,
   first_meeting BOOLEAN DEFAULT FALSE,
   agreement_signed BOOLEAN DEFAULT FALSE,
   payment_amount NUMERIC,
@@ -70,6 +73,11 @@ ALTER TABLE visitors ADD COLUMN IF NOT EXISTS postal_code TEXT;
 ALTER TABLE visitors ADD COLUMN IF NOT EXISTS location_permission TEXT DEFAULT 'not_requested';
 ALTER TABLE visitors ADD COLUMN IF NOT EXISTS google_maps_url TEXT;
 
+-- Add client columns if they don't exist (for existing tables)
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS website BOOLEAN DEFAULT FALSE;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS collaboration BOOLEAN DEFAULT FALSE;
+
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -82,6 +90,7 @@ $$ language 'plpgsql';
 -- Drop triggers if they exist
 DROP TRIGGER IF EXISTS update_leads_updated_at ON leads;
 DROP TRIGGER IF EXISTS update_visitors_updated_at ON visitors;
+DROP TRIGGER IF EXISTS update_clients_updated_at ON clients;
 
 -- Create triggers
 CREATE TRIGGER update_leads_updated_at BEFORE UPDATE ON leads
@@ -90,9 +99,13 @@ CREATE TRIGGER update_leads_updated_at BEFORE UPDATE ON leads
 CREATE TRIGGER update_visitors_updated_at BEFORE UPDATE ON visitors
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_clients_updated_at BEFORE UPDATE ON clients
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 -- Enable RLS (safe to run multiple times)
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies first to avoid conflicts
 DROP POLICY IF EXISTS "Enable read access for authenticated users only" ON leads;
@@ -127,3 +140,22 @@ CREATE POLICY "Enable insert access for all users" ON visitors
 
 CREATE POLICY "Enable update access for authenticated users only" ON visitors
   FOR UPDATE USING (auth.role() = 'authenticated');
+
+-- Drop existing client policies
+DROP POLICY IF EXISTS "Enable read access for authenticated users only" ON clients;
+DROP POLICY IF EXISTS "Enable insert access for authenticated users only" ON clients;
+DROP POLICY IF EXISTS "Enable update access for authenticated users only" ON clients;
+DROP POLICY IF EXISTS "Enable delete access for authenticated users only" ON clients;
+
+-- Create client policies
+CREATE POLICY "Enable read access for authenticated users only" ON clients
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Enable insert access for authenticated users only" ON clients
+  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "Enable update access for authenticated users only" ON clients
+  FOR UPDATE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Enable delete access for authenticated users only" ON clients
+  FOR DELETE USING (auth.role() = 'authenticated');

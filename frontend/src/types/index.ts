@@ -65,6 +65,9 @@ export interface Client {
   google_maps_link?: string;
   owner_contact_number?: string;
   first_call: boolean;
+  description?: string;
+  website: boolean;
+  collaboration: boolean;
   first_meeting: boolean;
   agreement_signed: boolean;
   payment_amount?: number;
