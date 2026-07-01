@@ -280,32 +280,156 @@ app.post('/api/visitors', async (req, res) => {
 })
 
 app.put('/api/visitors/:id', async (req, res) => {
-  const { id } = req.params
-  const { time_spent } = req.body
+  const { id } = req.params;
+  const { time_spent } = req.body;
 
   if (supabase) {
     const { data, error } = await supabase
       .from('visitors')
       .update({ time_spent })
       .eq('id', id)
-      .select()
+      .select();
     
     if (error) {
-      return res.status(500).json({ error: error.message })
+      return res.status(500).json({ error: error.message });
     }
     if (!data || data.length === 0) {
-      return res.status(404).json({ error: 'Visitor not found' })
+      return res.status(404).json({ error: 'Visitor not found' });
     }
-    return res.json(data[0])
+    return res.json(data[0]);
   }
   
-  const visitorIndex = demoVisitors.findIndex(visitor => visitor.id == id)
+  const visitorIndex = demoVisitors.findIndex(visitor => visitor.id == id);
   if (visitorIndex === -1) {
-    return res.status(404).json({ error: 'Visitor not found' })
+    return res.status(404).json({ error: 'Visitor not found' });
   }
-  demoVisitors[visitorIndex].time_spent = time_spent
-  res.json(demoVisitors[visitorIndex])
-})
+  demoVisitors[visitorIndex].time_spent = time_spent;
+  res.json(demoVisitors[visitorIndex]);
+});
+
+// Client endpoints
+app.get('/api/clients', async (req, res) => {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    return res.json(data);
+  }
+  res.json([]);
+});
+
+app.post('/api/clients', async (req, res) => {
+  const {
+    business_name,
+    owner_name,
+    address_name,
+    google_maps_link,
+    owner_contact_number
+  } = req.body;
+
+  if (!business_name || !owner_name || !address_name) {
+    return res.status(400).json({ error: 'Business name, owner name, and address are required' });
+  }
+
+  const newClient = {
+    business_name,
+    owner_name,
+    address_name,
+    google_maps_link,
+    owner_contact_number,
+    first_call: false,
+    first_meeting: false,
+    agreement_signed: false,
+    project_delivered: false
+  };
+
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('clients')
+      .insert([newClient])
+      .select();
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    return res.status(201).json(data[0]);
+  }
+
+  const demoClient = {
+    id: Date.now().toString(),
+    ...newClient,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+  res.status(201).json(demoClient);
+});
+
+app.put('/api/clients/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    business_name,
+    owner_name,
+    address_name,
+    google_maps_link,
+    owner_contact_number,
+    first_call,
+    first_meeting,
+    agreement_signed,
+    payment_amount,
+    amount_received,
+    project_delivered
+  } = req.body;
+
+  const updateData = { updated_at: new Date().toISOString() };
+  if (business_name !== undefined) updateData.business_name = business_name;
+  if (owner_name !== undefined) updateData.owner_name = owner_name;
+  if (address_name !== undefined) updateData.address_name = address_name;
+  if (google_maps_link !== undefined) updateData.google_maps_link = google_maps_link;
+  if (owner_contact_number !== undefined) updateData.owner_contact_number = owner_contact_number;
+  if (first_call !== undefined) updateData.first_call = first_call;
+  if (first_meeting !== undefined) updateData.first_meeting = first_meeting;
+  if (agreement_signed !== undefined) updateData.agreement_signed = agreement_signed;
+  if (payment_amount !== undefined) updateData.payment_amount = payment_amount;
+  if (amount_received !== undefined) updateData.amount_received = amount_received;
+  if (project_delivered !== undefined) updateData.project_delivered = project_delivered;
+
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('clients')
+      .update(updateData)
+      .eq('id', id)
+      .select();
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    return res.json(data[0]);
+  }
+
+  return res.json({ id, ...updateData });
+});
+
+app.delete('/api/clients/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (supabase) {
+    const { error } = await supabase
+      .from('clients')
+      .delete()
+      .eq('id', id);
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    return res.json({ message: 'Client deleted successfully' });
+  }
+
+  res.json({ message: 'Client deleted successfully' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

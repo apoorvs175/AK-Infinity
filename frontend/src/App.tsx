@@ -10,6 +10,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
+import ClientDetails from './pages/ClientDetails'
 import ScrollToTop from './components/ScrollToTop'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './lib/auth'
@@ -56,6 +57,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/clients"
+            element={
+              <ProtectedRoute>
+                <ClientDetails />
               </ProtectedRoute>
             }
           />

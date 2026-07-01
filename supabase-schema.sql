@@ -38,6 +38,24 @@ CREATE TABLE IF NOT EXISTS visitors (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create clients table
+CREATE TABLE IF NOT EXISTS clients (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  business_name TEXT NOT NULL,
+  owner_name TEXT NOT NULL,
+  address_name TEXT NOT NULL,
+  google_maps_link TEXT,
+  owner_contact_number TEXT,
+  first_call BOOLEAN DEFAULT FALSE,
+  first_meeting BOOLEAN DEFAULT FALSE,
+  agreement_signed BOOLEAN DEFAULT FALSE,
+  payment_amount NUMERIC,
+  amount_received NUMERIC,
+  project_delivered BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Add location columns if they don't exist (for existing tables)
 ALTER TABLE visitors ADD COLUMN IF NOT EXISTS latitude DECIMAL;
 ALTER TABLE visitors ADD COLUMN IF NOT EXISTS longitude DECIMAL;

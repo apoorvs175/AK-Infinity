@@ -219,6 +219,17 @@ export default function AdminDashboard() {
                 </button>
               )
             })}
+            <Link
+              to="/admin/clients"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`
+                flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm
+                text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]
+              `}
+            >
+              <Users className="w-4.5 h-4.5" />
+              {!sidebarCollapsed && <span>Client Details</span>}
+            </Link>
           </nav>
 
           {/* Footer Section */}

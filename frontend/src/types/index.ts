@@ -56,3 +56,20 @@ export interface PortfolioItem {
   link?: string;
   highlights: string[];
 }
+
+export interface Client {
+  id: string;
+  business_name: string;
+  owner_name: string;
+  address_name: string;
+  google_maps_link?: string;
+  owner_contact_number?: string;
+  first_call: boolean;
+  first_meeting: boolean;
+  agreement_signed: boolean;
+  payment_amount?: number;
+  amount_received?: number;
+  project_delivered: boolean;
+  created_at: string;
+  updated_at: string;
+}
