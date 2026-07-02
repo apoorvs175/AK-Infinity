@@ -68,7 +68,9 @@ export default function ClientDetails() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Partial<Client>>({});
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
@@ -140,7 +142,14 @@ export default function ClientDetails() {
 
   const handleCreateClient = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
     console.log('🔄 Creating client...');
+    
     const formData = new FormData(e.currentTarget);
     const newClientData = {
       business_name: formData.get('business_name') as string,
@@ -167,7 +176,9 @@ export default function ClientDetails() {
         const data = JSON.parse(responseText);
         console.log('✅ Client created successfully:', data);
         setClients(prev => [data, ...prev]);
-        e.currentTarget.reset();
+        if (formRef.current) {
+          formRef.current.reset();
+        }
         setShowModal(false);
         showToast('Client created successfully!', 'success');
       } else {
@@ -184,6 +195,8 @@ export default function ClientDetails() {
     } catch (error) {
       console.error('❌ Error creating client:', error);
       showToast('Failed to create client: ' + (error instanceof Error ? error.message : 'Unknown error'), 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -717,7 +730,7 @@ export default function ClientDetails() {
                 <X className="w-4.5 h-4.5 md:w-5 md:h-5" />
               </button>
             </div>
-            <form onSubmit={handleCreateClient} className="space-y-3.5 md:space-y-4">
+            <form ref={formRef} onSubmit={handleCreateClient} className="space-y-3.5 md:space-y-4">
               <div>
                 <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1.5">Business Name</label>
                 <input
@@ -770,15 +783,21 @@ export default function ClientDetails() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-3 md:px-4 py-1.5 md:py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium text-xs md:text-sm transition-all"
+                  disabled={isSubmitting}
+                  className="flex-1 px-3 md:px-4 py-1.5 md:py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 font-medium text-xs md:text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-3 md:px-4 py-1.5 md:py-2 bg-[#EAB308] text-[#0B132B] rounded-lg hover:bg-[#d4a207] font-medium text-xs md:text-sm transition-all shadow-md hover:shadow-lg"
+                  disabled={isSubmitting}
+                  className="flex-1 px-3 md:px-4 py-1.5 md:py-2 bg-[#EAB308] text-[#0B132B] rounded-lg hover:bg-[#d4a207] font-medium text-xs md:text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Save Client
+                  {isSubmitting ? (
+                    <div className="w-4 h-4 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    'Save Client'
+                  )}
                 </button>
               </div>
             </form>
