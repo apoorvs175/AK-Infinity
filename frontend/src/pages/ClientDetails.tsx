@@ -140,6 +140,7 @@ export default function ClientDetails() {
 
   const handleCreateClient = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('🔄 Creating client...');
     const formData = new FormData(e.currentTarget);
     const newClientData = {
       business_name: formData.get('business_name') as string,
@@ -149,6 +150,8 @@ export default function ClientDetails() {
       owner_contact_number: formData.get('owner_contact_number') as string
     };
 
+    console.log('📤 Sending client data to:', `${API_URL}/api/clients`, newClientData);
+
     try {
       const response = await fetch(`${API_URL}/api/clients`, {
         method: 'POST',
@@ -156,16 +159,31 @@ export default function ClientDetails() {
         body: JSON.stringify(newClientData)
       });
 
+      console.log('📥 Response status:', response.status);
+      const responseText = await response.text();
+      console.log('📥 Response text:', responseText);
+      
       if (response.ok) {
-        const data = await response.json();
+        const data = JSON.parse(responseText);
+        console.log('✅ Client created successfully:', data);
         setClients(prev => [data, ...prev]);
-        setShowModal(false);
         e.currentTarget.reset();
+        setShowModal(false);
         showToast('Client created successfully!', 'success');
+      } else {
+        console.error('❌ Server responded with error:', response.status, responseText);
+        let errorMessage;
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.error || responseText;
+        } catch {
+          errorMessage = responseText;
+        }
+        showToast('Failed to create client: ' + errorMessage, 'error');
       }
     } catch (error) {
-      console.error('Error creating client:', error);
-      showToast('Failed to create client', 'error');
+      console.error('❌ Error creating client:', error);
+      showToast('Failed to create client: ' + (error instanceof Error ? error.message : 'Unknown error'), 'error');
     }
   };
 

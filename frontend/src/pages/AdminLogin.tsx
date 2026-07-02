@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
@@ -21,8 +21,13 @@ export default function AdminLogin() {
   const { user } = useAuth()
 
   // Redirect to admin if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/admin')
+    }
+  }, [user, navigate])
+
   if (user) {
-    navigate('/admin')
     return null
   }
 
