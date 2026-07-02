@@ -8,16 +8,23 @@ const PORT = process.env.PORT || 5001
 
 // Check if Supabase is configured
 let supabase = null
+console.log('🔧 Checking Supabase configuration...')
+console.log('  SUPABASE_URL:', process.env.SUPABASE_URL ? 'Set' : 'Not set')
+console.log('  SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'Not set')
+
 if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim() && process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY.trim()) {
   try {
+    console.log('🔄 Creating Supabase client...')
     supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     )
-    console.log('Supabase configured')
+    console.log('✅ Supabase configured successfully')
   } catch (err) {
-    console.log('Supabase not configured')
+    console.log('❌ Error configuring Supabase:', err)
   }
+} else {
+  console.log('⚠️  Supabase not configured - will use demo mode')
 }
 
 const allowedOrigins = [
@@ -323,6 +330,8 @@ app.get('/api/clients', async (req, res) => {
 });
 
 app.post('/api/clients', async (req, res) => {
+  console.log('📥 Received request to create client:', req.body);
+  
   const {
     business_name,
     owner_name,
@@ -332,6 +341,7 @@ app.post('/api/clients', async (req, res) => {
   } = req.body;
 
   if (!business_name || !owner_name || !address_name) {
+    console.error('❌ Missing required fields:', { business_name, owner_name, address_name });
     return res.status(400).json({ error: 'Business name, owner name, and address are required' });
   }
 
@@ -350,14 +360,20 @@ app.post('/api/clients', async (req, res) => {
     project_delivered: false
   };
 
+  console.log('📝 Prepared client object:', newClient);
+
   if (supabase) {
+    console.log('💾 Saving to Supabase...');
     const { data, error } = await supabase
       .from('clients')
       .insert([newClient])
       .select();
+    
     if (error) {
+      console.error('❌ Supabase error:', error);
       return res.status(500).json({ error: error.message });
     }
+    console.log('✅ Client saved to Supabase:', data[0]);
     return res.status(201).json(data[0]);
   }
 
@@ -367,6 +383,7 @@ app.post('/api/clients', async (req, res) => {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
+  console.log('✅ Demo client created:', demoClient);
   res.status(201).json(demoClient);
 });
 
