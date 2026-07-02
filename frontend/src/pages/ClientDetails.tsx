@@ -13,7 +13,11 @@ import {
   Menu,
   CheckCircle2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  PhoneCall,
+  Handshake,
+  Briefcase,
+  CheckCircle
 } from 'lucide-react';
 import type { Client } from '../types';
 import { useAuth } from '../lib/auth';
@@ -69,6 +73,7 @@ export default function ClientDetails() {
   const [editValues, setEditValues] = useState<Partial<Client>>({});
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'pending-first-call' | 'pending-final-call' | 'completed-deals'>('all');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -76,6 +81,26 @@ export default function ClientDetails() {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
+
+  // Calculate stats from clients data
+  const totalClients = clients.length;
+  const pendingFirstCall = clients.filter(client => !client.first_call).length;
+  const pendingFinalCall = clients.filter(client => !client.final_call).length;
+  const completedDeals = clients.filter(client => client.project_delivered).length;
+
+  // Filter clients based on active filter
+  const filteredClients = clients.filter(client => {
+    switch (activeFilter) {
+      case 'pending-first-call':
+        return !client.first_call;
+      case 'pending-final-call':
+        return !client.final_call;
+      case 'completed-deals':
+        return client.project_delivered;
+      default:
+        return true;
+    }
+  });
 
   const fetchClients = useCallback(async () => {
     try {
@@ -323,46 +348,218 @@ export default function ClientDetails() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-3 md:p-4 lg:p-6">
-          <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
+        <main className="flex-1 overflow-y-auto px-1 py-2 md:overflow-hidden md:p-4 lg:p-6 md:flex md:flex-col">
+          <div className="max-w-7xl mx-auto space-y-3 md:space-y-6 md:flex-1 md:flex md:flex-col">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-3">
+              {/* Total Clients */}
+              <div
+                onClick={() => setActiveFilter('all')}
+                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
+                  activeFilter === 'all'
+                    ? 'border-[#0B132B] bg-slate-50 shadow-md'
+                    : 'border-slate-100'
+                }`}
+              >
+                {/* Mobile Layout */}
+                <div className="flex flex-col md:hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#0B132B] to-slate-700 flex items-center justify-center flex-shrink-0">
+                      <Briefcase className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium">Total Clients</div>
+                  </div>
+                  <div className="text-lg font-extrabold text-[#0B132B]">
+                    {loading ? (
+                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      totalClients
+                    )}
+                  </div>
+                </div>
+                {/* Tablet/Desktop Layout */}
+                <div className="hidden md:flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#0B132B] to-slate-700 flex items-center justify-center">
+                      <Briefcase className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-500 font-medium mb-1">Total Clients</div>
+                  <div className="text-2xl font-extrabold text-[#0B132B]">
+                    {loading ? (
+                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      totalClients
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Pending First Call */}
+              <div
+                onClick={() => setActiveFilter('pending-first-call')}
+                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
+                  activeFilter === 'pending-first-call'
+                    ? 'border-[#EAB308] bg-yellow-50 shadow-md'
+                    : 'border-slate-100'
+                }`}
+              >
+                {/* Mobile Layout */}
+                <div className="flex flex-col md:hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#EAB308] to-yellow-600 flex items-center justify-center flex-shrink-0">
+                      <PhoneCall className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium">Pending First Call</div>
+                  </div>
+                  <div className="text-lg font-extrabold text-[#EAB308]">
+                    {loading ? (
+                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      pendingFirstCall
+                    )}
+                  </div>
+                </div>
+                {/* Tablet/Desktop Layout */}
+                <div className="hidden md:flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#EAB308] to-yellow-600 flex items-center justify-center">
+                      <PhoneCall className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-500 font-medium mb-1">Pending First Call</div>
+                  <div className="text-2xl font-extrabold text-[#EAB308]">
+                    {loading ? (
+                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      pendingFirstCall
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Pending Final Call */}
+              <div
+                onClick={() => setActiveFilter('pending-final-call')}
+                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
+                  activeFilter === 'pending-final-call'
+                    ? 'border-orange-600 bg-orange-50 shadow-md'
+                    : 'border-slate-100'
+                }`}
+              >
+                {/* Mobile Layout */}
+                <div className="flex flex-col md:hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                      <Handshake className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium">Pending Final Call</div>
+                  </div>
+                  <div className="text-lg font-extrabold text-orange-600">
+                    {loading ? (
+                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      pendingFinalCall
+                    )}
+                  </div>
+                </div>
+                {/* Tablet/Desktop Layout */}
+                <div className="hidden md:flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                      <Handshake className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-500 font-medium mb-1">Pending Final Call</div>
+                  <div className="text-2xl font-extrabold text-orange-600">
+                    {loading ? (
+                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      pendingFinalCall
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Completed Deals */}
+              <div
+                onClick={() => setActiveFilter('completed-deals')}
+                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
+                  activeFilter === 'completed-deals'
+                    ? 'border-green-600 bg-green-50 shadow-md'
+                    : 'border-slate-100'
+                }`}
+              >
+                {/* Mobile Layout */}
+                <div className="flex flex-col md:hidden">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium">Completed Deals</div>
+                  </div>
+                  <div className="text-lg font-extrabold text-green-600">
+                    {loading ? (
+                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      completedDeals
+                    )}
+                  </div>
+                </div>
+                {/* Tablet/Desktop Layout */}
+                <div className="hidden md:flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-500 font-medium mb-1">Completed Deals</div>
+                  <div className="text-2xl font-extrabold text-green-600">
+                    {loading ? (
+                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
+                    ) : (
+                      completedDeals
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Table Container */}
-            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-              <div className="overflow-x-auto">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden md:flex-1 md:flex md:flex-col">
+              {/* Mobile: Natural scrolling, Desktop/Tablet: Fixed scroll */}
+              <div className="overflow-x-auto md:overflow-auto md:max-h-[450px] md:scrollbar-hide">
                 <style>{`
-                  /* Custom scrollbar */
-                  .custom-scrollbar::-webkit-scrollbar {
-                    height: 6px;
-                    width: 6px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-track {
-                    background: #f3f4f6;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: #d1d5db;
-                    border-radius: 3px;
-                  }
-                  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #9ca3af;
+                  /* Hide scrollbar only on desktop/tablet */
+                  @media (min-width: 768px) {
+                    .scrollbar-hide::-webkit-scrollbar {
+                      display: none;
+                    }
+                    .scrollbar-hide {
+                      -ms-overflow-style: none;
+                      scrollbar-width: none;
+                    }
                   }
                 `}</style>
-                <table className="w-full min-w-[1400px] custom-scrollbar">
+                <table className="w-full min-w-[1400px]">
                   {/* Sticky Header */}
                   <thead className="bg-slate-50 border-b border-slate-100 sticky top-0 z-10">
                     <tr>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-10">Sr</th>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Business</th>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Owner</th>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Address</th>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Contact</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Call</th>
-                      <th className="text-left px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Description</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Services</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Meeting</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Agreement</th>
-                      <th className="text-right px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Payment</th>
-                      <th className="text-right px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Received</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Delivered</th>
-                      <th className="text-center px-3 py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-14">Actions</th>
+                      <th className="text-left px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-8">Sr</th>
+                      <th className="text-left px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider max-w-[100px] md:max-w-none">Business</th>
+                      <th className="text-left px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Owner</th>
+                      <th className="text-left px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Address</th>
+                      <th className="text-left px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Contact</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Call</th>
+                      <th className="text-left px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Description</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Services</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Meeting</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Final Call</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Agreement</th>
+                      <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Payment</th>
+                      <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Received</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Delivered</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-14">Actions</th>
                     </tr>
                   </thead>
 
@@ -370,32 +567,38 @@ export default function ClientDetails() {
                     {loading ? (
                       Array.from({ length: 5 }).map((_, i) => (
                         <tr key={i} className="border-b border-slate-50">
-                          {Array.from({ length: 14 }).map((_, j) => (
-                            <td key={j} className="px-3 py-2.5">
+                          {Array.from({ length: 15 }).map((_, j) => (
+                            <td key={j} className={`${j < 4 ? 'px-0.5' : 'px-1'} py-1.5 md:px-3 md:py-2.5`}>
                               <div className="h-3.5 bg-slate-100 rounded w-16 animate-pulse" />
                             </td>
                           ))}
                         </tr>
                       ))
-                    ) : clients.length === 0 ? (
+                    ) : filteredClients.length === 0 ? (
                       <tr>
-                        <td colSpan={14} className="px-6 py-12 text-center">
+                        <td colSpan={15} className="px-4 py-8 md:px-6 md:py-12 text-center">
                           <div className="flex flex-col items-center gap-2">
-                            <Users className="w-14 h-14 mx-auto text-slate-200 mb-2 md:mb-3" />
+                            <Users className="w-12 h-12 md:w-14 md:h-14 mx-auto text-slate-200 mb-2" />
                             <p className="text-sm md:text-base font-semibold text-[#0B132B]">No Clients Found</p>
-                            <p className="text-xs md:text-sm text-slate-500 mt-1">Create your first client to get started</p>
-                            <button
-                              onClick={() => setShowModal(true)}
-                              className="flex items-center gap-1.5 bg-[#EAB308] hover:bg-[#d4a207] text-[#0B132B] px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 mt-2"
-                            >
-                              <Plus className="w-4 h-4" />
-                              Add Client
-                            </button>
+                            <p className="text-xs md:text-sm text-slate-500 mt-1">
+                              {activeFilter === 'all'
+                                ? 'Create your first client to get started'
+                                : 'No clients match this filter'}
+                            </p>
+                            {activeFilter === 'all' && (
+                              <button
+                                onClick={() => setShowModal(true)}
+                                className="flex items-center gap-1.5 bg-[#EAB308] hover:bg-[#d4a207] text-[#0B132B] px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 mt-2"
+                              >
+                                <Plus className="w-4 h-4" />
+                                Add Client
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
                     ) : (
-                      clients.map((client, index) => {
+                      filteredClients.map((client, index) => {
                         const isEditing = editingId === client.id;
                         const currentValues = isEditing ? editValues : client;
 
@@ -406,10 +609,10 @@ export default function ClientDetails() {
                               isEditing ? 'bg-blue-50' : 'hover:bg-slate-50 hover:shadow-inner'
                             }`}
                           >
-                            <td className="px-3 py-2.5 text-xs font-medium text-slate-600">{index + 1}</td>
+                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-medium text-slate-600">{index + 1}</td>
                             
                             {/* Business Name */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 max-w-[100px] md:max-w-none">
                               {isEditing ? (
                                 <input
                                   type="text"
@@ -418,12 +621,12 @@ export default function ClientDetails() {
                                   className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
                                 />
                               ) : (
-                                <span className="text-sm font-medium text-[#0B132B]">{client.business_name}</span>
+                                <span className="text-sm font-medium text-[#0B132B] break-words whitespace-normal">{client.business_name}</span>
                               )}
                             </td>
 
                             {/* Owner Name */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
                               {isEditing ? (
                                 <input
                                   type="text"
@@ -437,7 +640,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Address */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
                               {isEditing ? (
                                 <div className="space-y-1.5">
                                   <input
@@ -474,7 +677,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Contact Number */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
                               {isEditing ? (
                                 <input
                                   type="tel"
@@ -511,7 +714,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* First Call */}
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                               {isEditing ? (
                                 <button
                                   onClick={() => setEditValues(prev => ({ ...prev, first_call: !prev.first_call }))}
@@ -529,7 +732,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Description */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
                               {isEditing ? (
                                 <textarea
                                   value={currentValues.description || ''}
@@ -553,7 +756,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Services */}
-                            <td className="px-3 py-2.5">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
                               {isEditing ? (
                                 <div className="flex flex-wrap gap-1.5">
                                   <button
@@ -587,7 +790,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* First Meeting */}
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                               {isEditing ? (
                                 <button
                                   onClick={() => setEditValues(prev => ({ ...prev, first_meeting: !prev.first_meeting }))}
@@ -604,8 +807,26 @@ export default function ClientDetails() {
                               )}
                             </td>
 
+                            {/* Final Call */}
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                              {isEditing ? (
+                                <button
+                                  onClick={() => setEditValues(prev => ({ ...prev, final_call: !prev.final_call }))}
+                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                    currentValues.final_call
+                                      ? 'bg-green-500 border-green-500 text-white'
+                                      : 'border-slate-300 hover:border-slate-400'
+                                  }`}
+                                >
+                                  {currentValues.final_call && <Check className="w-2.5 h-2.5" />}
+                                </button>
+                              ) : (
+                                <StatusChip checked={client.final_call} />
+                              )}
+                            </td>
+
                             {/* Agreement Signed */}
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                               {isEditing ? (
                                 <button
                                   onClick={() => setEditValues(prev => ({ ...prev, agreement_signed: !prev.agreement_signed }))}
@@ -623,7 +844,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Payment Amount */}
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
                               {isEditing ? (
                                 <input
                                   type="number"
@@ -641,7 +862,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Amount Received */}
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
                               {isEditing ? (
                                 <input
                                   type="number"
@@ -659,7 +880,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Project Delivered */}
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                               {isEditing ? (
                                 <button
                                   onClick={() => setEditValues(prev => ({ ...prev, project_delivered: !prev.project_delivered }))}
@@ -677,7 +898,7 @@ export default function ClientDetails() {
                             </td>
 
                             {/* Actions */}
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                               {isEditing ? (
                                 <div className="flex items-center justify-center gap-0.5">
                                   <button

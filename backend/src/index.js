@@ -356,6 +356,7 @@ app.post('/api/clients', async (req, res) => {
     website: false,
     collaboration: false,
     first_meeting: false,
+    final_call: false,
     agreement_signed: false,
     project_delivered: false
   };
@@ -400,6 +401,7 @@ app.put('/api/clients/:id', async (req, res) => {
     website,
     collaboration,
     first_meeting,
+    final_call,
     agreement_signed,
     payment_amount,
     amount_received,
@@ -417,6 +419,7 @@ app.put('/api/clients/:id', async (req, res) => {
   if (website !== undefined) updateData.website = website;
   if (collaboration !== undefined) updateData.collaboration = collaboration;
   if (first_meeting !== undefined) updateData.first_meeting = first_meeting;
+  if (final_call !== undefined) updateData.final_call = final_call;
   if (agreement_signed !== undefined) updateData.agreement_signed = agreement_signed;
   if (payment_amount !== undefined) updateData.payment_amount = payment_amount;
   if (amount_received !== undefined) updateData.amount_received = amount_received;

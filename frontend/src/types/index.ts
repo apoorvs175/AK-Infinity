@@ -69,6 +69,7 @@ export interface Client {
   website: boolean;
   collaboration: boolean;
   first_meeting: boolean;
+  final_call: boolean;
   agreement_signed: boolean;
   payment_amount?: number;
   amount_received?: number;

@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS clients (
   website BOOLEAN DEFAULT FALSE,
   collaboration BOOLEAN DEFAULT FALSE,
   first_meeting BOOLEAN DEFAULT FALSE,
+  final_call BOOLEAN DEFAULT FALSE,
   agreement_signed BOOLEAN DEFAULT FALSE,
   payment_amount NUMERIC,
   amount_received NUMERIC,
@@ -77,6 +78,7 @@ ALTER TABLE visitors ADD COLUMN IF NOT EXISTS google_maps_url TEXT;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS description TEXT;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS website BOOLEAN DEFAULT FALSE;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS collaboration BOOLEAN DEFAULT FALSE;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS final_call BOOLEAN DEFAULT FALSE;
 
 -- Create updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
