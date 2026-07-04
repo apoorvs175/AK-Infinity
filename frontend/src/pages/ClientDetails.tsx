@@ -13,11 +13,7 @@ import {
   Menu,
   CheckCircle2,
   ChevronLeft,
-  ChevronRight,
-  PhoneCall,
-  Handshake,
-  Briefcase,
-  CheckCircle
+  ChevronRight
 } from 'lucide-react';
 import type { Client } from '../types';
 import { useAuth } from '../lib/auth';
