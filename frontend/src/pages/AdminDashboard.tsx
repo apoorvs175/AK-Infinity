@@ -20,6 +20,7 @@ import {
 import AKLogo from '../assets/AK_Main_Logo.webp'
 import type { Lead, Visitor } from '../types'
 import { useAuth } from '../lib/auth'
+import StatsCard from '../components/StatsCard'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com'
 
@@ -240,17 +241,32 @@ export default function AdminDashboard() {
                 </button>
               )
             })}
-            <Link
-              to="/admin/clients"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`
-                flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm
-                text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]
-              `}
-            >
-              <Users className="w-4.5 h-4.5" />
-              {!sidebarCollapsed && <span>Client Details</span>}
-            </Link>
+            
+            <div className="pt-1">
+              {!sidebarCollapsed && (
+                <p className="px-3 text-[10px] font-semibold uppercase text-slate-400 mb-1">
+                  Clients
+                </p>
+              )}
+              
+              <Link
+                to="/admin/clients/indian"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]"
+              >
+                <span className="w-4.5 h-4.5 flex items-center justify-center">🇮🇳</span>
+                {!sidebarCollapsed && <span>Indian Clients</span>}
+              </Link>
+              
+              <Link
+                to="/admin/clients/international"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]"
+              >
+                <span className="w-4.5 h-4.5 flex items-center justify-center">🌍</span>
+                {!sidebarCollapsed && <span>International Clients</span>}
+              </Link>
+            </div>
           </nav>
 
           {/* Footer Section */}
@@ -272,16 +288,15 @@ export default function AdminDashboard() {
                     </p>
                   </div>
                 )}
-              <button
-                onClick={handleLogout}
-                className={`
-                  p-1.5 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors
-                  ${sidebarCollapsed ? 'w-full justify-center' : ''}
-                `}
-                title="Logout"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+              {!sidebarCollapsed && (
+                <button
+                  onClick={handleLogout}
+                  className="p-1.5 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                  title="Logout"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
         </aside>
@@ -367,15 +382,7 @@ export default function AdminDashboard() {
                       { label: 'Contacted', value: stats.contactedLeads, color: 'from-yellow-500 to-yellow-600' },
                       { label: 'Converted', value: stats.convertedLeads, color: 'from-green-500 to-green-600' },
                     ].map((stat, index) => (
-                      <div
-                        key={index}
-                        className="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
-                      >
-                        <div className="text-[11px] md:text-sm text-slate-500 font-medium mb-1 md:mb-2">{stat.label}</div>
-                        <div className={`text-2xl md:text-4xl font-extrabold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
-                          {stat.value}
-                        </div>
-                      </div>
+                      <StatsCard key={index} label={stat.label} value={stat.value} color={stat.color} />
                     ))}
                   </div>
 

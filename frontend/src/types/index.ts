@@ -74,6 +74,7 @@ export interface Client {
   payment_amount?: number;
   amount_received?: number;
   project_delivered: boolean;
+  region: 'Indian' | 'International';
   created_at: string;
   updated_at: string;
 }

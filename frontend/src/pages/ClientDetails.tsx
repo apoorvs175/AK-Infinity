@@ -22,6 +22,7 @@ import {
 import type { Client } from '../types';
 import { useAuth } from '../lib/auth';
 import AKLogo from '../assets/AK_Main_Logo.webp';
+import StatsCard from '../components/StatsCard';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com';
 
@@ -61,7 +62,11 @@ const ServiceChip = ({ label, active }: { label: string; active: boolean }) => (
   </span>
 );
 
-export default function ClientDetails() {
+interface ClientDetailsPageProps {
+  region: 'Indian' | 'International';
+}
+
+export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [clients, setClients] = useState<Client[]>([]);
@@ -85,7 +90,7 @@ export default function ClientDetails() {
   // Calculate stats from clients data
   const totalClients = clients.length;
   const pendingFirstCall = clients.filter(client => !client.first_call).length;
-  const pendingFinalCall = clients.filter(client => !client.final_call).length;
+  const pendingFinalCall = clients.filter(client => client.first_call && !client.final_call).length;
   const completedDeals = clients.filter(client => client.project_delivered).length;
 
   // Filter clients based on active filter
@@ -94,7 +99,7 @@ export default function ClientDetails() {
       case 'pending-first-call':
         return !client.first_call;
       case 'pending-final-call':
-        return !client.final_call;
+        return client.first_call && !client.final_call;
       case 'completed-deals':
         return client.project_delivered;
       default:
@@ -104,7 +109,7 @@ export default function ClientDetails() {
 
   const fetchClients = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/api/clients`);
+      const response = await fetch(`${API_URL}/api/clients?region=${region}`);
       if (response.ok) {
         const data = await response.json();
         setClients(data);
@@ -114,7 +119,7 @@ export default function ClientDetails() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [region]);
 
   useEffect(() => {
     fetchClients();
@@ -181,7 +186,8 @@ export default function ClientDetails() {
       owner_name: formData.get('owner_name') as string,
       address_name: formData.get('address_name') as string,
       google_maps_link: formData.get('google_maps_link') as string,
-      owner_contact_number: formData.get('owner_contact_number') as string
+      owner_contact_number: formData.get('owner_contact_number') as string,
+      region: formData.get('region') as 'Indian' | 'International' || region
     };
 
     console.log('📤 Sending client data to:', `${API_URL}/api/clients`, newClientData);
@@ -283,9 +289,39 @@ export default function ClientDetails() {
             <LayoutDashboard className="w-4.5 h-4.5" />
             {!sidebarCollapsed && <span>Dashboard</span>}
           </Link>
-          <div className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm bg-[#EAB308]/10 text-[#EAB308] shadow-sm">
-            <Users className="w-4.5 h-4.5" />
-            {!sidebarCollapsed && <span>Client Details</span>}
+          
+          <div className="pt-1">
+            {!sidebarCollapsed && (
+              <p className="px-3 text-[10px] font-semibold uppercase text-slate-400 mb-1">
+                Clients
+              </p>
+            )}
+            
+            <Link
+              to="/admin/clients/indian"
+              onClick={() => setShowSidebar(false)}
+              className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm ${
+                region === 'Indian'
+                  ? 'bg-[#EAB308]/10 text-[#EAB308] shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]'
+              }`}
+            >
+              <span className="w-4.5 h-4.5 flex items-center justify-center">🇮🇳</span>
+              {!sidebarCollapsed && <span>Indian Clients</span>}
+            </Link>
+            
+            <Link
+              to="/admin/clients/international"
+              onClick={() => setShowSidebar(false)}
+              className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg font-medium transition-all duration-200 text-sm ${
+                region === 'International'
+                  ? 'bg-[#EAB308]/10 text-[#EAB308] shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B132B]'
+              }`}
+            >
+              <span className="w-4.5 h-4.5 flex items-center justify-center">🌍</span>
+              {!sidebarCollapsed && <span>International Clients</span>}
+            </Link>
           </div>
         </nav>
 
@@ -305,16 +341,18 @@ export default function ClientDetails() {
                 </p>
               </div>
             )}
-            <button
-              onClick={async () => {
-                await signOut();
-                navigate('/admin/login');
-              }}
-              className={`p-1.5 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors ${sidebarCollapsed ? 'w-full justify-center' : ''}`}
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+            {!sidebarCollapsed && (
+              <button
+                onClick={async () => {
+                  await signOut();
+                  navigate('/admin/login');
+                }}
+                className="p-1.5 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </aside>
@@ -332,9 +370,13 @@ export default function ClientDetails() {
                 <Menu className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-lg md:text-2xl font-bold text-[#0B132B]">Client Details</h1>
-                <p className="text-xs md:text-sm text-slate-500">Manage your client information</p>
-              </div>
+              <h1 className="text-lg md:text-2xl font-bold text-[#0B132B]">
+                {region === 'Indian' ? '🇮🇳 Indian Clients' : '🌍 International Clients'}
+              </h1>
+              <p className="text-xs md:text-sm text-slate-500">
+                Manage your {region.toLowerCase()} client information
+              </p>
+            </div>
             </div>
 
             <button
@@ -348,185 +390,49 @@ export default function ClientDetails() {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto px-1 py-2 md:overflow-hidden md:p-4 lg:p-6 md:flex md:flex-col">
-          <div className="max-w-7xl mx-auto space-y-3 md:space-y-6 md:flex-1 md:flex md:flex-col">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-3">
-              {/* Total Clients */}
-              <div
-                onClick={() => setActiveFilter('all')}
-                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
-                  activeFilter === 'all'
-                    ? 'border-[#0B132B] bg-slate-50 shadow-md'
-                    : 'border-slate-100'
-                }`}
-              >
-                {/* Mobile Layout */}
-                <div className="flex flex-col md:hidden">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#0B132B] to-slate-700 flex items-center justify-center flex-shrink-0">
-                      <Briefcase className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-medium">Total Clients</div>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#0B132B]">
-                    {loading ? (
-                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      totalClients
-                    )}
-                  </div>
-                </div>
-                {/* Tablet/Desktop Layout */}
-                <div className="hidden md:flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#0B132B] to-slate-700 flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mb-1">Total Clients</div>
-                  <div className="text-2xl font-extrabold text-[#0B132B]">
-                    {loading ? (
-                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      totalClients
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Pending First Call */}
-              <div
-                onClick={() => setActiveFilter('pending-first-call')}
-                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
-                  activeFilter === 'pending-first-call'
-                    ? 'border-[#EAB308] bg-yellow-50 shadow-md'
-                    : 'border-slate-100'
-                }`}
-              >
-                {/* Mobile Layout */}
-                <div className="flex flex-col md:hidden">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#EAB308] to-yellow-600 flex items-center justify-center flex-shrink-0">
-                      <PhoneCall className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-medium">Pending First Call</div>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#EAB308]">
-                    {loading ? (
-                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      pendingFirstCall
-                    )}
-                  </div>
-                </div>
-                {/* Tablet/Desktop Layout */}
-                <div className="hidden md:flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#EAB308] to-yellow-600 flex items-center justify-center">
-                      <PhoneCall className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mb-1">Pending First Call</div>
-                  <div className="text-2xl font-extrabold text-[#EAB308]">
-                    {loading ? (
-                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      pendingFirstCall
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Pending Final Call */}
-              <div
-                onClick={() => setActiveFilter('pending-final-call')}
-                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
-                  activeFilter === 'pending-final-call'
-                    ? 'border-orange-600 bg-orange-50 shadow-md'
-                    : 'border-slate-100'
-                }`}
-              >
-                {/* Mobile Layout */}
-                <div className="flex flex-col md:hidden">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0">
-                      <Handshake className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-medium">Pending Final Call</div>
-                  </div>
-                  <div className="text-lg font-extrabold text-orange-600">
-                    {loading ? (
-                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      pendingFinalCall
-                    )}
-                  </div>
-                </div>
-                {/* Tablet/Desktop Layout */}
-                <div className="hidden md:flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                      <Handshake className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mb-1">Pending Final Call</div>
-                  <div className="text-2xl font-extrabold text-orange-600">
-                    {loading ? (
-                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      pendingFinalCall
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Completed Deals */}
-              <div
-                onClick={() => setActiveFilter('completed-deals')}
-                className={`cursor-pointer bg-white rounded-xl md:rounded-2xl p-2.5 md:p-4 shadow-sm border transition-all duration-200 hover:shadow-md ${
-                  activeFilter === 'completed-deals'
-                    ? 'border-green-600 bg-green-50 shadow-md'
-                    : 'border-slate-100'
-                }`}
-              >
-                {/* Mobile Layout */}
-                <div className="flex flex-col md:hidden">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-medium">Completed Deals</div>
-                  </div>
-                  <div className="text-lg font-extrabold text-green-600">
-                    {loading ? (
-                      <div className="h-5 w-6 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      completedDeals
-                    )}
-                  </div>
-                </div>
-                {/* Tablet/Desktop Layout */}
-                <div className="hidden md:flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mb-1">Completed Deals</div>
-                  <div className="text-2xl font-extrabold text-green-600">
-                    {loading ? (
-                      <div className="h-6 w-8 bg-slate-200 rounded animate-pulse" />
-                    ) : (
-                      completedDeals
-                    )}
-                  </div>
-                </div>
-              </div>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          <div className="w-full mx-auto space-y-4 md:space-y-8">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-5">
+              {[
+                { 
+                  label: 'Total Clients', 
+                  value: loading ? 0 : totalClients, 
+                  color: 'from-[#0B132B] to-slate-600',
+                  filter: 'all'
+                },
+                { 
+                  label: 'Pending First Call', 
+                  value: loading ? 0 : pendingFirstCall, 
+                  color: 'from-[#EAB308] to-yellow-600',
+                  filter: 'pending-first-call'
+                },
+                { 
+                  label: 'Pending Final Call', 
+                  value: loading ? 0 : pendingFinalCall, 
+                  color: 'from-orange-500 to-orange-600',
+                  filter: 'pending-final-call'
+                },
+                { 
+                  label: 'Completed Deals', 
+                  value: loading ? 0 : completedDeals, 
+                  color: 'from-green-500 to-green-600',
+                  filter: 'completed-deals'
+                },
+              ].map((stat, index) => (
+                <StatsCard 
+                  key={index} 
+                  label={stat.label} 
+                  value={stat.value} 
+                  color={stat.color} 
+                  onClick={() => setActiveFilter(stat.filter as any)}
+                  isActive={activeFilter === stat.filter}
+                />
+              ))}
             </div>
 
             {/* Table Container */}
-            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden md:flex-1 md:flex md:flex-col">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
               {/* Mobile: Natural scrolling, Desktop/Tablet: Fixed scroll */}
               <div className="overflow-x-auto md:overflow-auto md:max-h-[450px] md:scrollbar-hide">
                 <style>{`
@@ -999,6 +905,17 @@ export default function ClientDetails() {
                   className="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#EAB308]/30 focus:border-[#EAB308]/50 outline-none transition-all text-xs md:text-sm bg-slate-50/50 focus:bg-white"
                   placeholder="+91 9876543210"
                 />
+              </div>
+              <div>
+                <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1.5">Region</label>
+                <select
+                  name="region"
+                  defaultValue={region}
+                  className="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#EAB308]/30 focus:border-[#EAB308]/50 outline-none transition-all text-xs md:text-sm bg-slate-50/50 focus:bg-white"
+                >
+                  <option value="Indian">🇮🇳 Indian</option>
+                  <option value="International">🌍 International</option>
+                </select>
               </div>
               <div className="flex gap-2.5 pt-2 md:pt-3">
                 <button

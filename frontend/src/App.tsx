@@ -10,7 +10,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
-import ClientDetails from './pages/ClientDetails'
+import ClientDetailsPage from './pages/ClientDetails'
 import ScrollToTop from './components/ScrollToTop'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './lib/auth'
@@ -62,9 +62,21 @@ function App() {
           />
           <Route
             path="/admin/clients"
+            element={<Navigate to="/admin/clients/indian" replace />}
+          />
+          <Route
+            path="/admin/clients/indian"
             element={
               <ProtectedRoute>
-                <ClientDetails />
+                <ClientDetailsPage region="Indian" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/clients/international"
+            element={
+              <ProtectedRoute>
+                <ClientDetailsPage region="International" />
               </ProtectedRoute>
             }
           />

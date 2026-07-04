@@ -316,11 +316,19 @@ app.put('/api/visitors/:id', async (req, res) => {
 
 // Client endpoints
 app.get('/api/clients', async (req, res) => {
+  const { region } = req.query;
+  
   if (supabase) {
-    const { data, error } = await supabase
+    let query = supabase
       .from('clients')
       .select('*')
       .order('created_at', { ascending: false });
+    
+    if (region) {
+      query = query.eq('region', region);
+    }
+    
+    const { data, error } = await query;
     if (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -337,7 +345,8 @@ app.post('/api/clients', async (req, res) => {
     owner_name,
     address_name,
     google_maps_link,
-    owner_contact_number
+    owner_contact_number,
+    region = 'Indian'
   } = req.body;
 
   if (!business_name || !owner_name || !address_name) {
@@ -351,6 +360,7 @@ app.post('/api/clients', async (req, res) => {
     address_name,
     google_maps_link,
     owner_contact_number,
+    region,
     first_call: false,
     description: '',
     website: false,
@@ -405,7 +415,8 @@ app.put('/api/clients/:id', async (req, res) => {
     agreement_signed,
     payment_amount,
     amount_received,
-    project_delivered
+    project_delivered,
+    region
   } = req.body;
 
   const updateData = { updated_at: new Date().toISOString() };
@@ -424,6 +435,7 @@ app.put('/api/clients/:id', async (req, res) => {
   if (payment_amount !== undefined) updateData.payment_amount = payment_amount;
   if (amount_received !== undefined) updateData.amount_received = amount_received;
   if (project_delivered !== undefined) updateData.project_delivered = project_delivered;
+  if (region !== undefined) updateData.region = region;
 
   if (supabase) {
     const { data, error } = await supabase
