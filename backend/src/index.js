@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
+import { runBusinessResearch } from './ai-research-engine.js'
+import { generateSalesCoachReport, generateCallSummary } from './ai-sales-coach.js'
 
 const app = express()
 const PORT = process.env.PORT || 5001
@@ -30,7 +32,8 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim() && process.env.S
 const allowedOrigins = [
   'https://akinfinity.vercel.app',
   'http://localhost:5173',
-  'http://localhost:5174'
+  'http://localhost:5174',
+  'http://localhost:5175'
 ]
 
 app.use(cors({
@@ -470,6 +473,572 @@ app.delete('/api/clients/:id', async (req, res) => {
   }
 
   res.json({ message: 'Client deleted successfully' });
+});
+
+// AI Analysis Endpoints
+
+// Get latest AI analysis for a client
+app.get('/api/ai-analysis/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('is_latest', true)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows found
+      return res.status(500).json({ error: error.message });
+    }
+    return res.json(data || null);
+  }
+
+  res.json(null);
+});
+
+// Get all AI analyses for a client
+app.get('/api/ai-analysis/:clientId/all', async (req, res) => {
+  const { clientId } = req.params;
+
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    return res.json(data);
+  }
+
+  res.json([]);
+});
+
+// Start AI analysis for a client
+app.post('/api/ai-analysis/:clientId/analyze', async (req, res) => {
+  const { clientId } = req.params;
+  const { force = false } = req.query; // Optional force flag to re-run analysis
+
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+
+  try {
+    // Get client data
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .single();
+
+    if (clientError) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    // Check for recent completed analysis (last 24 hours)
+    if (!force) {
+      const { data: existingAnalysis, error: checkError } = await supabase
+        .from('ai_analysis')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('status', 'Completed')
+        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()) // Last 24 hours
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (existingAnalysis && !checkError) {
+        // Update to mark as latest
+        await supabase
+          .from('ai_analysis')
+          .update({ is_latest: true })
+          .eq('id', existingAnalysis.id);
+
+        await supabase
+          .from('ai_analysis')
+          .update({ is_latest: false })
+          .eq('client_id', clientId)
+          .neq('id', existingAnalysis.id);
+
+        console.log('Reusing recent analysis from', existingAnalysis.created_at);
+        return res.status(200).json(existingAnalysis);
+      }
+    }
+
+    // Check if there's already a processing analysis
+    const { data: processingAnalysis, error: processingCheckError } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('status', 'Processing')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (processingAnalysis && !processingCheckError) {
+      // Return existing processing analysis
+      return res.status(202).json(processingAnalysis);
+    }
+
+    // Create initial analysis record with Processing status
+    const { data: newAnalysis, error: createError } = await supabase
+      .from('ai_analysis')
+      .insert([{
+        client_id: clientId,
+        status: 'Processing',
+        is_latest: true
+      }])
+      .select()
+      .single();
+
+    if (createError) {
+      return res.status(500).json({ error: createError.message });
+    }
+
+    // Mark all previous analyses as not latest
+    await supabase
+      .from('ai_analysis')
+      .update({ is_latest: false })
+      .eq('client_id', clientId)
+      .neq('id', newAnalysis.id);
+
+    // Return the processing analysis immediately
+    res.status(202).json(newAnalysis);
+
+    // Run the research in the background
+    (async () => {
+      try {
+        const researchResult = await runBusinessResearch(client);
+        
+        // Update the analysis with results
+        const googleReviews = researchResult.collectedData.googleMapsData ? {
+          average_rating: researchResult.collectedData.googleMapsData.rating,
+          total_reviews: researchResult.collectedData.googleMapsData.reviewsCount
+        } : null;
+        
+        const websiteUrl = researchResult.collectedData.googleMapsData?.website || null;
+        
+        await supabase
+          .from('ai_analysis')
+          .update({
+            status: 'Completed',
+            business_summary: researchResult.businessIntelligence.businessSummary,
+            digital_presence: researchResult.businessIntelligence.digitalPresence,
+            website_status: researchResult.businessIntelligence.websiteStatus,
+            public_online_presence: researchResult.businessIntelligence.publicOnlinePresence,
+            business_strengths: researchResult.businessIntelligence.businessStrengths,
+            improvement_opportunities: researchResult.businessIntelligence.improvementOpportunities,
+            suggested_services: researchResult.businessIntelligence.suggestedServices,
+            confidence_score: researchResult.businessIntelligence.confidenceScore,
+            raw_data: researchResult.collectedData,
+            google_reviews: googleReviews,
+            website_url: websiteUrl,
+            google_maps_data: researchResult.collectedData.googleMapsData
+          })
+          .eq('id', newAnalysis.id);
+      } catch (error) {
+        console.error('AI research failed:', error);
+        
+        // Create user-friendly error message
+        let userFriendlyError = 'An error occurred during analysis';
+        if (error.message) {
+          if (error.message.includes('429') || error.message.includes('quota')) {
+            userFriendlyError = 'API quota exceeded. Please try again later or upgrade your plan.';
+          } else if (error.message.includes('GEMINI_API_KEY')) {
+            userFriendlyError = 'Gemini API key not configured. Please check your environment variables.';
+          } else if (error.message.includes('Failed to parse')) {
+            userFriendlyError = 'Failed to generate analysis. Please try again.';
+          } else {
+            userFriendlyError = 'Analysis failed. Please try again.';
+          }
+        }
+        
+        // Update with failed status
+        await supabase
+          .from('ai_analysis')
+          .update({
+            status: 'Failed',
+            error_message: userFriendlyError
+          })
+          .eq('id', newAnalysis.id);
+      }
+    })();
+
+  } catch (error) {
+    console.error('Error starting AI analysis:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ==================== AI Sales Coach & Memory Endpoints ====================
+
+// Get or Generate Sales Coach Report
+app.get('/api/sales-coach/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    // Check if report already exists
+    let { data: existingReport, error: getError } = await supabase
+      .from('ai_sales_coach_reports')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('generated_at', { ascending: false })
+      .limit(1)
+      .single();
+      
+    if (getError && getError.code !== 'PGRST116') {
+      return res.status(500).json({ error: getError.message });
+    }
+    
+    if (existingReport) {
+      return res.json(existingReport);
+    }
+    
+    // If no report exists, create one
+    // Get AI analysis first
+    const { data: aiAnalysis, error: analysisError } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('is_latest', true)
+      .single();
+      
+    if (analysisError) {
+      return res.status(404).json({ error: 'AI Analysis not found' });
+    }
+    
+    // Get client
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .single();
+      
+    if (clientError) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    
+    // Generate report
+    const report = await generateSalesCoachReport(aiAnalysis, client);
+    
+    // Save to DB
+    const { data: savedReport, error: saveError } = await supabase
+      .from('ai_sales_coach_reports')
+      .insert([{
+        client_id: clientId,
+        ai_analysis_id: aiAnalysis.id,
+        opening_line: report.opening_line,
+        conversation_strategy: report.conversation_strategy,
+        questions_to_ask: report.questions_to_ask,
+        predicted_objections: report.predicted_objections,
+        professional_replies: report.professional_replies,
+        closing_strategy: report.closing_strategy,
+        recommended_services: report.recommended_services,
+        sales_tips: report.sales_tips
+      }])
+      .select()
+      .single();
+      
+    if (saveError) {
+      return res.status(500).json({ error: saveError.message });
+    }
+    
+    // Add timeline event
+    await supabase.from('client_timeline').insert([{
+      client_id: clientId,
+      event_type: 'AI_SALES_COACH_GENERATED',
+      event_title: 'AI Sales Coach Report Generated',
+      event_description: 'AI-generated sales coaching report created'
+    }]);
+    
+    res.json(savedReport);
+    
+  } catch (error) {
+    console.error('Error with Sales Coach:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/sales-coach/:clientId/regenerate', async (req, res) => {
+  const { clientId } = req.params;
+  
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    // Get AI analysis
+    const { data: aiAnalysis, error: analysisError } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('is_latest', true)
+      .single();
+      
+    if (analysisError) {
+      return res.status(404).json({ error: 'AI Analysis not found' });
+    }
+    
+    // Get client
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .single();
+      
+    if (clientError) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    
+    // Generate new report
+    const report = await generateSalesCoachReport(aiAnalysis, client);
+    
+    // Save to DB
+    const { data: savedReport, error: saveError } = await supabase
+      .from('ai_sales_coach_reports')
+      .insert([{
+        client_id: clientId,
+        ai_analysis_id: aiAnalysis.id,
+        opening_line: report.opening_line,
+        conversation_strategy: report.conversation_strategy,
+        questions_to_ask: report.questions_to_ask,
+        predicted_objections: report.predicted_objections,
+        professional_replies: report.professional_replies,
+        closing_strategy: report.closing_strategy,
+        recommended_services: report.recommended_services,
+        sales_tips: report.sales_tips
+      }])
+      .select()
+      .single();
+      
+    if (saveError) {
+      return res.status(500).json({ error: saveError.message });
+    }
+    
+    // Add timeline event
+    await supabase.from('client_timeline').insert([{
+      client_id: clientId,
+      event_type: 'AI_SALES_COACH_REGENERATED',
+      event_title: 'AI Sales Coach Report Regenerated',
+      event_description: 'New AI sales coaching report created'
+    }]);
+    
+    res.json(savedReport);
+    
+  } catch (error) {
+    console.error('Error regenerating Sales Coach:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Call Notes Endpoints
+app.get('/api/call-notes/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('call_notes')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false });
+      
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching call notes:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/call-notes/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  const { short_notes, call_date } = req.body;
+  
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    // Get client
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .single();
+      
+    if (clientError) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    
+    // Generate AI summary
+    const aiSummary = await generateCallSummary(short_notes, client);
+    
+    // Save to DB
+    const { data: savedNote, error: saveError } = await supabase
+      .from('call_notes')
+      .insert([{
+        client_id: clientId,
+        short_notes,
+        ai_generated_summary: aiSummary,
+        call_date: call_date || new Date().toISOString()
+      }])
+      .select()
+      .single();
+      
+    if (saveError) {
+      return res.status(500).json({ error: saveError.message });
+    }
+    
+    // Add timeline event
+    await supabase.from('client_timeline').insert([{
+      client_id: clientId,
+      event_type: 'CALL_NOTE_ADDED',
+      event_title: 'Call Note Added',
+      event_description: 'New call note recorded'
+    }]);
+    
+    // Update follow-up recommendation
+    await supabase.from('follow_up_recommendations').insert([{
+      client_id: clientId,
+      recommended_action: 'Review call summary and plan next steps',
+      priority: 'MEDIUM',
+      due_date: new Date(Date.now() + 24 * 60 * 60 * 1000) // tomorrow
+    }]);
+    
+    res.json(savedNote);
+    
+  } catch (error) {
+    console.error('Error saving call note:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/call-notes/:id', async (req, res) => {
+  const { id } = req.params;
+  const { short_notes, ai_generated_summary } = req.body;
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('call_notes')
+      .update({
+        short_notes,
+        ai_generated_summary,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+      
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    
+    res.json(data);
+    
+  } catch (error) {
+    console.error('Error updating call note:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Timeline Endpoint
+app.get('/api/client-timeline/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('client_timeline')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('event_date', { ascending: false });
+      
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching timeline:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Follow-up Recommendations Endpoints
+app.get('/api/follow-up/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('follow_up_recommendations')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('due_date', { ascending: true });
+      
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching follow-ups:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/follow-up/:id', async (req, res) => {
+  const { id } = req.params;
+  const { is_completed, recommended_action, priority, due_date, notes } = req.body;
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('follow_up_recommendations')
+      .update({
+        is_completed,
+        recommended_action,
+        priority,
+        due_date,
+        notes,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+      
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error updating follow-up:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(PORT, () => {

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   Users,
@@ -13,14 +13,15 @@ import {
   Menu,
   CheckCircle2,
   ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
-import type { Client } from '../types';
-import { useAuth } from '../lib/auth';
-import AKLogo from '../assets/AK_Main_Logo.webp';
+  ChevronRight,
+  Zap,
+  RefreshCw
+} from 'lucide-react'
+import type { Client, AIAnalysis } from '../types'
+import { useAuth } from '../lib/auth'
+import AKLogo from '../assets/AK_Main_Logo.webp'
 import StatsCard from '../components/StatsCard';
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com';
+import { API_URL } from '../lib/api';
 
 // Format Indian currency
 const formatCurrency = (amount: number | null | undefined) => {
@@ -65,6 +66,7 @@ interface ClientDetailsPageProps {
 export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -75,8 +77,77 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'all' | 'pending-first-call' | 'pending-final-call' | 'completed-deals'>('all');
+  const [aiAnalyses, setAiAnalyses] = useState<Record<string, AIAnalysis | null>>({});
+  const [analyzingClients, setAnalyzingClients] = useState<Set<string>>(new Set());
   const sidebarRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const fetchAIAnalysis = useCallback(async (clientId: string) => {
+    try {
+      const response = await fetch(`${API_URL}/api/ai-analysis/${clientId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setAiAnalyses(prev => ({ ...prev, [clientId]: data }));
+      }
+    } catch (error) {
+      console.error('Error fetching AI analysis:', error);
+    }
+  }, []);
+
+  const startAIAnalysis = useCallback(async (client: Client) => {
+    if (!client.google_maps_link) {
+      showToast('Client needs a Google Maps URL for AI analysis', 'error');
+      return;
+    }
+
+    setAnalyzingClients(prev => new Set(prev).add(client.id));
+    
+    try {
+      const response = await fetch(`${API_URL}/api/ai-analysis/${client.id}/analyze`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAiAnalyses(prev => ({ ...prev, [client.id]: data }));
+        showToast('AI analysis started!', 'success');
+        
+        // Poll for updates
+        const pollInterval = setInterval(async () => {
+          await fetchAIAnalysis(client.id);
+          const currentAnalysis = aiAnalyses[client.id];
+          if (currentAnalysis && ['Completed', 'Failed'].includes(currentAnalysis.status)) {
+            clearInterval(pollInterval);
+            setAnalyzingClients(prev => {
+              const next = new Set(prev);
+              next.delete(client.id);
+              return next;
+            });
+          }
+        }, 3000);
+        
+      } else {
+        throw new Error('Failed to start AI analysis');
+      }
+    } catch (error) {
+      console.error('Error starting AI analysis:', error);
+      showToast('Failed to start AI analysis', 'error');
+      setAnalyzingClients(prev => {
+        const next = new Set(prev);
+        next.delete(client.id);
+        return next;
+      });
+    }
+  }, [aiAnalyses, fetchAIAnalysis]);
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'Completed': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">Completed</span>;
+      case 'Processing': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 animate-pulse">Processing</span>;
+      case 'Failed': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">Failed</span>;
+      default: return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-50 text-slate-600">Not Analyzed</span>;
+    }
+  };
 
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
@@ -118,8 +189,16 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   }, [region]);
 
   useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
+    if (user) {
+      fetchClients();
+    }
+  }, [fetchClients, user]);
+
+  useEffect(() => {
+    if (clients.length > 0) {
+      clients.forEach(client => fetchAIAnalysis(client.id));
+    }
+  }, [clients, fetchAIAnalysis]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -443,7 +522,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                     }
                   }
                 `}</style>
-                <table className="w-full min-w-[1400px]">
+                <table className="w-full min-w-[1600px]">
                   {/* Sticky Header */}
                   <thead className="bg-slate-50 border-b border-slate-100 sticky top-0 z-10">
                     <tr>
@@ -461,6 +540,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Payment</th>
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Received</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Delivered</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">AI Status</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-14">Actions</th>
                     </tr>
                   </thead>
@@ -469,7 +549,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                     {loading ? (
                       Array.from({ length: 5 }).map((_, i) => (
                         <tr key={i} className="border-b border-slate-50">
-                          {Array.from({ length: 15 }).map((_, j) => (
+                          {Array.from({ length: 16 }).map((_, j) => (
                             <td key={j} className={`${j < 4 ? 'px-0.5' : 'px-1'} py-1.5 md:px-3 md:py-2.5`}>
                               <div className="h-3.5 bg-slate-100 rounded w-16 animate-pulse" />
                             </td>
@@ -478,7 +558,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       ))
                     ) : filteredClients.length === 0 ? (
                       <tr>
-                        <td colSpan={15} className="px-4 py-8 md:px-6 md:py-12 text-center">
+                        <td colSpan={16} className="px-4 py-8 md:px-6 md:py-12 text-center">
                           <div className="flex flex-col items-center gap-2">
                             <Users className="w-12 h-12 md:w-14 md:h-14 mx-auto text-slate-200 mb-2" />
                             <p className="text-sm md:text-base font-semibold text-[#0B132B]">No Clients Found</p>
@@ -503,332 +583,359 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       filteredClients.map((client, index) => {
                         const isEditing = editingId === client.id;
                         const currentValues = isEditing ? editValues : client;
+                        const aiAnalysis = aiAnalyses[client.id];
+                        const isAnalyzing = analyzingClients.has(client.id);
 
                         return (
-                          <tr
-                            key={client.id}
-                            className={`group transition-all duration-200 ${
-                              isEditing ? 'bg-blue-50' : 'hover:bg-slate-50 hover:shadow-inner'
-                            }`}
-                          >
-                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-medium text-slate-600">{index + 1}</td>
-                            
-                            {/* Business Name */}
-                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 max-w-[100px] md:max-w-none">
-                              {isEditing ? (
-                                <input
-                                  type="text"
-                                  value={currentValues.business_name || ''}
-                                  onChange={(e) => setEditValues(prev => ({ ...prev, business_name: e.target.value }))}
-                                  className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                />
-                              ) : (
-                                <span className="text-sm font-medium text-[#0B132B] break-words whitespace-normal">{client.business_name}</span>
-                              )}
-                            </td>
-
-                            {/* Owner Name */}
-                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
-                              {isEditing ? (
-                                <input
-                                  type="text"
-                                  value={currentValues.owner_name || ''}
-                                  onChange={(e) => setEditValues(prev => ({ ...prev, owner_name: e.target.value }))}
-                                  className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                />
-                              ) : (
-                                <span className="text-xs text-slate-600">{client.owner_name}</span>
-                              )}
-                            </td>
-
-                            {/* Address */}
-                            <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
-                              {isEditing ? (
-                                <div className="space-y-1.5">
+                          <React.Fragment key={client.id}>
+                            <tr
+                              className={`group transition-all duration-200 ${
+                                isEditing ? 'bg-blue-50' : 'hover:bg-slate-50 hover:shadow-inner'
+                              }`}
+                            >
+                              <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-medium text-slate-600">{index + 1}</td>
+                              
+                              {/* Business Name */}
+                              <td className="px-0.5 py-1.5 md:px-3 md:py-2.5 max-w-[100px] md:max-w-none">
+                                {isEditing ? (
                                   <input
                                     type="text"
-                                    value={currentValues.address_name || ''}
-                                    onChange={(e) => setEditValues(prev => ({ ...prev, address_name: e.target.value }))}
+                                    value={currentValues.business_name || ''}
+                                    onChange={(e) => setEditValues(prev => ({ ...prev, business_name: e.target.value }))}
                                     className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                    placeholder="Address"
                                   />
-                                  <input
-                                    type="url"
-                                    value={currentValues.google_maps_link || ''}
-                                    onChange={(e) => setEditValues(prev => ({ ...prev, google_maps_link: e.target.value }))}
-                                    className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                    placeholder="Maps URL"
-                                  />
-                                </div>
-                              ) : (
-                                <div className="space-y-1">
-                                  <span className="text-xs text-slate-600 block">{client.address_name}</span>
-                                  {client.google_maps_link && (
-                                    <a
-                                      href={client.google_maps_link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-800 font-medium transition-colors hover:underline"
-                                    >
-                                      <MapPin className="w-3 h-3" />
-                                      Location
-                                    </a>
-                                  )}
-                                </div>
-                              )}
-                            </td>
+                                ) : (
+                                  <span className="text-sm font-medium text-[#0B132B] break-words whitespace-normal">{client.business_name}</span>
+                                )}
+                              </td>
 
-                            {/* Contact Number */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
-                              {isEditing ? (
-                                <input
-                                  type="tel"
-                                  value={currentValues.owner_contact_number || ''}
-                                  onChange={(e) => setEditValues(prev => ({ ...prev, owner_contact_number: e.target.value }))}
-                                  className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                  placeholder="Contact"
-                                />
-                              ) : (
-                                <div className="flex items-center gap-1.5">
-                                  <span className="text-xs text-slate-600">{client.owner_contact_number || '-'}</span>
-                                  {client.owner_contact_number && (
-                                    <div className="flex items-center gap-0.5">
+                              {/* Owner Name */}
+                              <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
+                                {isEditing ? (
+                                  <input
+                                    type="text"
+                                    value={currentValues.owner_name || ''}
+                                    onChange={(e) => setEditValues(prev => ({ ...prev, owner_name: e.target.value }))}
+                                    className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                  />
+                                ) : (
+                                  <span className="text-xs text-slate-600">{client.owner_name}</span>
+                                )}
+                              </td>
+
+                              {/* Address */}
+                              <td className="px-0.5 py-1.5 md:px-3 md:py-2.5">
+                                {isEditing ? (
+                                  <div className="space-y-1.5">
+                                    <input
+                                      type="text"
+                                      value={currentValues.address_name || ''}
+                                      onChange={(e) => setEditValues(prev => ({ ...prev, address_name: e.target.value }))}
+                                      className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                      placeholder="Address"
+                                    />
+                                    <input
+                                      type="url"
+                                      value={currentValues.google_maps_link || ''}
+                                      onChange={(e) => setEditValues(prev => ({ ...prev, google_maps_link: e.target.value }))}
+                                      className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                      placeholder="Maps URL"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="space-y-1">
+                                    <span className="text-xs text-slate-600 block">{client.address_name}</span>
+                                    {client.google_maps_link && (
                                       <a
-                                        href={`tel:${client.owner_contact_number}`}
-                                        className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all shadow-sm hover:shadow-md"
-                                        title="Call"
-                                      >
-                                        <Phone className="w-3.5 h-3.5" />
-                                      </a>
-                                      <a
-                                        href={`https://wa.me/${client.owner_contact_number.replace(/\D/g, '')}`}
+                                        href={client.google_maps_link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-1 text-green-500 hover:text-green-700 hover:bg-green-50 rounded transition-all shadow-sm hover:shadow-md"
-                                        title="WhatsApp"
+                                        className="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-800 font-medium transition-colors hover:underline"
                                       >
-                                        <WhatsAppIcon className="w-3.5 h-3.5" />
+                                        <MapPin className="w-3 h-3" />
+                                        Location
                                       </a>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </td>
+                                    )}
+                                  </div>
+                                )}
+                              </td>
 
-                            {/* First Call */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <button
-                                  onClick={() => setEditValues(prev => ({ ...prev, first_call: !prev.first_call }))}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                    currentValues.first_call
-                                      ? 'bg-green-500 border-green-500 text-white'
-                                      : 'border-slate-300 hover:border-slate-400'
-                                  }`}
-                                >
-                                  {currentValues.first_call && <Check className="w-2.5 h-2.5" />}
-                                </button>
-                              ) : (
-                                <StatusChip checked={client.first_call} />
-                              )}
-                            </td>
+                              {/* Contact Number */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5">
+                                {isEditing ? (
+                                  <input
+                                    type="tel"
+                                    value={currentValues.owner_contact_number || ''}
+                                    onChange={(e) => setEditValues(prev => ({ ...prev, owner_contact_number: e.target.value }))}
+                                    className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                    placeholder="Contact"
+                                  />
+                                ) : (
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-xs text-slate-600">{client.owner_contact_number || '-'}</span>
+                                    {client.owner_contact_number && (
+                                      <div className="flex items-center gap-0.5">
+                                        <a
+                                          href={`tel:${client.owner_contact_number}`}
+                                          className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all shadow-sm hover:shadow-md"
+                                          title="Call"
+                                        >
+                                          <Phone className="w-3.5 h-3.5" />
+                                        </a>
+                                        <a
+                                          href={`https://wa.me/${client.owner_contact_number.replace(/\D/g, '')}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="p-1 text-green-500 hover:text-green-700 hover:bg-green-50 rounded transition-all shadow-sm hover:shadow-md"
+                                          title="WhatsApp"
+                                        >
+                                          <WhatsAppIcon className="w-3.5 h-3.5" />
+                                        </a>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </td>
 
-                            {/* Description */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
-                              {isEditing ? (
-                                <textarea
-                                  value={currentValues.description || ''}
-                                  onChange={(e) => setEditValues(prev => ({ ...prev, description: e.target.value }))}
-                                  className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50 resize-none"
-                                  placeholder="Description"
-                                  rows={2}
-                                />
-                              ) : (
-                                <div className="relative group">
-                                  <span className="text-xs text-slate-600 line-clamp-2 block">
-                                    {client.description || '—'}
-                                  </span>
-                                  {client.description && client.description.length > 50 && (
-                                    <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-pre-wrap z-20 max-w-xs shadow-lg">
-                                      {client.description}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </td>
-
-                            {/* Services */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5">
-                              {isEditing ? (
-                                <div className="flex flex-wrap gap-1.5">
+                              {/* First Call */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
                                   <button
-                                    onClick={() => setEditValues(prev => ({ ...prev, website: !prev.website }))}
-                                    className={`px-1.5 py-0.5 rounded text-xs font-medium border transition-all ${
-                                      currentValues.website
-                                        ? 'bg-blue-100 text-blue-700 border-blue-200'
-                                        : 'bg-white text-slate-600 border-slate-300 hover:border-blue-300'
+                                    onClick={() => setEditValues(prev => ({ ...prev, first_call: !prev.first_call }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.first_call
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
                                     }`}
                                   >
-                                    Website
+                                    {currentValues.first_call && <Check className="w-2.5 h-2.5" />}
                                   </button>
+                                ) : (
+                                  <StatusChip checked={client.first_call} />
+                                )}
+                              </td>
+
+                              {/* Description */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5">
+                                {isEditing ? (
+                                  <textarea
+                                    value={currentValues.description || ''}
+                                    onChange={(e) => setEditValues(prev => ({ ...prev, description: e.target.value }))}
+                                    className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50 resize-none"
+                                    placeholder="Description"
+                                    rows={2}
+                                  />
+                                ) : (
+                                  <div className="relative group">
+                                    <span className="text-xs text-slate-600 line-clamp-2 block">
+                                      {client.description || '—'}
+                                    </span>
+                                    {client.description && client.description.length > 50 && (
+                                      <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-pre-wrap z-20 max-w-xs shadow-lg">
+                                        {client.description}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </td>
+
+                              {/* Services */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5">
+                                {isEditing ? (
+                                  <div className="flex flex-wrap gap-1.5">
+                                    <button
+                                      onClick={() => setEditValues(prev => ({ ...prev, website: !prev.website }))}
+                                      className={`px-1.5 py-0.5 rounded text-xs font-medium border transition-all ${
+                                        currentValues.website
+                                          ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                          : 'bg-white text-slate-600 border-slate-300 hover:border-blue-300'
+                                      }`}
+                                    >
+                                      Website
+                                    </button>
+                                    <button
+                                      onClick={() => setEditValues(prev => ({ ...prev, collaboration: !prev.collaboration }))}
+                                      className={`px-1.5 py-0.5 rounded text-xs font-medium border transition-all ${
+                                        currentValues.collaboration
+                                          ? 'bg-blue-100 text-blue-700 border-blue-200'
+                                          : 'bg-white text-slate-600 border-slate-300 hover:border-blue-300'
+                                      }`}
+                                    >
+                                      Collab
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-wrap gap-1">
+                                    {client.website && <ServiceChip label="Website" active={true} />}
+                                    {client.collaboration && <ServiceChip label="Collab" active={true} />}
+                                    {!client.website && !client.collaboration && <span className="text-xs text-slate-400">—</span>}
+                                  </div>
+                                )}
+                              </td>
+
+                              {/* First Meeting */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
                                   <button
-                                    onClick={() => setEditValues(prev => ({ ...prev, collaboration: !prev.collaboration }))}
-                                    className={`px-1.5 py-0.5 rounded text-xs font-medium border transition-all ${
-                                      currentValues.collaboration
-                                        ? 'bg-blue-100 text-blue-700 border-blue-200'
-                                        : 'bg-white text-slate-600 border-slate-300 hover:border-blue-300'
+                                    onClick={() => setEditValues(prev => ({ ...prev, first_meeting: !prev.first_meeting }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.first_meeting
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
                                     }`}
                                   >
-                                    Collab
+                                    {currentValues.first_meeting && <Check className="w-2.5 h-2.5" />}
                                   </button>
-                                </div>
-                              ) : (
-                                <div className="flex flex-wrap gap-1">
-                                  {client.website && <ServiceChip label="Website" active={true} />}
-                                  {client.collaboration && <ServiceChip label="Collab" active={true} />}
-                                  {!client.website && !client.collaboration && <span className="text-xs text-slate-400">—</span>}
-                                </div>
-                              )}
-                            </td>
+                                ) : (
+                                  <StatusChip checked={client.first_meeting} />
+                                )}
+                              </td>
 
-                            {/* First Meeting */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <button
-                                  onClick={() => setEditValues(prev => ({ ...prev, first_meeting: !prev.first_meeting }))}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                    currentValues.first_meeting
-                                      ? 'bg-green-500 border-green-500 text-white'
-                                      : 'border-slate-300 hover:border-slate-400'
-                                  }`}
-                                >
-                                  {currentValues.first_meeting && <Check className="w-2.5 h-2.5" />}
-                                </button>
-                              ) : (
-                                <StatusChip checked={client.first_meeting} />
-                              )}
-                            </td>
-
-                            {/* Final Call */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <button
-                                  onClick={() => setEditValues(prev => ({ ...prev, final_call: !prev.final_call }))}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                    currentValues.final_call
-                                      ? 'bg-green-500 border-green-500 text-white'
-                                      : 'border-slate-300 hover:border-slate-400'
-                                  }`}
-                                >
-                                  {currentValues.final_call && <Check className="w-2.5 h-2.5" />}
-                                </button>
-                              ) : (
-                                <StatusChip checked={client.final_call} />
-                              )}
-                            </td>
-
-                            {/* Agreement Signed */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <button
-                                  onClick={() => setEditValues(prev => ({ ...prev, agreement_signed: !prev.agreement_signed }))}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                    currentValues.agreement_signed
-                                      ? 'bg-green-500 border-green-500 text-white'
-                                      : 'border-slate-300 hover:border-slate-400'
-                                  }`}
-                                >
-                                  {currentValues.agreement_signed && <Check className="w-2.5 h-2.5" />}
-                                </button>
-                              ) : (
-                                <StatusChip checked={client.agreement_signed} />
-                              )}
-                            </td>
-
-                            {/* Payment Amount */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
-                              {isEditing ? (
-                                <input
-                                  type="number"
-                                  value={currentValues.payment_amount ?? ''}
-                                  onChange={(e) => setEditValues(prev => ({
-                                    ...prev,
-                                    payment_amount: e.target.value ? Number(e.target.value) : undefined
-                                  }))}
-                                  className="w-20 px-2 py-1 border border-slate-300 rounded text-xs text-right focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                  placeholder="0"
-                                />
-                              ) : (
-                                <span className="text-sm font-medium text-[#0B132B]">{formatCurrency(client.payment_amount)}</span>
-                              )}
-                            </td>
-
-                            {/* Amount Received */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
-                              {isEditing ? (
-                                <input
-                                  type="number"
-                                  value={currentValues.amount_received ?? ''}
-                                  onChange={(e) => setEditValues(prev => ({
-                                    ...prev,
-                                    amount_received: e.target.value ? Number(e.target.value) : undefined
-                                  }))}
-                                  className="w-20 px-2 py-1 border border-slate-300 rounded text-xs text-right focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
-                                  placeholder="0"
-                                />
-                              ) : (
-                                <span className="text-sm font-medium text-[#0B132B]">{formatCurrency(client.amount_received)}</span>
-                              )}
-                            </td>
-
-                            {/* Project Delivered */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <button
-                                  onClick={() => setEditValues(prev => ({ ...prev, project_delivered: !prev.project_delivered }))}
-                                  className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                    currentValues.project_delivered
-                                      ? 'bg-green-500 border-green-500 text-white'
-                                      : 'border-slate-300 hover:border-slate-400'
-                                  }`}
-                                >
-                                  {currentValues.project_delivered && <Check className="w-2.5 h-2.5" />}
-                                </button>
-                              ) : (
-                                <StatusChip checked={client.project_delivered} />
-                              )}
-                            </td>
-
-                            {/* Actions */}
-                            <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                              {isEditing ? (
-                                <div className="flex items-center justify-center gap-0.5">
+                              {/* Final Call */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
                                   <button
-                                    onClick={handleSaveEdit}
-                                    className="p-1 text-green-600 hover:bg-green-50 rounded transition-all shadow-sm hover:shadow-md"
-                                    title="Save"
+                                    onClick={() => setEditValues(prev => ({ ...prev, final_call: !prev.final_call }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.final_call
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
                                   >
-                                    <Check className="w-4 h-4" />
+                                    {currentValues.final_call && <Check className="w-2.5 h-2.5" />}
                                   </button>
+                                ) : (
+                                  <StatusChip checked={client.final_call} />
+                                )}
+                              </td>
+
+                              {/* Agreement Signed */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
                                   <button
-                                    onClick={handleCancelEdit}
-                                    className="p-1 text-red-600 hover:bg-red-50 rounded transition-all shadow-sm hover:shadow-md"
-                                    title="Cancel"
+                                    onClick={() => setEditValues(prev => ({ ...prev, agreement_signed: !prev.agreement_signed }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.agreement_signed
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
                                   >
-                                    <X className="w-4 h-4" />
+                                    {currentValues.agreement_signed && <Check className="w-2.5 h-2.5" />}
                                   </button>
-                                </div>
-                              ) : (
-                                <button
-                                  onClick={() => handleEdit(client)}
-                                  className="p-1 text-slate-500 hover:text-[#EAB308] hover:bg-[#EAB308]/10 rounded transition-all shadow-sm hover:shadow-md"
-                                  title="Edit"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                </button>
-                              )}
-                            </td>
-                          </tr>
+                                ) : (
+                                  <StatusChip checked={client.agreement_signed} />
+                                )}
+                              </td>
+
+                              {/* Payment Amount */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
+                                {isEditing ? (
+                                  <input
+                                    type="number"
+                                    value={currentValues.payment_amount ?? ''}
+                                    onChange={(e) => setEditValues(prev => ({
+                                      ...prev,
+                                      payment_amount: e.target.value ? Number(e.target.value) : undefined
+                                    }))}
+                                    className="w-20 px-2 py-1 border border-slate-300 rounded text-xs text-right focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                    placeholder="0"
+                                  />
+                                ) : (
+                                  <span className="text-sm font-medium text-[#0B132B]">{formatCurrency(client.payment_amount)}</span>
+                                )}
+                              </td>
+
+                              {/* Amount Received */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-right">
+                                {isEditing ? (
+                                  <input
+                                    type="number"
+                                    value={currentValues.amount_received ?? ''}
+                                    onChange={(e) => setEditValues(prev => ({
+                                      ...prev,
+                                      amount_received: e.target.value ? Number(e.target.value) : undefined
+                                    }))}
+                                    className="w-20 px-2 py-1 border border-slate-300 rounded text-xs text-right focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
+                                    placeholder="0"
+                                  />
+                                ) : (
+                                  <span className="text-sm font-medium text-[#0B132B]">{formatCurrency(client.amount_received)}</span>
+                                )}
+                              </td>
+
+                              {/* Project Delivered */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
+                                  <button
+                                    onClick={() => setEditValues(prev => ({ ...prev, project_delivered: !prev.project_delivered }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.project_delivered
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
+                                  >
+                                    {currentValues.project_delivered && <Check className="w-2.5 h-2.5" />}
+                                  </button>
+                                ) : (
+                                  <StatusChip checked={client.project_delivered} />
+                                )}
+                              </td>
+
+                              {/* AI Status */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {aiAnalysis ? getStatusBadge(aiAnalysis.status) : getStatusBadge('Not Analyzed')}
+                              </td>
+
+                              {/* Actions */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
+                                  <div className="flex items-center justify-center gap-0.5">
+                                    <button
+                                      onClick={handleSaveEdit}
+                                      className="p-1 text-green-600 hover:bg-green-50 rounded transition-all shadow-sm hover:shadow-md"
+                                      title="Save"
+                                    >
+                                      <Check className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      onClick={handleCancelEdit}
+                                      className="p-1 text-red-600 hover:bg-red-50 rounded transition-all shadow-sm hover:shadow-md"
+                                      title="Cancel"
+                                    >
+                                      <X className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center justify-center gap-0.5">
+                                    <Link
+                                      to={`/admin/clients/${client.id}/ai-analysis`}
+                                      state={{ from: location.pathname }}
+                                      className="p-1 text-[#EAB308] hover:bg-[#EAB308]/10 rounded transition-all shadow-sm hover:shadow-md flex items-center gap-1"
+                                      title="AI Analysis"
+                                    >
+                                      {isAnalyzing ? (
+                                        <div className="w-4 h-4 border-2 border-[#EAB308] border-t-transparent rounded-full animate-spin" />
+                                      ) : aiAnalysis?.status === 'Completed' ? (
+                                        <Zap className="w-4 h-4" />
+                                      ) : (
+                                        <RefreshCw className="w-4 h-4" />
+                                      )}
+                                      <span className="text-xs font-medium hidden sm:inline">
+                                        {isAnalyzing ? 'Processing' : aiAnalysis?.status === 'Completed' ? 'View' : 'Analyze'}
+                                      </span>
+                                    </Link>
+                                    <button
+                                      onClick={() => handleEdit(client)}
+                                      className="p-1 text-slate-500 hover:text-[#EAB308] hover:bg-[#EAB308]/10 rounded transition-all shadow-sm hover:shadow-md"
+                                      title="Edit"
+                                    >
+                                      <Edit2 className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
+                          </React.Fragment>
                         );
                       })
                     )}

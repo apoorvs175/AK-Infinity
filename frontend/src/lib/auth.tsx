@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.removeItem('ak_infinity_session')
 
     if (!supabase) {
-      console.error('Supabase not configured - check environment variables')
+      console.error('Supabase not configured')
       setLoading(false)
       return
     }

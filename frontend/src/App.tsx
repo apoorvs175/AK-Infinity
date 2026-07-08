@@ -11,6 +11,7 @@ import Contact from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import ClientDetailsPage from './pages/ClientDetails'
+import AIAnalysisPage from './pages/AIAnalysisPage'
 import ScrollToTop from './components/ScrollToTop'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './lib/auth'
@@ -77,6 +78,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ClientDetailsPage region="International" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/clients/:clientId/ai-analysis"
+            element={
+              <ProtectedRoute>
+                <AIAnalysisPage />
               </ProtectedRoute>
             }
           />

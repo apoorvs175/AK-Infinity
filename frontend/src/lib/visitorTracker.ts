@@ -1,11 +1,11 @@
 // Visitor Tracker Utility
+import { API_URL } from './api';
+
 let sessionId = localStorage.getItem('visitorSessionId') || crypto.randomUUID()
 localStorage.setItem('visitorSessionId', sessionId)
 
 let visitorId: string | null = null
 let startTime = Date.now()
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com'
 
 // Parse user agent to get browser and OS info
 function parseUserAgent(userAgent: string) {
@@ -40,8 +40,6 @@ function parseUserAgent(userAgent: string) {
 // Track page visit
 export async function trackVisit(pageVisited: string) {
   try {
-    console.log('🔍 Tracking visit to:', pageVisited)
-    
     const userAgent = navigator.userAgent
     const { browser, os, deviceType } = parseUserAgent(userAgent)
     const referrer = document.referrer || 'Direct'
@@ -53,10 +51,8 @@ export async function trackVisit(pageVisited: string) {
     } = {}
     let locationPermission = 'not_requested'
     
-    // Try to get geolocation
+    // Try to get geolocation (but don't spam the console)
     if ('geolocation' in navigator) {
-      console.log('📍 Requesting location permission...')
-      
       try {
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -72,27 +68,16 @@ export async function trackVisit(pageVisited: string) {
           longitude: position.coords.longitude,
           accuracy: position.coords.accuracy
         }
-        
-        console.log('✅ Location obtained:', locationData)
       } catch (geoError) {
-        console.log('❌ Geolocation error:', geoError)
-        
         if ((geoError as GeolocationPositionError).code === 1) {
           locationPermission = 'denied'
-          console.log('🔒 User denied location permission')
         } else if ((geoError as GeolocationPositionError).code === 2) {
           locationPermission = 'unavailable'
-          console.log('⚠️ Location unavailable')
         } else if ((geoError as GeolocationPositionError).code === 3) {
           locationPermission = 'timeout'
-          console.log('⏱️ Location request timed out')
         }
       }
-    } else {
-      console.log('⚠️ Geolocation not supported in this browser')
     }
-    
-    console.log('📤 Sending visitor data with permission:', locationPermission)
     
     const response = await fetch(API_URL + '/api/visitors', {
       method: 'POST',
@@ -114,14 +99,11 @@ export async function trackVisit(pageVisited: string) {
     
     if (response.ok) {
       const data = await response.json()
-      console.log('✅ Visitor tracked successfully:', data.id)
       visitorId = data.id
       startTime = Date.now()
-    } else {
-      console.error('❌ Error tracking visit:', response.status)
     }
   } catch (error) {
-    console.error('❌ Error tracking visit:', error)
+    // Fail silently - don't spam the console with errors
   }
 }
 
@@ -142,6 +124,6 @@ export async function updateTimeSpent() {
       })
     })
   } catch (error) {
-    console.error('Error updating time spent:', error)
+    // Fail silently - don't spam the console
   }
 }

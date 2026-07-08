@@ -19,10 +19,9 @@ import {
 } from 'lucide-react'
 import AKLogo from '../assets/AK_Main_Logo.webp'
 import type { Lead, Visitor } from '../types'
-import { useAuth } from '../lib/auth'
-import StatsCard from '../components/StatsCard'
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://ak-infinity-backend.onrender.com'
+import { useAuth } from '../lib/auth';
+import StatsCard from '../components/StatsCard';
+import { API_URL } from '../lib/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
@@ -63,9 +62,11 @@ export default function AdminDashboard() {
   }, [])
 
   useEffect(() => {
-    loadLeads()
-    loadVisitors()
-  }, [])
+    if (user) {
+      loadLeads()
+      loadVisitors()
+    }
+  }, [user])
 
   const loadLeads = async () => {
     setLoading(true)
