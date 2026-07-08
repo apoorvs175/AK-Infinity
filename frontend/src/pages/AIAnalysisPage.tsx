@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   ArrowLeft,
   Phone,
@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   XCircle,
   Star,
-  Zap,
   Check,
   AlertCircle,
   TrendingUp,
@@ -461,17 +460,20 @@ export default function AIAnalysisPage() {
               <div className="mt-5 md:mt-6">
                 <p className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Social Media</p>
                 <div className="flex flex-wrap gap-2">
-                  {analysis?.publicOnlinePresence?.platforms?.length > 0 ? (
-                    analysis.publicOnlinePresence.platforms.map((platform: string, index: number) => (
-                      <span key={index} className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-full text-xs md:text-sm font-bold shadow-sm">
-                        {platform}
+                  {(() => {
+                    const platforms = analysis?.public_online_presence?.platforms;
+                    return platforms?.length > 0 ? (
+                      platforms.map((platform: string, index: number) => (
+                        <span key={index} className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-full text-xs md:text-sm font-bold shadow-sm">
+                          {platform}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="px-3 py-1.5 bg-gradient-to-r from-slate-100 to-slate-200 text-slate-600 rounded-full text-xs md:text-sm font-bold shadow-sm">
+                        No social media detected
                       </span>
-                    ))
-                  ) : (
-                    <span className="px-3 py-1.5 bg-gradient-to-r from-slate-100 to-slate-200 text-slate-600 rounded-full text-xs md:text-sm font-bold shadow-sm">
-                      No social media detected
-                    </span>
-                  )}
+                    );
+                  })()}
                 </div>
               </div>
             </section>

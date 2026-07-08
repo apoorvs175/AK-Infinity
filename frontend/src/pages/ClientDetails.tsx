@@ -78,7 +78,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'all' | 'pending-first-call' | 'pending-final-call' | 'completed-deals'>('all');
   const [aiAnalyses, setAiAnalyses] = useState<Record<string, AIAnalysis | null>>({});
-  const [analyzingClients, setAnalyzingClients] = useState<Set<string>>(new Set());
+  const [analyzingClients, _setAnalyzingClients] = useState<Set<string>>(new Set());
   const sidebarRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -93,52 +93,6 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
       console.error('Error fetching AI analysis:', error);
     }
   }, []);
-
-  const startAIAnalysis = useCallback(async (client: Client) => {
-    if (!client.google_maps_link) {
-      showToast('Client needs a Google Maps URL for AI analysis', 'error');
-      return;
-    }
-
-    setAnalyzingClients(prev => new Set(prev).add(client.id));
-    
-    try {
-      const response = await fetch(`${API_URL}/api/ai-analysis/${client.id}/analyze`, {
-        method: 'POST'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAiAnalyses(prev => ({ ...prev, [client.id]: data }));
-        showToast('AI analysis started!', 'success');
-        
-        // Poll for updates
-        const pollInterval = setInterval(async () => {
-          await fetchAIAnalysis(client.id);
-          const currentAnalysis = aiAnalyses[client.id];
-          if (currentAnalysis && ['Completed', 'Failed'].includes(currentAnalysis.status)) {
-            clearInterval(pollInterval);
-            setAnalyzingClients(prev => {
-              const next = new Set(prev);
-              next.delete(client.id);
-              return next;
-            });
-          }
-        }, 3000);
-        
-      } else {
-        throw new Error('Failed to start AI analysis');
-      }
-    } catch (error) {
-      console.error('Error starting AI analysis:', error);
-      showToast('Failed to start AI analysis', 'error');
-      setAnalyzingClients(prev => {
-        const next = new Set(prev);
-        next.delete(client.id);
-        return next;
-      });
-    }
-  }, [aiAnalyses, fetchAIAnalysis]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

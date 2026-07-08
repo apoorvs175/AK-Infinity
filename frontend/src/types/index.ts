@@ -77,6 +77,7 @@ export interface Client {
   region: 'Indian' | 'International';
   created_at: string;
   updated_at: string;
+  website_url?: string;
 }
 
 export interface AIAnalysis {
