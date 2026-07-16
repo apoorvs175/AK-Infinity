@@ -1,11 +1,6 @@
 import { chromium } from 'playwright'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-
-// Initialize Gemini
-let genAI = null
-if (process.env.GEMINI_API_KEY) {
-  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-}
+import { aiAnalysisServiceProvider } from './ai/index.js'
+import { logAIRequest } from './utils/logger.js'
 
 /**
  * Parse Google Maps URL to extract business information with improved selectors
@@ -163,13 +158,17 @@ async function analyzeWebsite(websiteUrl) {
       mobileResponsive: false,
       modernDesign: false,
       https: false,
+      hasNavigation: false,
+      hasAboutPage: false,
+      hasServicesPage: false,
+      hasContactPage: false,
       contactInfo: {
         phone: null,
         email: null,
         address: null
       },
       uxIssues: [],
-      missingInfo: []
+      observations: []
     }
   }
 
@@ -181,19 +180,24 @@ async function analyzeWebsite(websiteUrl) {
     
     let available = true
     let https = websiteUrl.startsWith('https')
+    const observations = []
+    const uxIssues = []
     
     try {
       await page.goto(websiteUrl, { waitUntil: 'networkidle', timeout: 30000 })
     } catch (navError) {
       console.log('⚠️ Website navigation failed:', navError.message)
       available = false
+      observations.push('Website failed to load')
     }
     
     let mobileResponsive = false
     let modernDesign = false
+    let hasNavigation = false
+    let hasAboutPage = false
+    let hasServicesPage = false
+    let hasContactPage = false
     const contactInfo = { phone: null, email: null, address: null }
-    const uxIssues = []
-    const missingInfo = []
     
     if (available) {
       // Check mobile responsiveness
@@ -205,6 +209,8 @@ async function analyzeWebsite(websiteUrl) {
       })
       
       mobileResponsive = viewportMeta
+      if (mobileResponsive) observations.push('Mobile responsive via viewport meta tag')
+      else uxIssues.push('No viewport meta tag for mobile responsiveness')
       
       // Check for modern design cues
       modernDesign = await page.evaluate(() => {
@@ -218,6 +224,8 @@ async function analyzeWebsite(websiteUrl) {
         })
         return hasTailwind || hasFlexbox
       })
+      if (modernDesign) observations.push('Modern layout with flex/grid or Tailwind')
+      else observations.push('Basic design without modern layout techniques')
       
       // Extract contact info
       const pageContent = await page.content()
@@ -226,28 +234,31 @@ async function analyzeWebsite(websiteUrl) {
       const phoneMatches = pageContent.match(/[+]?[\d\s\-()]{10,}/g)
       if (phoneMatches) {
         contactInfo.phone = phoneMatches[0].trim()
+        observations.push('Phone number found on website')
       }
       
       // Email regex
       const emailMatches = pageContent.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g)
       if (emailMatches) {
         contactInfo.email = emailMatches[0]
+        observations.push('Email address found on website')
       }
       
-      // Check for missing information
-      const hasAbout = pageContent.toLowerCase().includes('about')
-      const hasServices = pageContent.toLowerCase().includes('service')
-      const hasContact = pageContent.toLowerCase().includes('contact')
+      // Check for about/services/contact pages
+      hasAboutPage = pageContent.toLowerCase().includes('about')
+      hasServicesPage = pageContent.toLowerCase().includes('service')
+      hasContactPage = pageContent.toLowerCase().includes('contact')
       
-      if (!hasAbout) missingInfo.push('About section')
-      if (!hasServices) missingInfo.push('Services section')
-      if (!hasContact) missingInfo.push('Contact page')
+      if (hasAboutPage) observations.push('About page found')
+      if (hasServicesPage) observations.push('Services page found')
+      if (hasContactPage) observations.push('Contact page found')
       
       // UX checks
-      const hasNavigation = await page.evaluate(() => {
+      hasNavigation = await page.evaluate(() => {
         return document.querySelector('nav') !== null
       })
-      if (!hasNavigation) uxIssues.push('No clear navigation')
+      if (hasNavigation) observations.push('Navigation menu found')
+      else uxIssues.push('No clear navigation')
     }
     
     console.log('✅ Website analysis complete:', { available, mobileResponsive, modernDesign, https, contactInfo })
@@ -258,9 +269,13 @@ async function analyzeWebsite(websiteUrl) {
       mobileResponsive,
       modernDesign,
       https,
+      hasNavigation,
+      hasAboutPage,
+      hasServicesPage,
+      hasContactPage,
       contactInfo,
       uxIssues,
-      missingInfo
+      observations
     }
   } catch (error) {
     console.error('❌ Error analyzing website:', error)
@@ -269,9 +284,13 @@ async function analyzeWebsite(websiteUrl) {
       mobileResponsive: false,
       modernDesign: false,
       https: false,
+      hasNavigation: false,
+      hasAboutPage: false,
+      hasServicesPage: false,
+      hasContactPage: false,
       contactInfo: { phone: null, email: null, address: null },
       uxIssues: ['Failed to analyze website'],
-      missingInfo: []
+      observations: ['Website analysis failed']
     }
   }
 }
@@ -279,81 +298,164 @@ async function analyzeWebsite(websiteUrl) {
 /**
  * Generate business intelligence using Gemini
  */
-async function generateBusinessIntelligence(collectedData) {
-  console.log('🤖 Starting Gemini analysis...')
-  if (!genAI) {
-    console.log('⚠️ GEMINI_API_KEY not configured')
-    throw new Error('GEMINI_API_KEY not configured')
+async function generateBusinessIntelligence(collectedData, clientId) {
+  console.log('🤖 Starting AI Analysis Service...')
+  const startTimestamp = new Date()
+  
+  if (!aiAnalysisServiceProvider.isConfigured()) {
+    const error = new Error('AI_ANALYSIS_API_KEY not configured')
+    logAIRequest({
+      timestamp: startTimestamp.toISOString(),
+      clientId,
+      service: 'analysis',
+      requestType: 'business-intelligence',
+      tokensSent: 0,
+      tokensReceived: 0,
+      responseTimeMs: new Date() - startTimestamp,
+      error: error.message,
+    })
+    throw error
   }
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-
   const prompt = `
-Analyze this business data and generate structured business intelligence in JSON format only.
+Analyze this business data and generate a comprehensive analysis in valid JSON format only.
 
 Business Data:
 ${JSON.stringify(collectedData, null, 2)}
 
-Please return a JSON object with the following structure (no extra text, just valid JSON):
+Generate JSON with this structure:
 {
-  "business_summary": {
-    "overview": "Brief overview of the business",
-    "industry": "Industry category",
-    "key_features": ["Feature 1", "Feature 2"]
+  "business_summary": "200-400 word professional, human-readable summary. If not enough info, use: 'Unable to generate a reliable business summary because sufficient public information could not be verified.'",
+  "business_intelligence": {
+    "business_category": "Business category from Google Maps or best guess",
+    "industry": "Industry the business belongs to",
+    "target_customers": "Who are their primary customers? (3-5 types)",
+    "business_model": "Explain how they earn revenue",
+    "key_products_services": ["Product/Service 1", "Product/Service 2", "Product/Service 3"],
+    "unique_selling_proposition": "What makes them unique?",
+    "business_strengths": ["Strength 1", "Strength 2", "Strength 3", "Strength 4"],
+    "business_weaknesses": ["Weakness 1", "Weakness 2", "Weakness 3"],
+    "growth_opportunities": [
+      {
+        "opportunity": "Growth opportunity",
+        "ak_infinity_service": "Which AK Infinity service helps with this"
+      }
+    ]
   },
-  "digital_presence": {
-    "score": 0-100,
-    "strengths": ["Strength 1"],
-    "weaknesses": ["Weakness 1"]
+  "review_intelligence": {
+    "sentiment": "Positive/Mixed/Negative/Unavailable",
+    "common_positive": ["Positive point 1", "Positive point 2"],
+    "common_complaints": ["Complaint 1", "Complaint 2"]
   },
-  "website_status": {
-    "overall": "Good/Needs Improvement",
-    "recommendations": ["Rec 1"]
-  },
-  "public_online_presence": {
-    "platforms": ["Instagram", "Facebook", "LinkedIn"],
-    "activity_level": "High/Medium/Low",
-    "notes": "Any notes about online presence"
-  },
-  "business_strengths": ["Strength 1", "Strength 2"],
-  "improvement_opportunities": ["Opportunity 1", "Opportunity 2"],
-  "suggested_services": [
-    {
-      "service": "Service Name",
-      "reason": "Why this service is relevant"
+  "online_presence": {
+    "overall_rating": "Poor/Fair/Good/Excellent",
+    "reasons": ["Reason 1", "Reason 2"],
+    "social_media": {
+      "facebook": false,
+      "instagram": false,
+      "linkedin": false,
+      "youtube": false
     }
-  ],
+  },
   "confidence_score": 0-100
 }
 
-AK Infinity offers: Website Development, Digital Marketing, Mobile Apps, UI/UX Design, Branding, SEO, Social Media Management.
+Important Rules:
+- No hallucinations: only use verified public information from the provided data.
+- If review text isn't available, set sentiment to "Unavailable"
+- confidence_score should be based on: google data quality (20%), website availability (25%), amount of verified info (30%), AI certainty (25%)
+- Return ONLY valid JSON, no extra text.
 `
 
   try {
-    const result = await model.generateContent(prompt)
-    const response = await result.response
-    const text = response.text()
-    
+    const result = await aiAnalysisServiceProvider.sendMessage({
+      messages: [{ role: 'user', content: prompt }],
+    })
+
+    const text = result.content.trim()
     const jsonMatch = text.match(/\{[\s\S]*\}/)
-    if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0])
-      console.log('✅ Gemini analysis complete:', parsed)
-      return parsed
-    }
+    let aiAnalysis = {}
     
-    throw new Error('Failed to parse Gemini response')
+    if (jsonMatch) {
+      aiAnalysis = JSON.parse(jsonMatch[0])
+    } else {
+      throw new Error('AI returned invalid JSON')
+    }
+
+    const endTimestamp = new Date()
+    logAIRequest({
+      timestamp: startTimestamp.toISOString(),
+      clientId,
+      service: 'analysis',
+      requestType: 'business-intelligence',
+      tokensSent: result.tokensSent,
+      tokensReceived: result.tokensReceived,
+      responseTimeMs: endTimestamp - startTimestamp,
+      error: null,
+    })
+    
+    console.log('✅ AI Analysis complete')
+    return aiAnalysis
   } catch (error) {
-    console.error('❌ Error with Gemini:', error)
-    throw error
+    const endTimestamp = new Date()
+    logAIRequest({
+      timestamp: startTimestamp.toISOString(),
+      clientId,
+      service: 'analysis',
+      requestType: 'business-intelligence',
+      tokensSent: 0,
+      tokensReceived: 0,
+      responseTimeMs: endTimestamp - startTimestamp,
+      error: error.message,
+    })
+    console.error('❌ Error with AI Analysis:', error)
+    // Fallback
+    const hasWebsite = collectedData.websiteAnalysis?.available || collectedData.googleMapsData?.website
+    const hasGoogleData = collectedData.googleMapsData?.name
+    const confidenceScore = (hasGoogleData ? 30 : 0) + (hasWebsite ? 30 : 0) + 10
+    return {
+      business_summary: "Unable to generate a reliable business summary because sufficient public information could not be verified.",
+      business_intelligence: {
+        business_category: collectedData.googleMapsData?.category || 'Unknown',
+        industry: 'Unknown',
+        target_customers: 'Not enough data',
+        business_model: 'Not enough data',
+        key_products_services: [],
+        unique_selling_proposition: 'Not enough data',
+        business_strengths: hasGoogleData ? ['Verified Google Business Profile'] : [],
+        business_weaknesses: hasWebsite ? [] : ['No official website'],
+        growth_opportunities: []
+      },
+      review_intelligence: {
+        sentiment: 'Unavailable',
+        common_positive: [],
+        common_complaints: []
+      },
+      online_presence: {
+        overall_rating: hasWebsite ? 'Fair' : 'Poor',
+        reasons: [
+          hasGoogleData ? 'Google Business Profile Exists' : 'No Google Business Profile',
+          hasWebsite ? 'Website Exists' : 'No Website'
+        ],
+        social_media: {
+          facebook: false,
+          instagram: false,
+          linkedin: false,
+          youtube: false
+        }
+      },
+      confidence_score: confidenceScore
+    }
   }
 }
 
 /**
  * Main research function
  */
-export async function runBusinessResearch(client) {
+export async function runBusinessResearch(client, clientId) {
   console.log('🚀 Starting business research for client:', client.business_name)
   console.log('📋 Client data:', JSON.stringify(client, null, 2))
+  const pipelineStart = Date.now()
   
   const collectedData = {
     client,
@@ -361,24 +463,32 @@ export async function runBusinessResearch(client) {
     websiteAnalysis: null
   }
 
-  // Step 1: Parse Google Maps URL
+  // Step 1: Parse Google Maps URL - continue even if fails
   if (client.google_maps_link) {
     console.log('📍 Step 1: Parsing Google Maps URL...')
-    const mapsResult = await parseGoogleMapsURL(client.google_maps_link)
-    if (mapsResult.success) {
-      collectedData.googleMapsData = mapsResult.data
-    } else {
-      console.log('⚠️ Google Maps parsing failed:', mapsResult.error)
+    try {
+      const mapsResult = await parseGoogleMapsURL(client.google_maps_link)
+      if (mapsResult.success) {
+        collectedData.googleMapsData = mapsResult.data
+      } else {
+        console.log('⚠️ Google Maps parsing failed:', mapsResult.error)
+      }
+    } catch (e) {
+      console.error('❌ Google Maps parsing threw error:', e)
     }
   } else {
     console.log('⚠️ No Google Maps link provided')
   }
 
-  // Step 2: Analyze website
+  // Step 2: Analyze website - continue even if fails
   const websiteUrl = collectedData.googleMapsData?.website || ''
   if (websiteUrl) {
     console.log('🌐 Step 2: Analyzing website...')
-    collectedData.websiteAnalysis = await analyzeWebsite(websiteUrl)
+    try {
+      collectedData.websiteAnalysis = await analyzeWebsite(websiteUrl)
+    } catch (e) {
+      console.error('❌ Website analysis threw error:', e)
+    }
   } else {
     console.log('⚠️ No website URL to analyze')
   }
@@ -387,50 +497,64 @@ export async function runBusinessResearch(client) {
   console.log('✅ Step 3: Verifying business...')
   const businessVerified = collectedData.googleMapsData?.name?.length > 0
 
-  // Step 4: Generate structured BI with Gemini
+  // Step 4: Generate structured BI with AI
   console.log('🤖 Step 4: Generating business intelligence...')
-  let businessIntelligence = null
-  if (genAI) {
-    businessIntelligence = await generateBusinessIntelligence(collectedData)
-  } else {
-    console.log('⚠️ Using fallback BI (no Gemini key)')
-    const hasWebsite = collectedData.websiteAnalysis?.available || websiteUrl.length > 0
-    businessIntelligence = {
-      business_summary: {
-        overview: collectedData.googleMapsData?.name 
-          ? `Business analysis for ${collectedData.googleMapsData.name}`
-          : 'Business analysis requires Gemini API key',
-        industry: collectedData.googleMapsData?.category || 'Unknown',
-        key_features: ['Data collection successful']
-      },
-      digital_presence: {
-        score: hasWebsite ? 50 : 25,
-        strengths: collectedData.googleMapsData?.rating ? ['Has Google reviews'] : [],
-        weaknesses: ['AI analysis unavailable']
-      },
-      website_status: {
-        overall: hasWebsite ? 'Available' : 'Not Found',
-        recommendations: hasWebsite ? [] : ['Create a professional website']
-      },
-      public_online_presence: {
-        platforms: [],
-        activity_level: 'Unknown',
-        notes: 'Social media check requires additional configuration'
-      },
-      business_strengths: collectedData.googleMapsData?.name ? ['Verified business listing'] : [],
-      improvement_opportunities: hasWebsite ? [] : ['Website Development'],
-      suggested_services: hasWebsite ? [] : [{
-        service: 'Website Development',
-        reason: 'Business has no official website'
-      }],
-      confidence_score: 30
+  let aiAnalysis = null
+  if (aiAnalysisServiceProvider.isConfigured()) {
+    try {
+      aiAnalysis = await generateBusinessIntelligence(collectedData, clientId)
+    } catch (e) {
+      console.error('❌ AI Analysis threw error:', e)
     }
   }
+  
+  if (!aiAnalysis) {
+    console.log('⚠️ Using fallback BI (no analysis API key or AI failed)')
+    const hasWebsite = collectedData.websiteAnalysis?.available || websiteUrl.length > 0
+    const hasGoogleData = collectedData.googleMapsData?.name
+    aiAnalysis = {
+      business_summary: "Unable to generate a reliable business summary because sufficient public information could not be verified.",
+      business_intelligence: {
+        business_category: collectedData.googleMapsData?.category || 'Unknown',
+        industry: 'Unknown',
+        target_customers: 'Not enough data',
+        business_model: 'Not enough data',
+        key_products_services: [],
+        unique_selling_proposition: 'Not enough data',
+        business_strengths: hasGoogleData ? ['Verified Google Business Profile'] : [],
+        business_weaknesses: hasWebsite ? [] : ['No official website'],
+        growth_opportunities: []
+      },
+      review_intelligence: {
+        sentiment: 'Unavailable',
+        common_positive: [],
+        common_complaints: []
+      },
+      online_presence: {
+        overall_rating: hasWebsite ? 'Fair' : 'Poor',
+        reasons: [
+          hasGoogleData ? 'Google Business Profile Exists' : 'No Google Business Profile',
+          hasWebsite ? 'Website Exists' : 'No Website'
+        ],
+        social_media: {
+          facebook: false,
+          instagram: false,
+          linkedin: false,
+          youtube: false
+        }
+      },
+      confidence_score: (hasGoogleData ? 30 : 0) + (hasWebsite ? 30 : 0) + 10
+    }
+  }
+  
+  const analysisDuration = Date.now() - pipelineStart
 
   console.log('✅ Business research complete!')
   return {
     collectedData,
-    businessIntelligence,
-    businessVerified
+    aiAnalysis,
+    businessVerified,
+    analysisDuration,
+    aiModel: 'Gemini 2.5 Flash'
   }
 }

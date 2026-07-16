@@ -4,6 +4,7 @@ import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
 import { runBusinessResearch } from './ai-research-engine.js'
 import { generateSalesCoachReport, generateCallSummary } from './ai-sales-coach.js'
+import { aiChatService } from './ai-chat-service.js'
 
 const app = express()
 const PORT = process.env.PORT || 5001
@@ -33,8 +34,9 @@ const allowedOrigins = [
   'https://akinfinity.vercel.app',
   'http://localhost:5173',
   'http://localhost:5174',
-  'http://localhost:5175'
-]
+  'http://localhost:5175',
+  'http://localhost:5176'
+];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -60,17 +62,23 @@ let nextVisitorId = 1
 
 // Get all leads
 app.get('/api/leads', async (req, res) => {
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('leads')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (error) {
-      return res.status(500).json({ error: error.message })
+  try {
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false })
+      if (error) {
+        console.error('Supabase error fetching leads:', error)
+        return res.json(demoLeads) // Fall back to demo mode on error
+      }
+      return res.json(data)
     }
-    return res.json(data)
+    res.json(demoLeads)
+  } catch (error) {
+    console.error('Error fetching leads:', error)
+    res.json(demoLeads) // Fall back to demo mode on any error
   }
-  res.json(demoLeads)
 })
 
 // Create a new lead
@@ -161,17 +169,23 @@ app.delete('/api/leads/:id', async (req, res) => {
 
 // Visitor endpoints
 app.get('/api/visitors', async (req, res) => {
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('visitors')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (error) {
-      return res.status(500).json({ error: error.message })
+  try {
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('visitors')
+        .select('*')
+        .order('created_at', { ascending: false })
+      if (error) {
+        console.error('Supabase error fetching visitors:', error)
+        return res.json(demoVisitors) // Fall back to demo mode on error
+      }
+      return res.json(data)
     }
-    return res.json(data)
+    res.json(demoVisitors)
+  } catch (error) {
+    console.error('Error fetching visitors:', error)
+    res.json(demoVisitors) // Fall back to demo mode on any error
   }
-  res.json(demoVisitors)
 })
 
 // Reverse geocoding function using OpenStreetMap Nominatim
@@ -441,6 +455,36 @@ app.put('/api/clients/:id', async (req, res) => {
   if (region !== undefined) updateData.region = region;
 
   if (supabase) {
+    // First, get the current client to check existing dates
+    const { data: currentClient, error: fetchError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (fetchError) {
+      return res.status(500).json({ error: fetchError.message });
+    }
+
+    // Set dates if the corresponding boolean is being set to true and date doesn't exist
+    if (first_call === true && !currentClient.first_call_date) {
+      updateData.first_call_date = new Date().toISOString();
+    }
+    if (first_meeting === true && !currentClient.first_meeting_date) {
+      updateData.first_meeting_date = new Date().toISOString();
+    }
+    if (final_call === true && !currentClient.final_call_date) {
+      updateData.final_call_date = new Date().toISOString();
+    }
+    if (agreement_signed === true && !currentClient.agreement_date) {
+      updateData.agreement_date = new Date().toISOString();
+    }
+
+    // Update last_description_updated_at if description is changed
+    if (description !== undefined && description !== currentClient.description) {
+      updateData.last_description_updated_at = new Date().toISOString();
+    }
+
     const { data, error } = await supabase
       .from('clients')
       .update(updateData)
@@ -612,7 +656,7 @@ app.post('/api/ai-analysis/:clientId/analyze', async (req, res) => {
     // Run the research in the background
     (async () => {
       try {
-        const researchResult = await runBusinessResearch(client);
+        const researchResult = await runBusinessResearch(client, clientId);
         
         // Update the analysis with results
         const googleReviews = researchResult.collectedData.googleMapsData ? {
@@ -626,18 +670,24 @@ app.post('/api/ai-analysis/:clientId/analyze', async (req, res) => {
           .from('ai_analysis')
           .update({
             status: 'Completed',
-            business_summary: researchResult.businessIntelligence.businessSummary,
-            digital_presence: researchResult.businessIntelligence.digitalPresence,
-            website_status: researchResult.businessIntelligence.websiteStatus,
-            public_online_presence: researchResult.businessIntelligence.publicOnlinePresence,
-            business_strengths: researchResult.businessIntelligence.businessStrengths,
-            improvement_opportunities: researchResult.businessIntelligence.improvementOpportunities,
-            suggested_services: researchResult.businessIntelligence.suggestedServices,
-            confidence_score: researchResult.businessIntelligence.confidenceScore,
+            business_summary: researchResult.aiAnalysis.business_summary,
+            business_intelligence: researchResult.aiAnalysis.business_intelligence,
+            review_intelligence: researchResult.aiAnalysis.review_intelligence,
+            online_presence: researchResult.aiAnalysis.online_presence,
+            digital_presence: researchResult.collectedData.websiteAnalysis,
+            website_status: researchResult.collectedData.websiteAnalysis,
+            public_online_presence: researchResult.aiAnalysis.online_presence,
+            business_strengths: researchResult.aiAnalysis.business_intelligence.business_strengths,
+            improvement_opportunities: researchResult.aiAnalysis.business_intelligence.growth_opportunities,
+            suggested_services: [],
+            confidence_score: researchResult.aiAnalysis.confidence_score,
             raw_data: researchResult.collectedData,
             google_reviews: googleReviews,
             website_url: websiteUrl,
-            google_maps_data: researchResult.collectedData.googleMapsData
+            google_maps_data: researchResult.collectedData.googleMapsData,
+            analysis_duration: researchResult.analysisDuration,
+            ai_model: researchResult.aiModel,
+            analysis_version: 'v1'
           })
           .eq('id', newAnalysis.id);
       } catch (error) {
@@ -1037,6 +1087,316 @@ app.put('/api/follow-up/:id', async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error('Error updating follow-up:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ==================== AI Chat Assistant Endpoints ====================
+
+// Get or create conversation for a client
+app.get('/api/chat/:clientId/conversation', async (req, res) => {
+  const { clientId } = req.params;
+  
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    // Find existing active conversation
+    let { data: conversation, error: convError } = await supabase
+      .from('ai_conversations')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+      
+    if (convError && convError.code !== 'PGRST116') {
+      return res.status(500).json({ error: convError.message });
+    }
+    
+    // If no conversation exists, create one
+    if (!conversation) {
+      const { data: newConversation, error: createError } = await supabase
+        .from('ai_conversations')
+        .insert([{
+          client_id: clientId,
+          title: 'Sales Conversation',
+          status: 'active',
+        }])
+        .select()
+        .single();
+        
+      if (createError) {
+        return res.status(500).json({ error: createError.message });
+      }
+      conversation = newConversation;
+    }
+    
+    // Get all messages for this conversation
+    const { data: messages, error: messagesError } = await supabase
+      .from('ai_messages')
+      .select('*')
+      .eq('conversation_id', conversation.id)
+      .order('created_at', { ascending: true });
+      
+    if (messagesError) {
+      return res.status(500).json({ error: messagesError.message });
+    }
+    
+    // Get or create ai_context for this client
+    let { data: aiContext, error: contextError } = await supabase
+      .from('ai_context')
+      .select('*')
+      .eq('client_id', clientId)
+      .maybeSingle();
+      
+    if (contextError && contextError.code !== 'PGRST116') {
+      return res.status(500).json({ error: contextError.message });
+    }
+    
+    res.json({
+      conversation,
+      messages,
+      aiContext,
+    });
+    
+  } catch (error) {
+    console.error('Error fetching chat:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Send a chat message
+app.post('/api/chat/:clientId/messages', async (req, res) => {
+  const { clientId } = req.params;
+  const { message } = req.body;
+  
+  if (!message || typeof message !== 'string' || message.trim() === '') {
+    return res.status(400).json({ error: 'Message is required' });
+  }
+  
+  if (!supabase) {
+    return res.status(500).json({ error: 'Supabase not configured' });
+  }
+  
+  try {
+    // Get client data
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .single();
+      
+    if (clientError) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    
+    // Get AI analysis
+    let aiAnalysis = null;
+    const { data: analysisData, error: analysisError } = await supabase
+      .from('ai_analysis')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('is_latest', true)
+      .maybeSingle();
+    if (!analysisError) {
+      aiAnalysis = analysisData;
+    }
+      
+    // Get sales coach report
+    let salesCoachReport = null;
+    const { data: coachData, error: coachError } = await supabase
+      .from('ai_sales_coach_reports')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('generated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!coachError) {
+      salesCoachReport = coachData;
+    }
+    
+    // Get or create conversation
+    let { data: conversation, error: convError } = await supabase
+      .from('ai_conversations')
+      .select('*')
+      .eq('client_id', clientId)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+      
+    if (convError && convError.code !== 'PGRST116') {
+      return res.status(500).json({ error: convError.message });
+    }
+    
+    if (!conversation) {
+      const { data: newConv, error: createError } = await supabase
+        .from('ai_conversations')
+        .insert([{ client_id: clientId, title: 'Sales Conversation', status: 'active' }])
+        .select()
+        .single();
+      if (createError) {
+        return res.status(500).json({ error: createError.message });
+      }
+      conversation = newConv;
+    }
+    
+    // Get existing messages
+    const { data: existingMessages, error: messagesError } = await supabase
+      .from('ai_messages')
+      .select('*')
+      .eq('conversation_id', conversation.id)
+      .order('created_at', { ascending: true });
+      
+    if (messagesError) {
+      return res.status(500).json({ error: messagesError.message });
+    }
+    
+    // Get ai_context
+    let { data: aiContext, error: contextError } = await supabase
+      .from('ai_context')
+      .select('*')
+      .eq('client_id', clientId)
+      .maybeSingle();
+      
+    if (contextError && contextError.code !== 'PGRST116') {
+      return res.status(500).json({ error: contextError.message });
+    }
+    
+    // Save user message
+    const { data: savedUserMessage, error: saveError1 } = await supabase
+      .from('ai_messages')
+      .insert([{
+        conversation_id: conversation.id,
+        client_id: clientId,
+        role: 'user',
+        content: message.trim(),
+      }])
+      .select()
+      .single();
+      
+    if (saveError1) {
+      return res.status(500).json({ error: saveError1.message });
+    }
+    
+    // Prepare conversation history for AI
+    const conversationHistory = [
+      ...existingMessages,
+      { role: 'user', content: message.trim() }
+    ];
+    
+    // Get AI response
+    let assistantMessage;
+    let aiContent;
+    try {
+      aiContent = await aiChatService.sendMessage({
+        client,
+        aiAnalysis,
+        salesCoachReport,
+        aiContext,
+        messages: conversationHistory,
+        clientId,
+      });
+    } catch (aiError) {
+      console.error('AI Error:', aiError);
+    }
+    
+    // Determine user-friendly error message
+    let responseContent;
+    let tokens, model;
+    if (aiContent) {
+      responseContent = aiContent.content;
+      tokens = aiContent.tokensReceived;
+      model = aiContent.model;
+    } else {
+      // Map error types to friendly messages
+      const errorType = aiError?.type || 'general';
+      const errorMessages = {
+        rate_limit: "The AI service is temporarily unavailable due to usage limits. Please try again in a few minutes.",
+        not_configured: "AI service is not properly configured. Please check your API key.",
+        timeout: "The AI request timed out. Please try again.",
+        general: "Sorry, I couldn't process your request right now. Please try again later.",
+      };
+      responseContent = errorMessages[errorType] || errorMessages.general;
+      tokens = 0;
+      model = null;
+    }
+    
+    // Save AI response or friendly message
+    const { data: savedAssistantMsg, error: saveError2 } = await supabase
+      .from('ai_messages')
+      .insert([{
+        conversation_id: conversation.id,
+        client_id: clientId,
+        role: 'assistant',
+        content: responseContent,
+        tokens,
+        model,
+      }])
+      .select()
+      .single();
+      
+    if (saveError2) {
+      return res.status(500).json({ error: saveError2.message });
+    }
+    assistantMessage = savedAssistantMsg;
+      
+    // Update conversation's updated_at
+    await supabase
+      .from('ai_conversations')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', conversation.id);
+        
+    // Update ai_context with snapshots
+    const newAiContext = {
+      client_id: clientId,
+      business_snapshot: {
+        business_name: client.business_name,
+        owner_name: client.owner_name,
+        address_name: client.address_name,
+        region: client.region,
+      },
+      analysis_snapshot: aiAnalysis,
+      call_guide_snapshot: salesCoachReport,
+      updated_at: new Date().toISOString(),
+    };
+      
+    if (aiContext) {
+      await supabase.from('ai_context').update(newAiContext).eq('id', aiContext.id);
+    } else {
+      await supabase.from('ai_context').insert([newAiContext]);
+    }
+      
+    // Every 10 messages, generate a summary if AI is working
+    if (aiContent) {
+      const allMessages = [...existingMessages, savedUserMessage, assistantMessage];
+      if (allMessages.length % 10 === 0) {
+        const summary = await aiChatService.generateConversationSummary(allMessages);
+        if (summary) {
+          await supabase
+            .from('ai_conversations')
+            .update({ summary })
+            .eq('id', conversation.id);
+            
+          if (aiContext) {
+            await supabase.from('ai_context').update({ last_summary: summary }).eq('id', aiContext.id);
+          } else {
+            await supabase.from('ai_context').insert([{ client_id: clientId, last_summary: summary }]);
+          }
+        }
+      }
+    }
+
+    res.json({
+      userMessage: savedUserMessage,
+      assistantMessage,
+    });
+    
+  } catch (error) {
+    console.error('Error handling chat:', error);
     res.status(500).json({ error: error.message });
   }
 });

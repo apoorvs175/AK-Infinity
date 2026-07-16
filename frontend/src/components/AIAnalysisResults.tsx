@@ -56,18 +56,7 @@ export default function AIAnalysisResults({ analysis }: AIAnalysisResultsProps) 
                 Business Summary
               </h4>
               <div className="bg-slate-50 rounded-lg p-4">
-                <p className="text-slate-700 mb-2">{analysis.business_summary.overview}</p>
-                <p className="text-sm text-slate-500"><strong>Industry:</strong> {analysis.business_summary.industry}</p>
-                {analysis.business_summary.keyFeatures?.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-sm font-medium text-slate-700 mb-1">Key Features:</p>
-                    <ul className="list-disc list-inside text-sm text-slate-600">
-                      {analysis.business_summary.keyFeatures.map((feature: string, idx: number) => (
-                        <li key={idx}>{feature}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{analysis.business_summary}</p>
               </div>
             </section>
           )}

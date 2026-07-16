@@ -94,15 +94,6 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
     }
   }, []);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'Completed': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">Completed</span>;
-      case 'Processing': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-50 text-yellow-700 animate-pulse">Processing</span>;
-      case 'Failed': return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">Failed</span>;
-      default: return <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-50 text-slate-600">Not Analyzed</span>;
-    }
-  };
-
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
@@ -494,7 +485,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Payment</th>
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Received</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Delivered</th>
-                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">AI Status</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Details</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider w-14">Actions</th>
                     </tr>
                   </thead>
@@ -818,29 +809,35 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                               </td>
 
                               {/* Project Delivered */}
-                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                                {isEditing ? (
-                                  <button
-                                    onClick={() => setEditValues(prev => ({ ...prev, project_delivered: !prev.project_delivered }))}
-                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
-                                      currentValues.project_delivered
-                                        ? 'bg-green-500 border-green-500 text-white'
-                                        : 'border-slate-300 hover:border-slate-400'
-                                    }`}
-                                  >
-                                    {currentValues.project_delivered && <Check className="w-2.5 h-2.5" />}
-                                  </button>
-                                ) : (
-                                  <StatusChip checked={client.project_delivered} />
-                                )}
-                              </td>
+                      <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                        {isEditing ? (
+                          <button
+                            onClick={() => setEditValues(prev => ({ ...prev, project_delivered: !prev.project_delivered }))}
+                            className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                              currentValues.project_delivered
+                                ? 'bg-green-500 border-green-500 text-white'
+                                : 'border-slate-300 hover:border-slate-400'
+                            }`}
+                          >
+                            {currentValues.project_delivered && <Check className="w-2.5 h-2.5" />}
+                          </button>
+                        ) : (
+                          <StatusChip checked={client.project_delivered} />
+                        )}
+                      </td>
 
-                              {/* AI Status */}
-                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
-                                {aiAnalysis ? getStatusBadge(aiAnalysis.status) : getStatusBadge('Not Analyzed')}
-                              </td>
+                      {/* Details Button */}
+                      <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                        <Link
+                          to={`/admin/clients/${client.id}/ai-analysis`}
+                          state={{ from: location.pathname }}
+                          className="inline-flex items-center gap-1.5 px-2 py-1 bg-[#EAB308]/10 text-[#EAB308] rounded-lg text-xs font-medium hover:bg-[#EAB308]/20 transition-all"
+                        >
+                          Details
+                        </Link>
+                      </td>
 
-                              {/* Actions */}
+                      {/* Actions */}
                               <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                                 {isEditing ? (
                                   <div className="flex items-center justify-center gap-0.5">

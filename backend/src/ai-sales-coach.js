@@ -1,19 +1,18 @@
 // AI Sales Coach Logic
 // Generates sales guidance based on AI analysis and client history
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { aiAnalysisServiceProvider } from './ai/index.js';
+import { logAIRequest } from './utils/logger.js';
 
-const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+async function generateSalesCoachReport(aiAnalysis, client, clientId) {
+  const startTimestamp = new Date();
 
-async function generateSalesCoachReport(aiAnalysis, client) {
-  if (!genAI) {
+  if (!aiAnalysisServiceProvider.isConfigured()) {
     // Fallback if AI not configured
     return createFallbackSalesCoachReport(aiAnalysis, client);
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-
     const prompt = `
 You are an expert sales coach from AK Infinity. Based on the following data, create a practical sales playbook.
 
@@ -69,18 +68,42 @@ Please generate a JSON response with the following structure:
 }
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const result = await aiAnalysisServiceProvider.sendMessage({
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const text = result.content;
     
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
+      const endTimestamp = new Date();
+      logAIRequest({
+        timestamp: startTimestamp.toISOString(),
+        clientId,
+        service: 'analysis',
+        requestType: 'sales-coach-report',
+        tokensSent: result.tokensSent,
+        tokensReceived: result.tokensReceived,
+        responseTimeMs: endTimestamp - startTimestamp,
+        error: null,
+      });
       return JSON.parse(jsonMatch[0]);
     }
     
     throw new Error('Failed to parse AI response');
     
   } catch (error) {
+    const endTimestamp = new Date();
+    logAIRequest({
+      timestamp: startTimestamp.toISOString(),
+      clientId,
+      service: 'analysis',
+      requestType: 'sales-coach-report',
+      tokensSent: 0,
+      tokensReceived: 0,
+      responseTimeMs: endTimestamp - startTimestamp,
+      error: error.message,
+    });
     console.error('Error generating sales coach report:', error);
     return createFallbackSalesCoachReport(aiAnalysis, client);
   }
@@ -135,8 +158,10 @@ function createFallbackSalesCoachReport(aiAnalysis, client) {
   };
 }
 
-async function generateCallSummary(shortNotes, client) {
-  if (!genAI) {
+async function generateCallSummary(shortNotes, client, clientId) {
+  const startTimestamp = new Date();
+
+  if (!aiAnalysisServiceProvider.isConfigured()) {
     // Fallback
     return {
       call_outcome: "Call completed",
@@ -146,8 +171,6 @@ async function generateCallSummary(shortNotes, client) {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-    
     const prompt = `
 Convert these short call notes into a structured summary.
 
@@ -165,25 +188,49 @@ Return JSON in this format:
 }
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const result = await aiAnalysisServiceProvider.sendMessage({
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const text = result.content;
     
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
+      const endTimestamp = new Date();
+      logAIRequest({
+        timestamp: startTimestamp.toISOString(),
+        clientId,
+        service: 'analysis',
+        requestType: 'call-summary',
+        tokensSent: result.tokensSent,
+        tokensReceived: result.tokensReceived,
+        responseTimeMs: endTimestamp - startTimestamp,
+        error: null,
+      });
       return JSON.parse(jsonMatch[0]);
     }
     
     throw new Error('Failed to parse AI response');
     
   } catch (error) {
-      console.error('Error generating call summary:', error);
-      return {
-        call_outcome: "Call completed",
-        key_points: shortNotes.split('\n').filter(Boolean),
-        decision_made: "Pending"
-      };
-    }
+    const endTimestamp = new Date();
+    logAIRequest({
+      timestamp: startTimestamp.toISOString(),
+      clientId,
+      service: 'analysis',
+      requestType: 'call-summary',
+      tokensSent: 0,
+      tokensReceived: 0,
+      responseTimeMs: endTimestamp - startTimestamp,
+      error: error.message,
+    });
+    console.error('Error generating call summary:', error);
+    return {
+      call_outcome: "Call completed",
+      key_points: shortNotes.split('\n').filter(Boolean),
+      decision_made: "Pending"
+    };
+  }
   }
 
 

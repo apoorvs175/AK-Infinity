@@ -78,6 +78,11 @@ export interface Client {
   created_at: string;
   updated_at: string;
   website_url?: string;
+  first_call_date?: string;
+  first_meeting_date?: string;
+  final_call_date?: string;
+  agreement_date?: string;
+  last_description_updated_at?: string;
 }
 
 export interface AIAnalysis {
@@ -85,7 +90,36 @@ export interface AIAnalysis {
   client_id: string;
   status: 'Not Analyzed' | 'Processing' | 'Completed' | 'Failed';
   error_message?: string;
-  business_summary?: any;
+  business_summary?: string;
+  business_intelligence?: {
+    business_category?: string;
+    industry?: string;
+    target_customers?: string;
+    business_model?: string;
+    key_products_services?: string[];
+    unique_selling_proposition?: string;
+    business_strengths?: string[];
+    business_weaknesses?: string[];
+    growth_opportunities?: Array<{
+      opportunity?: string;
+      ak_infinity_service?: string;
+    }>;
+  };
+  review_intelligence?: {
+    sentiment?: string;
+    common_positive?: string[];
+    common_complaints?: string[];
+  };
+  online_presence?: {
+    overall_rating?: string;
+    reasons?: string[];
+    social_media?: {
+      facebook?: boolean;
+      instagram?: boolean;
+      linkedin?: boolean;
+      youtube?: boolean;
+    };
+  };
   digital_presence?: any;
   website_status?: any;
   public_online_presence?: any;
@@ -103,6 +137,9 @@ export interface AIAnalysis {
   };
   website_url?: string;
   google_maps_data?: any;
+  analysis_duration?: number;
+  ai_model?: string;
+  analysis_version?: string;
 }
 
 export interface AISalesCoachReport {
@@ -151,4 +188,44 @@ export interface FollowUpRecommendation {
   is_completed: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface AIConversation {
+  id: string;
+  client_id: string;
+  title?: string;
+  summary?: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AIMessage {
+  id: string;
+  conversation_id: string;
+  client_id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  tokens?: number;
+  model?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AIContext {
+  id: string;
+  client_id: string;
+  business_snapshot?: any;
+  analysis_snapshot?: any;
+  call_guide_snapshot?: any;
+  last_summary?: string;
+  updated_at: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  client_id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  created_at: string;
 }
