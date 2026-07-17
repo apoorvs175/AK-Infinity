@@ -374,7 +374,7 @@ export default function AdminDashboard() {
               {activeSection === 'dashboard' && (
                 <>
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 md:gap-5">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 md:gap-4">
                     {[
                       { label: 'Total Visitors', value: stats.totalVisitors, color: 'from-blue-500 to-blue-600' },
                       { label: 'Today\'s Visitors', value: stats.todayVisitors, color: 'from-cyan-500 to-cyan-600' },

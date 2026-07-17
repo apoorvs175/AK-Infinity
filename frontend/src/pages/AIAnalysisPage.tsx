@@ -221,16 +221,16 @@ export default function AIAnalysisPage() {
 
           {/* Main Content */}
           <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-            <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
+            <div className="max-w-7xl mx-auto space-y-3 md:space-y-6">
               {/* Client Information Section */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6">
                   <h2 className="text-2xl font-bold text-[#0B132B]">Client Information</h2>
                   <p className="text-slate-500 mt-1">Complete details about {client?.business_name || 'the client'}</p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center shrink-0">
                         <Building2 className="w-5 h-5 text-white" />
@@ -253,7 +253,7 @@ export default function AIAnalysisPage() {
                     </div>
                   </div>
 
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
                         <Phone className="w-5 h-5 text-green-700" />
@@ -325,7 +325,7 @@ export default function AIAnalysisPage() {
               </section>
 
               {/* Client Timeline Section */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6">
                   <h2 className="text-2xl font-bold text-[#0B132B]">Client Timeline</h2>
                   <p className="text-slate-500 mt-1">Important dates and milestones</p>
@@ -394,7 +394,7 @@ export default function AIAnalysisPage() {
               </section>
 
               {/* Client Description History Section */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6 flex items-center justify-between gap-4">
                   <div>
                     <h2 className="text-2xl font-bold text-[#0B132B]">Client Description History</h2>
@@ -458,7 +458,6 @@ export default function AIAnalysisPage() {
                       <thead>
                         <tr className="bg-slate-50 border-b border-slate-200">
                           <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
                           <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
                         </tr>
                       </thead>
@@ -467,9 +466,6 @@ export default function AIAnalysisPage() {
                           <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                             <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
                               <span className="text-sm md:text-xs text-slate-700">{formatDate(item.created_date)}</span>
-                            </td>
-                            <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
-                              <span className="text-sm md:text-xs text-slate-700">{formatTime(item.created_date)}</span>
                             </td>
                             <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
                               <p className="text-sm md:text-xs text-slate-700 whitespace-pre-wrap">{item.description}</p>
@@ -487,7 +483,7 @@ export default function AIAnalysisPage() {
               </section>
 
               {/* Business Health Report */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -506,7 +502,7 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* New Premium Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8">
                   {/* Card 1 - Digital Presence */}
                   <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div className="flex items-center gap-3 mb-6 md:mb-4 sm:mb-3">
@@ -836,7 +832,7 @@ export default function AIAnalysisPage() {
               </section>
 
               {/* AI Findings Section */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6">
                   <h2 className="text-2xl font-bold text-[#0B132B]">AI Findings</h2>
                   <p className="text-slate-500 mt-1">Comprehensive analysis of the business</p>
@@ -1039,7 +1035,7 @@ export default function AIAnalysisPage() {
               </section>
 
               {/* Sales Playbook Section */}
-              <section className="mb-8">
+              <section className="mb-6 md:mb-8">
                 <div className="border-b border-slate-200 pb-4 mb-6">
                   <h2 className="text-2xl font-bold text-[#0B132B]">Sales Playbook</h2>
                   <p className="text-slate-500 mt-1">Your guide to a perfect sales call</p>
