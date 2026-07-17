@@ -1,0 +1,7 @@
+-- Add more date columns and boolean flags to clients table
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS second_call BOOLEAN DEFAULT false;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS second_call_date TIMESTAMP WITH TIME ZONE;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS third_call BOOLEAN DEFAULT false;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS third_call_date TIMESTAMP WITH TIME ZONE;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS deal_closed BOOLEAN DEFAULT false;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS deal_closed_date TIMESTAMP WITH TIME ZONE;

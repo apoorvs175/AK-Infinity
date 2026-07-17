@@ -6,18 +6,18 @@ import {
   LogOut,
   Plus,
   MapPin,
-  Edit2,
-  X,
-  Check,
   Phone,
   Menu,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Zap,
-  RefreshCw
+  RefreshCw,
+  X,
+  Edit2,
+  Check
 } from 'lucide-react'
-import type { Client, AIAnalysis } from '../types'
+import type { Client, AIAnalysis, ClientDescriptionHistory } from '../types'
 import { useAuth } from '../lib/auth'
 import AKLogo from '../assets/AK_Main_Logo.webp'
 import StatsCard from '../components/StatsCard';
@@ -32,6 +32,17 @@ const formatCurrency = (amount: number | null | undefined) => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(amount);
+};
+
+// Format date for display (e.g., "17 Jul 2026")
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 };
 
 const StatusChip = ({ checked }: { checked: boolean }) => (
@@ -79,6 +90,8 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
   const [activeFilter, setActiveFilter] = useState<'all' | 'pending-first-call' | 'pending-final-call' | 'completed-deals'>('all');
   const [aiAnalyses, setAiAnalyses] = useState<Record<string, AIAnalysis | null>>({});
   const [analyzingClients, _setAnalyzingClients] = useState<Set<string>>(new Set());
+  // Latest descriptions now hold full object { description: string; created_date: string }
+  const [latestDescriptions, setLatestDescriptions] = useState<Record<string, { description: string; created_date: string } | null>>({});
   const sidebarRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -91,6 +104,22 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
       }
     } catch (error) {
       console.error('Error fetching AI analysis:', error);
+    }
+  }, []);
+
+  const fetchLatestDescription = useCallback(async (clientId: string) => {
+    try {
+      const response = await fetch(`${API_URL}/api/client-description-history/${clientId}/latest`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data) {
+          setLatestDescriptions(prev => ({ ...prev, [clientId]: { description: data.description, created_date: data.created_date } }));
+        } else {
+          setLatestDescriptions(prev => ({ ...prev, [clientId]: null }));
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching latest description:', error);
     }
   }, []);
 
@@ -141,9 +170,12 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
 
   useEffect(() => {
     if (clients.length > 0) {
-      clients.forEach(client => fetchAIAnalysis(client.id));
+      clients.forEach(client => {
+        fetchAIAnalysis(client.id);
+        fetchLatestDescription(client.id);
+      });
     }
-  }, [clients, fetchAIAnalysis]);
+  }, [clients, fetchAIAnalysis, fetchLatestDescription]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -452,7 +484,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
             </div>
 
             {/* Table Container */}
-            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-2xl border-2 border-[#EAB308]/70 hover:border-[#EAB308] shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               {/* Mobile: Natural scrolling, Desktop/Tablet: Fixed scroll */}
               <div className="overflow-x-auto md:overflow-auto md:max-h-[450px] md:scrollbar-hide">
                 <style>{`
@@ -467,7 +499,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                     }
                   }
                 `}</style>
-                <table className="w-full min-w-[1600px]">
+                <table className="w-full min-w-[1900px]">
                   {/* Sticky Header */}
                   <thead className="bg-slate-50 border-b border-slate-100 sticky top-0 z-10">
                     <tr>
@@ -477,11 +509,14 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       <th className="text-left px-0.5 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Address</th>
                       <th className="text-left px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Contact</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Call</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Second Call</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Third Call</th>
                       <th className="text-left px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Description</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Services</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">First Meeting</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Final Call</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Agreement</th>
+                      <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Deal Closed</th>
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Payment</th>
                       <th className="text-right px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Received</th>
                       <th className="text-center px-1 py-1.5 md:px-3 md:py-2.5 text-xs font-semibold text-slate-700 uppercase tracking-wider">Delivered</th>
@@ -494,7 +529,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                     {loading ? (
                       Array.from({ length: 5 }).map((_, i) => (
                         <tr key={i} className="border-b border-slate-50">
-                          {Array.from({ length: 16 }).map((_, j) => (
+                          {Array.from({ length: 19 }).map((_, j) => (
                             <td key={j} className={`${j < 4 ? 'px-0.5' : 'px-1'} py-1.5 md:px-3 md:py-2.5`}>
                               <div className="h-3.5 bg-slate-100 rounded w-16 animate-pulse" />
                             </td>
@@ -503,7 +538,7 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                       ))
                     ) : filteredClients.length === 0 ? (
                       <tr>
-                        <td colSpan={16} className="px-4 py-8 md:px-6 md:py-12 text-center">
+                        <td colSpan={19} className="px-4 py-8 md:px-6 md:py-12 text-center">
                           <div className="flex flex-col items-center gap-2">
                             <Users className="w-12 h-12 md:w-14 md:h-14 mx-auto text-slate-200 mb-2" />
                             <p className="text-sm md:text-base font-semibold text-[#0B132B]">No Clients Found</p>
@@ -550,7 +585,13 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                                     className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50"
                                   />
                                 ) : (
-                                  <span className="text-sm font-medium text-[#0B132B] break-words whitespace-normal">{client.business_name}</span>
+                                  <Link
+                                    to={`/admin/clients/${client.id}/ai-analysis`}
+                                    state={{ from: location.pathname }}
+                                    className="text-sm font-medium text-[#0B132B] break-words whitespace-normal hover:text-[#EAB308] hover:underline transition-all cursor-pointer inline-block"
+                                  >
+                                    {client.business_name}
+                                  </Link>
                                 )}
                               </td>
 
@@ -660,27 +701,64 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                                 )}
                               </td>
 
-                              {/* Description */}
-                              <td className="px-1 py-1.5 md:px-3 md:py-2.5">
+                              {/* Second Call */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
                                 {isEditing ? (
-                                  <textarea
-                                    value={currentValues.description || ''}
-                                    onChange={(e) => setEditValues(prev => ({ ...prev, description: e.target.value }))}
-                                    className="w-full px-2 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50 resize-none"
-                                    placeholder="Description"
-                                    rows={2}
-                                  />
+                                  <button
+                                    onClick={() => setEditValues(prev => ({ ...prev, second_call: !prev.second_call }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.second_call
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
+                                  >
+                                    {currentValues.second_call && <Check className="w-2.5 h-2.5" />}
+                                  </button>
                                 ) : (
+                                  <StatusChip checked={client.second_call} />
+                                )}
+                              </td>
+
+                              {/* Third Call */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
+                                  <button
+                                    onClick={() => setEditValues(prev => ({ ...prev, third_call: !prev.third_call }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.third_call
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
+                                  >
+                                    {currentValues.third_call && <Check className="w-2.5 h-2.5" />}
+                                  </button>
+                                ) : (
+                                  <StatusChip checked={client.third_call} />
+                                )}
+                              </td>
+
+                              {/* Description (Read-only) */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5">
+                                {latestDescriptions[client.id] ? (
                                   <div className="relative group">
-                                    <span className="text-xs text-slate-600 line-clamp-2 block">
-                                      {client.description || '—'}
-                                    </span>
-                                    {client.description && client.description.length > 50 && (
+                                    <div className="space-y-1">
+                                      <span className="text-xs text-slate-800 font-medium line-clamp-2 block">
+                                        {latestDescriptions[client.id].description}
+                                      </span>
+                                      {latestDescriptions[client.id].created_date && (
+                                        <div className="text-[10px] text-slate-500">
+                                          {formatDate(latestDescriptions[client.id].created_date)}
+                                        </div>
+                                      )}
+                                    </div>
+                                    {latestDescriptions[client.id].description.length > 50 && (
                                       <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-pre-wrap z-20 max-w-xs shadow-lg">
-                                        {client.description}
+                                        {latestDescriptions[client.id].description}
                                       </div>
                                     )}
                                   </div>
+                                ) : (
+                                  <span className="text-xs text-slate-400">—</span>
                                 )}
                               </td>
 
@@ -769,6 +847,24 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
                                   </button>
                                 ) : (
                                   <StatusChip checked={client.agreement_signed} />
+                                )}
+                              </td>
+
+                              {/* Deal Closed */}
+                              <td className="px-1 py-1.5 md:px-3 md:py-2.5 text-center">
+                                {isEditing ? (
+                                  <button
+                                    onClick={() => setEditValues(prev => ({ ...prev, deal_closed: !prev.deal_closed }))}
+                                    className={`w-4 h-4 rounded border flex items-center justify-center mx-auto transition-all ${
+                                      currentValues.deal_closed
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'border-slate-300 hover:border-slate-400'
+                                    }`}
+                                  >
+                                    {currentValues.deal_closed && <Check className="w-2.5 h-2.5" />}
+                                  </button>
+                                ) : (
+                                  <StatusChip checked={client.deal_closed} />
                                 )}
                               </td>
 

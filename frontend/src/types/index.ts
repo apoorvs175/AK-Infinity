@@ -65,12 +65,15 @@ export interface Client {
   google_maps_link?: string;
   owner_contact_number?: string;
   first_call: boolean;
+  second_call: boolean;
+  third_call: boolean;
   description?: string;
   website: boolean;
   collaboration: boolean;
   first_meeting: boolean;
   final_call: boolean;
   agreement_signed: boolean;
+  deal_closed: boolean;
   payment_amount?: number;
   amount_received?: number;
   project_delivered: boolean;
@@ -79,9 +82,12 @@ export interface Client {
   updated_at: string;
   website_url?: string;
   first_call_date?: string;
+  second_call_date?: string;
+  third_call_date?: string;
   first_meeting_date?: string;
   final_call_date?: string;
   agreement_date?: string;
+  deal_closed_date?: string;
   last_description_updated_at?: string;
 }
 
@@ -220,6 +226,15 @@ export interface AIContext {
   call_guide_snapshot?: any;
   last_summary?: string;
   updated_at: string;
+}
+
+export interface ClientDescriptionHistory {
+  id: string;
+  client_id: string;
+  description: string;
+  created_date: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface ChatMessage {

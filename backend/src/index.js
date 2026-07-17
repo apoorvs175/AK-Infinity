@@ -379,12 +379,15 @@ app.post('/api/clients', async (req, res) => {
     owner_contact_number,
     region,
     first_call: false,
+    second_call: false,
+    third_call: false,
     description: '',
     website: false,
     collaboration: false,
     first_meeting: false,
     final_call: false,
     agreement_signed: false,
+    deal_closed: false,
     project_delivered: false
   };
 
@@ -428,8 +431,11 @@ app.put('/api/clients/:id', async (req, res) => {
     website,
     collaboration,
     first_meeting,
+    second_call,
+    third_call,
     final_call,
     agreement_signed,
+    deal_closed,
     payment_amount,
     amount_received,
     project_delivered,
@@ -447,8 +453,11 @@ app.put('/api/clients/:id', async (req, res) => {
   if (website !== undefined) updateData.website = website;
   if (collaboration !== undefined) updateData.collaboration = collaboration;
   if (first_meeting !== undefined) updateData.first_meeting = first_meeting;
+  if (second_call !== undefined) updateData.second_call = second_call;
+  if (third_call !== undefined) updateData.third_call = third_call;
   if (final_call !== undefined) updateData.final_call = final_call;
   if (agreement_signed !== undefined) updateData.agreement_signed = agreement_signed;
+  if (deal_closed !== undefined) updateData.deal_closed = deal_closed;
   if (payment_amount !== undefined) updateData.payment_amount = payment_amount;
   if (amount_received !== undefined) updateData.amount_received = amount_received;
   if (project_delivered !== undefined) updateData.project_delivered = project_delivered;
@@ -473,11 +482,20 @@ app.put('/api/clients/:id', async (req, res) => {
     if (first_meeting === true && !currentClient.first_meeting_date) {
       updateData.first_meeting_date = new Date().toISOString();
     }
+    if (second_call === true && !currentClient.second_call_date) {
+      updateData.second_call_date = new Date().toISOString();
+    }
+    if (third_call === true && !currentClient.third_call_date) {
+      updateData.third_call_date = new Date().toISOString();
+    }
     if (final_call === true && !currentClient.final_call_date) {
       updateData.final_call_date = new Date().toISOString();
     }
     if (agreement_signed === true && !currentClient.agreement_date) {
       updateData.agreement_date = new Date().toISOString();
+    }
+    if (deal_closed === true && !currentClient.deal_closed_date) {
+      updateData.deal_closed_date = new Date().toISOString();
     }
 
     // Update last_description_updated_at if description is changed
@@ -517,6 +535,101 @@ app.delete('/api/clients/:id', async (req, res) => {
   }
 
   res.json({ message: 'Client deleted successfully' });
+});
+
+// Client Description History Endpoints
+app.get('/api/client-description-history/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('client_description_history')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_date', { ascending: false });
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json(data);
+  }
+  res.json([]);
+});
+
+app.post('/api/client-description-history/:clientId', async (req, res) => {
+  const { clientId } = req.params;
+  const { description } = req.body;
+  if (!description || description.trim() === '') {
+    return res.status(400).json({ error: 'Description is required' });
+  }
+  if (supabase) {
+    // First, check if there's an existing description to migrate
+    const { data: client } = await supabase
+      .from('clients')
+      .select('description')
+      .eq('id', clientId)
+      .single();
+    // If client has existing non-empty description, migrate it first
+    if (client && client.description && client.description.trim() !== '') {
+      await supabase
+        .from('client_description_history')
+        .insert([{
+          client_id: clientId,
+          description: client.description,
+          created_date: new Date().toISOString()
+        }]);
+      // Clear the old description field to avoid duplication
+      await supabase
+        .from('clients')
+        .update({ description: '' })
+        .eq('id', clientId);
+    }
+    // Now add the new description
+    const { data, error } = await supabase
+      .from('client_description_history')
+      .insert([{
+        client_id: clientId,
+        description: description.trim(),
+        created_date: new Date().toISOString()
+      }])
+      .select()
+      .single();
+    if (error) return res.status(500).json({ error: error.message });
+    return res.status(201).json(data);
+  }
+  return res.status(201).json({ id: Date.now(), client_id: clientId, description: description.trim(), created_date: new Date().toISOString() });
+});
+
+// Helper endpoint to get latest description
+app.get('/api/client-description-history/:clientId/latest', async (req, res) => {
+  const { clientId } = req.params;
+  if (supabase) {
+    // First, check client_description_history for latest record
+    const { data: historyRecord, error: historyError } = await supabase
+      .from('client_description_history')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (historyError && historyError.code !== 'PGRST116') return res.status(500).json({ error: historyError.message });
+    
+    if (historyRecord) {
+      return res.json(historyRecord);
+    }
+    
+    // If no history, check the clients table's description field (old clients)
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('description')
+      .eq('id', clientId)
+      .single();
+    if (clientError && clientError.code !== 'PGRST116') return res.status(500).json({ error: clientError.message });
+    
+    if (client && client.description) {
+      // Return description without created_date
+      return res.json({ description: client.description });
+    }
+    
+    return res.json(null);
+  }
+  res.json(null);
 });
 
 // AI Analysis Endpoints
