@@ -19,7 +19,6 @@ import {
   Cpu,
   Database,
   Building2,
-  Calendar,
   Plus,
   X,
   Check

@@ -17,7 +17,7 @@ import {
   Edit2,
   Check
 } from 'lucide-react'
-import type { Client, AIAnalysis, ClientDescriptionHistory } from '../types'
+import type { Client, AIAnalysis } from '../types'
 import { useAuth } from '../lib/auth'
 import AKLogo from '../assets/AK_Main_Logo.webp'
 import StatsCard from '../components/StatsCard';
@@ -739,27 +739,31 @@ export default function ClientDetailsPage({ region }: ClientDetailsPageProps) {
 
                               {/* Description (Read-only) */}
                               <td className="px-1 py-1.5 md:px-3 md:py-2.5">
-                                {latestDescriptions[client.id] ? (
-                                  <div className="relative group">
-                                    <div className="space-y-1">
-                                      <span className="text-xs text-slate-800 font-medium line-clamp-2 block">
-                                        {latestDescriptions[client.id].description}
-                                      </span>
-                                      {latestDescriptions[client.id].created_date && (
-                                        <div className="text-[10px] text-slate-500">
-                                          {formatDate(latestDescriptions[client.id].created_date)}
+                                {(() => {
+                                  const latestDesc = latestDescriptions[client.id];
+                                  if (!latestDesc) {
+                                    return <span className="text-xs text-slate-400">—</span>;
+                                  }
+                                  return (
+                                    <div className="relative group">
+                                      <div className="space-y-1">
+                                        <span className="text-xs text-slate-800 font-medium line-clamp-2 block">
+                                          {latestDesc.description}
+                                        </span>
+                                        {latestDesc.created_date && (
+                                          <div className="text-[10px] text-slate-500">
+                                            {formatDate(latestDesc.created_date)}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {latestDesc.description.length > 50 && (
+                                        <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-pre-wrap z-20 max-w-xs shadow-lg">
+                                          {latestDesc.description}
                                         </div>
                                       )}
                                     </div>
-                                    {latestDescriptions[client.id].description.length > 50 && (
-                                      <div className="absolute bottom-full left-0 mb-1 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-pre-wrap z-20 max-w-xs shadow-lg">
-                                        {latestDescriptions[client.id].description}
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <span className="text-xs text-slate-400">—</span>
-                                )}
+                                  );
+                                })()}
                               </td>
 
                               {/* Services */}
