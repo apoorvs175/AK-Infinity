@@ -862,7 +862,7 @@ export default function AIAnalysisPage() {
                       </p>
                     </div>
                   ) : analysis?.business_summary ? (
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <p className="text-base md:text-sm sm:text-[13px] text-slate-800 leading-relaxed whitespace-pre-wrap">
                         {analysis.business_summary}
                       </p>
@@ -879,22 +879,22 @@ export default function AIAnalysisPage() {
                 {/* Key Insights Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-4 sm:gap-3 mb-6 md:mb-5 sm:mb-4">
                   {/* Industry */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Industry</h4>
                     <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.industry || 'Not available'}</p>
                   </div>
                   {/* Target Customers */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Target Customers</h4>
                     <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.target_customers || 'Not enough data'}</p>
                   </div>
                   {/* Business Model */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Business Model</h4>
                     <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.business_model || 'Not enough data'}</p>
                   </div>
                   {/* Unique Selling Proposition */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">USP</h4>
                     <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.unique_selling_proposition || 'Not enough data'}</p>
                   </div>
@@ -909,7 +909,7 @@ export default function AIAnalysisPage() {
                       </div>
                       Strengths
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.business_strengths.map((strength: string, index: number) => (
                           <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
@@ -931,7 +931,7 @@ export default function AIAnalysisPage() {
                       </div>
                       Weaknesses
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.business_weaknesses.map((weakness: string, index: number) => (
                           <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
@@ -953,7 +953,7 @@ export default function AIAnalysisPage() {
                       </div>
                       Key Products/Services
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.key_products_services.map((product: string, index: number) => (
                           <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
@@ -975,7 +975,7 @@ export default function AIAnalysisPage() {
                       </div>
                       Growth Opportunities
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <ul className="space-y-3 md:space-y-2.5 sm:space-y-2">
                         {analysis.business_intelligence.growth_opportunities.map((opp: any, index: number) => (
                           <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex flex-col gap-1">
@@ -1006,7 +1006,7 @@ export default function AIAnalysisPage() {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-3 sm:gap-2.5">
                       {analysis.suggested_services.map((service: any, index: number) => (
-                        <div key={index} className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                        <div key={index} className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                           <p className="font-semibold text-[#EAB308] text-base md:text-sm">{service.service}</p>
                           <p className="text-sm md:text-xs text-slate-600 mt-1">{service.reason}</p>
                         </div>
@@ -1024,7 +1024,7 @@ export default function AIAnalysisPage() {
                       </div>
                       AI Recommendations
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                       <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.improvement_opportunities.map((opp: string, index: number) => (
                           <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
@@ -1053,7 +1053,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Opening Strategy
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5">
                     <div>
                       <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">1. Greeting</h4>
                       <p className="text-base md:text-sm sm:text-[13px] text-slate-800 font-medium">
@@ -1083,7 +1083,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Conversation Flow
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-3 md:space-y-2.5 sm:space-y-2 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-3 md:space-y-2.5 sm:space-y-2">
                     {salesCoach?.talking_points?.length > 0 ? (
                       salesCoach.talking_points.map((tp: any, index: number) => (
                         <div key={index} className="flex items-start gap-3 md:gap-2.5 sm:gap-2 p-3 md:p-2.5 sm:p-2 bg-slate-50 rounded-lg">
@@ -1120,7 +1120,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Questions to Ask
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                       {salesCoach?.questions_to_ask?.length > 0 ? (
                         salesCoach.questions_to_ask.map((q: string, index: number) => (
@@ -1154,7 +1154,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Objections
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5">
                     {salesCoach?.objection_handling?.length > 0 ? (
                       salesCoach.objection_handling.map((obj: any, index: number) => (
                         <div key={index} className="p-3 md:p-2.5 sm:p-2 border border-slate-200 rounded-lg">
@@ -1206,7 +1206,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Closing Strategy
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <p className="text-base md:text-sm sm:text-[13px] text-slate-800">
                       {salesCoach?.closing_strategy || 'Sir, thank you for your time. Aaj humne discuss kiya ki kaise aapki online presence improve ho sakti hai aur leads badh sakti hain. Main aapko ek free 15-minute ka demo dekar dikhata hoon ki hum kaise kaam karte hain. Kya aapke paas Thursday ya Friday koi time hai?'}
                     </p>
@@ -1221,7 +1221,7 @@ export default function AIAnalysisPage() {
                     </div>
                     Next Follow-up
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white rounded-2xl p-4 md:p-3 sm:p-2.5">
                     <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                       {salesCoach?.follow_up_recommendations?.length > 0 ? (
                         salesCoach.follow_up_recommendations.map((rec: string, index: number) => (
