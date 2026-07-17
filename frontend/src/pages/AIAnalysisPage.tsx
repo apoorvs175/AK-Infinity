@@ -297,15 +297,15 @@ export default function AIAnalysisPage() {
                     </div>
                   </div>
 
-                  <div className="bg-white border-2 border-[#EAB308]/40 hover:border-[#EAB308] rounded-2xl p-4 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 md:col-span-2 xl:col-span-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-                        <MapPin className="w-5 h-5 text-slate-600" />
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 md:col-span-2 xl:col-span-1">
+                    <div className="flex items-center gap-3 mb-4 md:mb-3 sm:mb-2">
+                      <div className="w-10 h-10 md:w-8 md:h-8 sm:w-7 sm:h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                        <MapPin className="w-5 h-5 md:w-4 md:h-4 sm:w-3.5 sm:h-3.5 text-slate-600" />
                       </div>
                       <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Address</span>
                     </div>
-                    <div className="space-y-3">
-                      <p className="text-sm md:text-base font-medium text-[#0B132B] leading-relaxed break-words">
+                    <div className="space-y-3 md:space-y-2 sm:space-y-1.5">
+                      <p className="text-sm md:text-xs sm:text-[11px] font-medium text-[#0B132B] leading-relaxed break-words">
                         {client?.address_name || '-'}
                       </p>
                       {client?.google_maps_link && (
@@ -313,9 +313,9 @@ export default function AIAnalysisPage() {
                           href={client.google_maps_link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 rounded-lg transition-all duration-200"
+                          className="inline-flex items-center gap-2 text-sm md:text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 md:px-2.5 md:py-1.5 sm:px-2 sm:py-1 rounded-lg transition-all duration-200"
                         >
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="w-4 h-4 md:w-3.5 md:h-3.5" />
                           View Location
                         </a>
                       )}
@@ -335,57 +335,57 @@ export default function AIAnalysisPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200">
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Event</th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                        <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Event</th>
+                        <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
                       <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">Client Added</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">Client Added</span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{formatDate(client?.created_at)}</span>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">First Call</span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{client?.first_call_date ? formatDate(client.first_call_date) : ''}</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{formatDate(client?.created_at)}</span>
                         </td>
                       </tr>
                       <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">Second Call</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">First Call</span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{client?.second_call_date ? formatDate(client.second_call_date) : ''}</span>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">Third Call</span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{client?.third_call_date ? formatDate(client.third_call_date) : ''}</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{client?.first_call_date ? formatDate(client.first_call_date) : ''}</span>
                         </td>
                       </tr>
                       <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">Final Call</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">Second Call</span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{client?.final_call_date ? formatDate(client.final_call_date) : ''}</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{client?.second_call_date ? formatDate(client.second_call_date) : ''}</span>
                         </td>
                       </tr>
                       <tr className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-[#0B132B]">Deal Closed</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">Third Call</span>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-slate-700">{client?.deal_closed_date ? formatDate(client.deal_closed_date) : ''}</span>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{client?.third_call_date ? formatDate(client.third_call_date) : ''}</span>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">Final Call</span>
+                        </td>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{client?.final_call_date ? formatDate(client.final_call_date) : ''}</span>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs font-medium text-[#0B132B]">Deal Closed</span>
+                        </td>
+                        <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                          <span className="text-sm md:text-xs text-slate-700">{client?.deal_closed_date ? formatDate(client.deal_closed_date) : ''}</span>
                         </td>
                       </tr>
                     </tbody>
@@ -415,25 +415,25 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {isAddingDescription && (
-                  <div className="mb-6 bg-white rounded-2xl border-2 border-[#EAB308]/70 hover:border-[#EAB308] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-4 md:p-6">
-                    <label className="block text-sm font-medium text-slate-700 mb-2">New Description</label>
+                  <div className="mb-6 bg-white rounded-2xl border-2 border-[#EAB308]/70 hover:border-[#EAB308] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-6 md:p-4 sm:p-3">
+                    <label className="block text-sm md:text-xs font-medium text-slate-700 mb-2">New Description</label>
                     <textarea
                       value={newDescriptionText}
                       onChange={(e) => setNewDescriptionText(e.target.value)}
                       placeholder="Enter description here..."
                       rows={4}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50 resize-none"
+                      className="w-full px-3 py-2 md:px-2.5 md:py-1.5 sm:px-2 sm:py-1 border border-slate-300 rounded-lg text-sm md:text-xs focus:outline-none focus:ring-1 focus:ring-[#EAB308]/50 focus:border-[#EAB308]/50 resize-none"
                     />
-                    <div className="flex items-center gap-2 mt-4">
+                    <div className="flex items-center gap-2 mt-4 md:mt-3 sm:mt-2">
                       <button
                         onClick={addDescription}
                         disabled={!newDescriptionText.trim() || isSubmitting}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#EAB308] hover:bg-[#d4a207] disabled:opacity-50 disabled:cursor-not-allowed text-[#0B132B] rounded-lg text-sm font-medium transition-all"
+                        className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1.5 sm:px-2.5 sm:py-1 bg-[#EAB308] hover:bg-[#d4a207] disabled:opacity-50 disabled:cursor-not-allowed text-[#0B132B] rounded-lg text-sm md:text-xs font-medium transition-all"
                       >
                         {isSubmitting ? (
-                          <div className="w-4 h-4 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin" />
+                          <div className="w-4 h-4 md:w-3.5 md:h-3.5 border-2 border-[#0B132B] border-t-transparent rounded-full animate-spin" />
                         ) : (
-                          <Check className="w-4 h-4" />
+                          <Check className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         )}
                         Save
                       </button>
@@ -443,9 +443,9 @@ export default function AIAnalysisPage() {
                           setNewDescriptionText('')
                         }}
                         disabled={isSubmitting}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 rounded-lg text-sm font-medium transition-all"
+                        className="flex items-center gap-2 px-4 py-2 md:px-3 md:py-1.5 sm:px-2.5 sm:py-1 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed text-slate-700 rounded-lg text-sm md:text-xs font-medium transition-all"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         Cancel
                       </button>
                     </div>
@@ -457,29 +457,29 @@ export default function AIAnalysisPage() {
                     <table className="w-full">
                       <thead>
                         <tr className="bg-slate-50 border-b border-slate-200">
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
-                          <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
+                          <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                          <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
+                          <th className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-200">
                         {descriptionHistory.map((item) => (
                           <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-6 py-4">
-                              <span className="text-sm text-slate-700">{formatDate(item.created_date)}</span>
+                            <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                              <span className="text-sm md:text-xs text-slate-700">{formatDate(item.created_date)}</span>
                             </td>
-                            <td className="px-6 py-4">
-                              <span className="text-sm text-slate-700">{formatTime(item.created_date)}</span>
+                            <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                              <span className="text-sm md:text-xs text-slate-700">{formatTime(item.created_date)}</span>
                             </td>
-                            <td className="px-6 py-4">
-                              <p className="text-sm text-slate-700 whitespace-pre-wrap">{item.description}</p>
+                            <td className="px-6 py-4 md:px-4 md:py-3 sm:px-3 sm:py-2">
+                              <p className="text-sm md:text-xs text-slate-700 whitespace-pre-wrap">{item.description}</p>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   ) : (
-                    <div className="p-8 text-center text-slate-500">
+                    <div className="p-8 md:p-6 sm:p-4 text-center text-slate-500">
                       No description history available.
                     </div>
                   )}
@@ -508,60 +508,60 @@ export default function AIAnalysisPage() {
                 {/* New Premium Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                   {/* Card 1 - Digital Presence */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shrink-0">
-                        <Globe className="w-6 h-6 text-white" />
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div className="flex items-center gap-3 mb-6 md:mb-4 sm:mb-3">
+                      <div className="w-12 h-12 md:w-10 md:h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shrink-0">
+                        <Globe className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-[#0B132B]">Digital Presence</h3>
+                        <h3 className="text-lg md:text-base sm:text-sm font-bold text-[#0B132B]">Digital Presence</h3>
                         <p className="text-xs text-slate-500">Website, Google Business &amp; Social Presence</p>
                       </div>
                     </div>
 
                     {/* Section A - Website Status */}
-                    <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Website Status</h4>
-                      <div className="space-y-3">
+                    <div className="mb-5 md:mb-4 sm:mb-3">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Website Status</h4>
+                      <div className="space-y-3 md:space-y-2 sm:space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-slate-700">Availability</span>
+                          <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">Availability</span>
                           {analysis?.digital_presence?.available || analysis?.website_url ? (
-                            <div className="flex items-center gap-1.5">
-                              <CheckCircle2 className="w-4 h-4 text-green-500" />
-                              <span className="text-sm font-medium text-green-700">Available</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <CheckCircle2 className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-green-500" />
+                              <span className="text-sm md:text-xs font-medium text-green-700">Available</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1.5">
-                              <XCircle className="w-4 h-4 text-red-500" />
-                              <span className="text-sm font-medium text-red-700">Not Found</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <XCircle className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-red-500" />
+                              <span className="text-sm md:text-xs font-medium text-red-700">Not Found</span>
                             </div>
                           )}
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-slate-700">HTTPS</span>
+                          <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">HTTPS</span>
                           {analysis?.digital_presence?.https ? (
-                            <div className="flex items-center gap-1.5">
-                              <CheckCircle2 className="w-4 h-4 text-green-500" />
-                              <span className="text-sm font-medium text-green-700">Enabled</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <CheckCircle2 className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-green-500" />
+                              <span className="text-sm md:text-xs font-medium text-green-700">Enabled</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1.5">
-                              <XCircle className="w-4 h-4 text-red-500" />
-                              <span className="text-sm font-medium text-red-700">Disabled</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <XCircle className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-red-500" />
+                              <span className="text-sm md:text-xs font-medium text-red-700">Disabled</span>
                             </div>
                           )}
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-slate-700">Mobile Friendly</span>
+                          <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">Mobile Friendly</span>
                           {analysis?.digital_presence?.mobileResponsive ? (
-                            <div className="flex items-center gap-1.5">
-                              <CheckCircle2 className="w-4 h-4 text-green-500" />
-                              <span className="text-sm font-medium text-green-700">Yes</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <CheckCircle2 className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-green-500" />
+                              <span className="text-sm md:text-xs font-medium text-green-700">Yes</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1.5">
-                              <XCircle className="w-4 h-4 text-red-500" />
-                              <span className="text-sm font-medium text-red-700">No</span>
+                            <div className="flex items-center gap-1.5 md:gap-1">
+                              <XCircle className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-red-500" />
+                              <span className="text-sm md:text-xs font-medium text-red-700">No</span>
                             </div>
                           )}
                         </div>
@@ -569,21 +569,21 @@ export default function AIAnalysisPage() {
                     </div>
 
                     {/* Divider */}
-                    <div className="border-b border-slate-100 mb-5"></div>
+                    <div className="border-b border-slate-100 mb-5 md:mb-4 sm:mb-3"></div>
 
                     {/* Section B - Google Business Profile */}
-                    <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Google Business Profile</h4>
-                      <div className="space-y-2">
+                    <div className="mb-5 md:mb-4 sm:mb-3">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Google Business Profile</h4>
+                      <div className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         <div>
-                          <span className="text-xs text-slate-500 block">Business Name</span>
-                          <p className="text-sm font-medium text-[#0B132B] truncate">
+                          <span className="text-xs sm:text-[11px] text-slate-500 block">Business Name</span>
+                          <p className="text-sm md:text-xs sm:text-[11px] font-medium text-[#0B132B] truncate">
                             {analysis?.google_maps_data?.name || 'Information Not Available'}
                           </p>
                         </div>
                         <div>
-                          <span className="text-xs text-slate-500 block">Category</span>
-                          <p className="text-sm font-medium text-slate-700 truncate">
+                          <span className="text-xs sm:text-[11px] text-slate-500 block">Category</span>
+                          <p className="text-sm md:text-xs sm:text-[11px] font-medium text-slate-700 truncate">
                             {analysis?.business_intelligence?.business_category || analysis?.google_maps_data?.category || 'Information Not Available'}
                           </p>
                         </div>
@@ -591,12 +591,12 @@ export default function AIAnalysisPage() {
                     </div>
 
                     {/* Divider */}
-                    <div className="border-b border-slate-100 mb-5"></div>
+                    <div className="border-b border-slate-100 mb-5 md:mb-4 sm:mb-3"></div>
 
                     {/* Section C - Social Presence */}
                     <div className="mt-auto">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Social Presence</h4>
-                      <div className="flex flex-wrap gap-2 mb-3">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Social Presence</h4>
+                      <div className="flex flex-wrap gap-2 md:gap-1.5 sm:gap-1 mb-3 md:mb-2 sm:mb-1.5">
                         {[
                           { key: 'facebook', label: 'Facebook' },
                           { key: 'instagram', label: 'Instagram' },
@@ -605,7 +605,7 @@ export default function AIAnalysisPage() {
                         ].map((platform) => (
                           <span
                             key={platform.key}
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            className={`px-3 py-1 md:px-2 md:py-0.5 sm:px-1.5 sm:py-0.5 rounded-full text-xs font-medium ${
                               analysis?.online_presence?.social_media?.[platform.key as keyof typeof analysis.online_presence.social_media]
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-slate-100 text-slate-600'
@@ -616,8 +616,8 @@ export default function AIAnalysisPage() {
                         ))}
                       </div>
                       <div>
-                        <p className="text-xs text-slate-500 mb-1">Overall Social Presence</p>
-                        <span className={`text-sm font-bold px-3 py-1 rounded-full ${
+                        <p className="text-xs sm:text-[11px] text-slate-500 mb-1 md:mb-0.5">Overall Social Presence</p>
+                        <span className={`text-sm md:text-xs font-bold px-3 py-1 md:px-2 md:py-0.5 sm:px-1.5 sm:py-0.5 rounded-full ${
                           analysis?.online_presence?.overall_rating === 'Excellent' ? 'bg-green-100 text-green-700' :
                           analysis?.online_presence?.overall_rating === 'Good' ? 'bg-blue-100 text-blue-700' :
                           analysis?.online_presence?.overall_rating === 'Fair' ? 'bg-yellow-100 text-yellow-700' :
@@ -630,57 +630,57 @@ export default function AIAnalysisPage() {
                   </div>
 
                   {/* Card 2 - Business Reputation */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shrink-0">
-                        <Star className="w-6 h-6 text-white fill-white" />
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div className="flex items-center gap-3 mb-6 md:mb-4 sm:mb-3">
+                      <div className="w-12 h-12 md:w-10 md:h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shrink-0">
+                        <Star className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 text-white fill-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-[#0B132B]">Business Reputation</h3>
+                        <h3 className="text-lg md:text-base sm:text-sm font-bold text-[#0B132B]">Business Reputation</h3>
                         <p className="text-xs text-slate-500">Google Reviews &amp; Customer Trust</p>
                       </div>
                     </div>
 
                     {/* Google Rating */}
-                    <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Google Rating</h4>
+                    <div className="mb-5 md:mb-4 sm:mb-3">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Google Rating</h4>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-extrabold text-[#0B132B]">
+                        <span className="text-4xl md:text-3xl sm:text-2xl font-extrabold text-[#0B132B]">
                           {analysis?.google_reviews?.average_rating || '0'}
                         </span>
-                        <span className="text-xl text-slate-400">/ 5</span>
+                        <span className="text-xl md:text-lg sm:text-base text-slate-400">/ 5</span>
                       </div>
-                      <div className="mt-2">
+                      <div className="mt-2 md:mt-1.5">
                         {renderStars(analysis?.google_reviews?.average_rating || 0)}
                       </div>
                     </div>
 
                     {/* Divider */}
-                    <div className="border-b border-slate-100 mb-5"></div>
+                    <div className="border-b border-slate-100 mb-5 md:mb-4 sm:mb-3"></div>
 
                     {/* Total Reviews */}
-                    <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Total Reviews</h4>
-                      <p className="text-2xl font-bold text-[#0B132B]">
+                    <div className="mb-5 md:mb-4 sm:mb-3">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 md:mb-1.5">Total Reviews</h4>
+                      <p className="text-2xl md:text-xl sm:text-lg font-bold text-[#0B132B]">
                         {analysis?.google_reviews?.total_reviews ? `${analysis.google_reviews.total_reviews}` : '0'}
                       </p>
-                      <p className="text-xs text-slate-500">Customer Reviews</p>
+                      <p className="text-xs sm:text-[11px] text-slate-500">Customer Reviews</p>
                     </div>
 
                     {/* Divider */}
-                    <div className="border-b border-slate-100 mb-5"></div>
+                    <div className="border-b border-slate-100 mb-5 md:mb-4 sm:mb-3"></div>
 
                     {/* Review Summary */}
                     <div className="mt-auto">
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Review Summary</h4>
-                      <div className="space-y-2">
+                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Review Summary</h4>
+                      <div className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {/* Positive Reviews */}
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                            <span className="text-sm text-slate-700">Positive</span>
+                          <div className="flex items-center gap-2 md:gap-1.5">
+                            <div className="w-3 h-3 md:w-2.5 md:h-2.5 rounded-full bg-green-500"></div>
+                            <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">Positive</span>
                           </div>
-                          <span className="text-sm font-bold text-green-700">
+                          <span className="text-sm md:text-xs font-bold text-green-700">
                             {analysis?.review_intelligence?.sentiment === 'Positive' ? '82%' : 
                              analysis?.review_intelligence?.sentiment === 'Mixed' ? '45%' : 
                              analysis?.review_intelligence?.sentiment === 'Negative' ? '10%' : '0%'}
@@ -688,11 +688,11 @@ export default function AIAnalysisPage() {
                         </div>
                         {/* Neutral Reviews */}
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <span className="text-sm text-slate-700">Neutral</span>
+                          <div className="flex items-center gap-2 md:gap-1.5">
+                            <div className="w-3 h-3 md:w-2.5 md:h-2.5 rounded-full bg-yellow-500"></div>
+                            <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">Neutral</span>
                           </div>
-                          <span className="text-sm font-bold text-yellow-700">
+                          <span className="text-sm md:text-xs font-bold text-yellow-700">
                             {analysis?.review_intelligence?.sentiment === 'Positive' ? '12%' : 
                              analysis?.review_intelligence?.sentiment === 'Mixed' ? '35%' : 
                              analysis?.review_intelligence?.sentiment === 'Negative' ? '20%' : '0%'}
@@ -700,11 +700,11 @@ export default function AIAnalysisPage() {
                         </div>
                         {/* Negative Reviews */}
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                            <span className="text-sm text-slate-700">Negative</span>
+                          <div className="flex items-center gap-2 md:gap-1.5">
+                            <div className="w-3 h-3 md:w-2.5 md:h-2.5 rounded-full bg-red-500"></div>
+                            <span className="text-sm md:text-xs sm:text-[11px] text-slate-700">Negative</span>
                           </div>
-                          <span className="text-sm font-bold text-red-700">
+                          <span className="text-sm md:text-xs font-bold text-red-700">
                             {analysis?.review_intelligence?.sentiment === 'Positive' ? '6%' : 
                              analysis?.review_intelligence?.sentiment === 'Mixed' ? '20%' : 
                              analysis?.review_intelligence?.sentiment === 'Negative' ? '70%' : '0%'}
@@ -715,20 +715,20 @@ export default function AIAnalysisPage() {
                   </div>
 
                   {/* Card 3 - AI Confidence */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center shrink-0">
-                        <Award className="w-6 h-6 text-white" />
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div className="flex items-center gap-3 mb-6 md:mb-4 sm:mb-3">
+                      <div className="w-12 h-12 md:w-10 md:h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center shrink-0">
+                        <Award className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-[#0B132B]">AI Confidence</h3>
+                        <h3 className="text-lg md:text-base sm:text-sm font-bold text-[#0B132B]">AI Confidence</h3>
                         <p className="text-xs text-slate-500">Overall AI Analysis Score</p>
                       </div>
                     </div>
 
                     {/* Circular Progress Indicator */}
-                    <div className="flex justify-center mb-6">
-                      <div className="relative w-40 h-40">
+                    <div className="flex justify-center mb-6 md:mb-4 sm:mb-3">
+                      <div className="relative w-40 h-40 md:w-36 md:h-36 sm:w-32 sm:h-32">
                         {/* Background Circle */}
                         <svg className="w-full h-full" viewBox="0 0 100 100">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
@@ -747,7 +747,7 @@ export default function AIAnalysisPage() {
                           />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="text-4xl font-extrabold text-[#0B132B]">
+                          <span className="text-4xl md:text-3xl sm:text-2xl font-extrabold text-[#0B132B]">
                             {analysis?.confidence_score || 0}%
                           </span>
                           <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">
@@ -758,13 +758,13 @@ export default function AIAnalysisPage() {
                     </div>
 
                     {/* Info Panel */}
-                    <div className="mt-auto bg-slate-50 rounded-xl p-4">
-                      <p className="text-sm text-slate-700 leading-relaxed">
+                    <div className="mt-auto bg-slate-50 rounded-xl p-4 md:p-3 sm:p-2.5">
+                      <p className="text-sm md:text-xs sm:text-[11px] text-slate-700 leading-relaxed">
                         This score represents how confident the AI is in the collected business information.
                       </p>
                       {analysis && analysis.confidence_score && analysis.confidence_score < 50 && (
-                        <div className="mt-3 flex items-start gap-2 text-xs text-yellow-700 bg-yellow-50 rounded-lg p-3">
-                          <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="mt-3 md:mt-2.5 flex items-start gap-2 text-xs sm:text-[11px] text-yellow-700 bg-yellow-50 rounded-lg p-3 md:p-2.5 sm:p-2">
+                          <svg className="w-4 h-4 md:w-3.5 md:h-3.5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
                           <span>Limited online information was available. Running another analysis later may improve confidence.</span>
@@ -776,11 +776,11 @@ export default function AIAnalysisPage() {
 
                 {/* Overall Rating Reasons */}
                 {analysis && analysis.online_presence && analysis.online_presence.reasons && analysis.online_presence.reasons.length > 0 && (
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 mb-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Key Insights</p>
-                    <ul className="space-y-2">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 mb-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 md:mb-2 sm:mb-1.5">Key Insights</p>
+                    <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                       {analysis.online_presence.reasons.map((reason: string, index: number) => (
-                        <li key={index} className="text-sm text-slate-700 flex items-start gap-2">
+                        <li key={index} className="text-sm md:text-xs sm:text-[11px] text-slate-700 flex items-start gap-2">
                           <span className="text-[#EAB308] mt-1">•</span>
                           {reason}
                         </li>
@@ -791,41 +791,41 @@ export default function AIAnalysisPage() {
 
                 {/* Analysis Metadata */}
                 {(analysis?.analysis_duration || analysis?.ai_model || analysis?.analysis_version || analysis?.created_at) && (
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Analysis Details</p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 md:mb-3 sm:mb-2.5">Analysis Details</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 sm:gap-3">
                       {analysis.ai_model && (
                         <div>
-                          <p className="text-xs text-slate-500 mb-1">AI Model</p>
-                          <p className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                            <Cpu className="w-4 h-4 text-slate-500" />
+                          <p className="text-xs sm:text-[11px] text-slate-500 mb-1 md:mb-0.5">AI Model</p>
+                          <p className="text-sm md:text-xs font-medium text-slate-800 flex items-center gap-1.5 md:gap-1">
+                            <Cpu className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-slate-500" />
                             {analysis.ai_model}
                           </p>
                         </div>
                       )}
                       {analysis.analysis_duration && (
                         <div>
-                          <p className="text-xs text-slate-500 mb-1">Duration</p>
-                          <p className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                            <Clock className="w-4 h-4 text-slate-500" />
+                          <p className="text-xs sm:text-[11px] text-slate-500 mb-1 md:mb-0.5">Duration</p>
+                          <p className="text-sm md:text-xs font-medium text-slate-800 flex items-center gap-1.5 md:gap-1">
+                            <Clock className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-slate-500" />
                             {(analysis.analysis_duration / 1000).toFixed(1)}s
                           </p>
                         </div>
                       )}
                       {analysis.created_at && (
                         <div>
-                          <p className="text-xs text-slate-500 mb-1">Generated</p>
-                          <p className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                            <Database className="w-4 h-4 text-slate-500" />
+                          <p className="text-xs sm:text-[11px] text-slate-500 mb-1 md:mb-0.5">Generated</p>
+                          <p className="text-sm md:text-xs font-medium text-slate-800 flex items-center gap-1.5 md:gap-1">
+                            <Database className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-slate-500" />
                             {new Date(analysis.created_at).toLocaleDateString()}
                           </p>
                         </div>
                       )}
                       {analysis.analysis_version && (
                         <div>
-                          <p className="text-xs text-slate-500 mb-1">Version</p>
-                          <p className="text-sm font-medium text-slate-800 flex items-center gap-1.5">
-                            <Zap className="w-4 h-4 text-slate-500" />
+                          <p className="text-xs sm:text-[11px] text-slate-500 mb-1 md:mb-0.5">Version</p>
+                          <p className="text-sm md:text-xs font-medium text-slate-800 flex items-center gap-1.5 md:gap-1">
+                            <Zap className="w-4 h-4 md:w-3.5 md:h-3.5 sm:w-3 sm:h-3 text-slate-500" />
                             {analysis.analysis_version}
                           </p>
                         </div>
@@ -843,33 +843,33 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Executive Summary */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
-                      <Zap className="w-3.5 h-3.5 text-white" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
+                      <Zap className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-white" />
                     </div>
                     Executive Summary
                   </h3>
                   {analysis?.status === 'Processing' ? (
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
+                    <div className="p-4 md:p-3 sm:p-2.5 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
                       <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                      <p className="text-sm text-blue-800 font-medium">Business summary is being generated...</p>
+                      <p className="text-sm md:text-xs text-blue-800 font-medium">Business summary is being generated...</p>
                     </div>
                   ) : analysis?.status === 'Failed' ? (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-                      <p className="text-sm text-red-800 font-medium">
+                    <div className="p-4 md:p-3 sm:p-2.5 bg-red-50 border border-red-200 rounded-xl">
+                      <p className="text-sm md:text-xs text-red-800 font-medium">
                         Unable to generate a business summary because sufficient verified public information could not be collected.
                       </p>
                     </div>
                   ) : analysis?.business_summary ? (
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <p className="text-base text-slate-800 leading-relaxed whitespace-pre-wrap">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <p className="text-base md:text-sm sm:text-[13px] text-slate-800 leading-relaxed whitespace-pre-wrap">
                         {analysis.business_summary}
                       </p>
                     </div>
                   ) : (
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-                      <p className="text-sm text-yellow-800 font-medium">
+                    <div className="p-4 md:p-3 sm:p-2.5 bg-yellow-50 border border-yellow-200 rounded-xl">
+                      <p className="text-sm md:text-xs text-yellow-800 font-medium">
                         Run AI Analysis to get a personalized business summary.
                       </p>
                     </div>
@@ -877,42 +877,42 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Key Insights Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-4 sm:gap-3 mb-6 md:mb-5 sm:mb-4">
                   {/* Industry */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Industry</h4>
-                    <p className="text-base text-slate-800">{analysis?.business_intelligence?.industry || 'Not available'}</p>
+                    <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.industry || 'Not available'}</p>
                   </div>
                   {/* Target Customers */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Target Customers</h4>
-                    <p className="text-base text-slate-800">{analysis?.business_intelligence?.target_customers || 'Not enough data'}</p>
+                    <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.target_customers || 'Not enough data'}</p>
                   </div>
                   {/* Business Model */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Business Model</h4>
-                    <p className="text-base text-slate-800">{analysis?.business_intelligence?.business_model || 'Not enough data'}</p>
+                    <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.business_model || 'Not enough data'}</p>
                   </div>
                   {/* Unique Selling Proposition */}
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">USP</h4>
-                    <p className="text-base text-slate-800">{analysis?.business_intelligence?.unique_selling_proposition || 'Not enough data'}</p>
+                    <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{analysis?.business_intelligence?.unique_selling_proposition || 'Not enough data'}</p>
                   </div>
                 </div>
 
                 {/* Strengths */}
                 {analysis?.business_intelligence?.business_strengths && analysis.business_intelligence.business_strengths.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center">
-                        <ShieldCheck className="w-3.5 h-3.5 text-green-700" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-green-100 flex items-center justify-center">
+                        <ShieldCheck className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-green-700" />
                       </div>
                       Strengths
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <ul className="space-y-2">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.business_strengths.map((strength: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-green-500 mt-1">•</span>
                             {strength}
                           </li>
@@ -924,17 +924,17 @@ export default function AIAnalysisPage() {
 
                 {/* Weaknesses */}
                 {analysis?.business_intelligence?.business_weaknesses && analysis.business_intelligence.business_weaknesses.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center">
-                        <XCircle className="w-3.5 h-3.5 text-red-700" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-red-100 flex items-center justify-center">
+                        <XCircle className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-red-700" />
                       </div>
                       Weaknesses
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <ul className="space-y-2">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.business_weaknesses.map((weakness: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-red-500 mt-1">•</span>
                             {weakness}
                           </li>
@@ -946,17 +946,17 @@ export default function AIAnalysisPage() {
 
                 {/* Key Products/Services */}
                 {analysis?.business_intelligence?.key_products_services && analysis.business_intelligence.key_products_services.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center">
-                        <Briefcase className="w-3.5 h-3.5 text-blue-700" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <Briefcase className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-blue-700" />
                       </div>
                       Key Products/Services
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <ul className="space-y-2">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.business_intelligence.key_products_services.map((product: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-blue-500 mt-1">•</span>
                             {product}
                           </li>
@@ -968,23 +968,23 @@ export default function AIAnalysisPage() {
 
                 {/* Growth Opportunities */}
                 {analysis?.business_intelligence?.growth_opportunities && analysis.business_intelligence.growth_opportunities.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-yellow-100 flex items-center justify-center">
-                        <TrendingUp className="w-3.5 h-3.5 text-yellow-700" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-yellow-100 flex items-center justify-center">
+                        <TrendingUp className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-yellow-700" />
                       </div>
                       Growth Opportunities
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <ul className="space-y-3">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <ul className="space-y-3 md:space-y-2.5 sm:space-y-2">
                         {analysis.business_intelligence.growth_opportunities.map((opp: any, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex flex-col gap-1">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex flex-col gap-1">
                             <div className="flex items-start gap-2">
                               <span className="text-yellow-600 mt-1">•</span>
                               {opp.opportunity}
                             </div>
                             {opp.ak_infinity_service && (
-                              <div className="pl-6 text-sm text-yellow-700 font-medium">
+                              <div className="pl-6 text-sm md:text-xs text-yellow-700 font-medium">
                                 AK Infinity Service: {opp.ak_infinity_service}
                               </div>
                             )}
@@ -997,18 +997,18 @@ export default function AIAnalysisPage() {
 
                 {/* Recommended Services */}
                 {analysis?.suggested_services && analysis.suggested_services.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
-                        <Award className="w-3.5 h-3.5 text-white" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
+                        <Award className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-white" />
                       </div>
                       Recommended Services
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-3 sm:gap-2.5">
                       {analysis.suggested_services.map((service: any, index: number) => (
-                        <div key={index} className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                          <p className="font-semibold text-[#EAB308] text-base">{service.service}</p>
-                          <p className="text-sm text-slate-600 mt-1">{service.reason}</p>
+                        <div key={index} className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                          <p className="font-semibold text-[#EAB308] text-base md:text-sm">{service.service}</p>
+                          <p className="text-sm md:text-xs text-slate-600 mt-1">{service.reason}</p>
                         </div>
                       ))}
                     </div>
@@ -1017,17 +1017,17 @@ export default function AIAnalysisPage() {
 
                 {/* AI Recommendations */}
                 {analysis?.improvement_opportunities && analysis.improvement_opportunities.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-purple-100 flex items-center justify-center">
-                        <Target className="w-3.5 h-3.5 text-purple-700" />
+                  <div className="mb-6 md:mb-5 sm:mb-4">
+                    <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                      <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-purple-100 flex items-center justify-center">
+                        <Target className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-purple-700" />
                       </div>
                       AI Recommendations
                     </h3>
-                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                      <ul className="space-y-2">
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                         {analysis.improvement_opportunities.map((opp: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-purple-500 mt-1">•</span>
                             {opp}
                           </li>
@@ -1046,29 +1046,29 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Opening Strategy */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-yellow-100 flex items-center justify-center">
-                      <Phone className="w-3.5 h-3.5 text-yellow-700" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-yellow-100 flex items-center justify-center">
+                      <Phone className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-yellow-700" />
                     </div>
                     Opening Strategy
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 space-y-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <div>
                       <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">1. Greeting</h4>
-                      <p className="text-base text-slate-800 font-medium">
+                      <p className="text-base md:text-sm sm:text-[13px] text-slate-800 font-medium">
                         {salesCoach?.call_guide?.greeting || `Namaste Sir, Kya meri baat ${client?.owner_name} ji se ho rahi hai?`}
                       </p>
                     </div>
                     <div>
                       <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">2. Introduction</h4>
-                      <p className="text-base text-slate-800 font-medium">
+                      <p className="text-base md:text-sm sm:text-[13px] text-slate-800 font-medium">
                         {salesCoach?.call_guide?.introduction || 'Sir mera naam Naman hai, main AK Infinity ki taraf se bol raha hoon. Hum businesses ko online grow karne mein madad karte hain. Aaj main sirf 2 minute lunga, agar aap allow karein to ek chhoti si baat share karna chahta hoon.'}
                       </p>
                     </div>
                     <div>
                       <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">3. Build Rapport</h4>
-                      <p className="text-base text-slate-800 font-medium">
+                      <p className="text-base md:text-sm sm:text-[13px] text-slate-800 font-medium">
                         {salesCoach?.call_guide?.build_rapport || `Sir humne aapka ${client?.business_name} dekha. Aapka kaam acche se chal raha hai lagta hai. Lekin ek cheez notice hui - aapki online presence thodi improve karne ki zarurat hai.`}
                       </p>
                     </div>
@@ -1076,21 +1076,21 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Conversation Flow (Talking Points) */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
-                      <MessageCircle className="w-3.5 h-3.5 text-white" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center">
+                      <MessageCircle className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-white" />
                     </div>
                     Conversation Flow
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 space-y-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-3 md:space-y-2.5 sm:space-y-2 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     {salesCoach?.talking_points?.length > 0 ? (
                       salesCoach.talking_points.map((tp: any, index: number) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                          <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 text-white text-sm font-bold mt-0.5 shrink-0">
+                        <div key={index} className="flex items-start gap-3 md:gap-2.5 sm:gap-2 p-3 md:p-2.5 sm:p-2 bg-slate-50 rounded-lg">
+                          <span className="flex items-center justify-center w-7 h-7 md:w-6 md:h-6 sm:w-5 sm:h-5 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 text-white text-sm md:text-xs font-bold mt-0.5 shrink-0">
                             {tp.point || index + 1}
                           </span>
-                          <p className="text-base text-slate-800">{tp.text}</p>
+                          <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{tp.text}</p>
                         </div>
                       ))
                     ) : (
@@ -1101,11 +1101,11 @@ export default function AIAnalysisPage() {
                         { point: 4, text: 'Hum sirf ek baar demo dena chahte hain, aap decide kar lena baad mein koi bhi obligation nahi hai.' },
                         { point: 5, text: 'Sir agar aap interested hain to main aapko ek free 15-minute ka demo dikha sakta hoon, kya Thursday ya Friday ko koi time suit karega?' }
                       ].map((tp, index) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                          <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 text-white text-sm font-bold mt-0.5 shrink-0">
+                        <div key={index} className="flex items-start gap-3 md:gap-2.5 sm:gap-2 p-3 md:p-2.5 sm:p-2 bg-slate-50 rounded-lg">
+                          <span className="flex items-center justify-center w-7 h-7 md:w-6 md:h-6 sm:w-5 sm:h-5 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 text-white text-sm md:text-xs font-bold mt-0.5 shrink-0">
                             {tp.point}
                           </span>
-                          <p className="text-base text-slate-800">{tp.text}</p>
+                          <p className="text-base md:text-sm sm:text-[13px] text-slate-800">{tp.text}</p>
                         </div>
                       ))
                     )}
@@ -1113,18 +1113,18 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Questions to Ask */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Target className="w-3.5 h-3.5 text-blue-700" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <Target className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-blue-700" />
                     </div>
                     Questions to Ask
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <ul className="space-y-2">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                       {salesCoach?.questions_to_ask?.length > 0 ? (
                         salesCoach.questions_to_ask.map((q: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-blue-500 mt-1">•</span>
                             {q}
                           </li>
@@ -1136,7 +1136,7 @@ export default function AIAnalysisPage() {
                           'Aapke business mein aane wale next 6 months ke goals kya hain?',
                           'Kya aapne kabhi professional services li hain online presence improve karne ke liye?'
                         ].map((q, index) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-blue-500 mt-1">•</span>
                             {q}
                           </li>
@@ -1147,24 +1147,24 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Objections (Possible Cross Questions) */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-red-100 flex items-center justify-center">
-                      <XCircle className="w-3.5 h-3.5 text-red-700" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-red-100 flex items-center justify-center">
+                      <XCircle className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-red-700" />
                     </div>
                     Objections
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 space-y-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 space-y-4 md:space-y-3 sm:space-y-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     {salesCoach?.objection_handling?.length > 0 ? (
                       salesCoach.objection_handling.map((obj: any, index: number) => (
-                        <div key={index} className="p-3 border border-slate-200 rounded-lg">
+                        <div key={index} className="p-3 md:p-2.5 sm:p-2 border border-slate-200 rounded-lg">
                           <div className="mb-2">
                             <h5 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Client</h5>
-                            <p className="text-base text-slate-800 bg-slate-50 p-2 rounded">{obj.client}</p>
+                            <p className="text-base md:text-sm sm:text-[13px] text-slate-800 bg-slate-50 p-2 rounded">{obj.client}</p>
                           </div>
                           <div>
                             <h5 className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-1">Suggested Reply</h5>
-                            <p className="text-base text-slate-800 bg-green-50 p-2 rounded">{obj.reply}</p>
+                            <p className="text-base md:text-sm sm:text-[13px] text-slate-800 bg-green-50 p-2 rounded">{obj.reply}</p>
                           </div>
                         </div>
                       ))
@@ -1183,14 +1183,14 @@ export default function AIAnalysisPage() {
                           reply: 'Bahut accha! Social media bhi zaruri hai, lekin website aapki apni property hoti hai. Social media par algorithm change ho sakta hai, lekin website par aap full control hote hain.'
                         }
                       ].map((obj, index) => (
-                        <div key={index} className="p-3 border border-slate-200 rounded-lg">
+                        <div key={index} className="p-3 md:p-2.5 sm:p-2 border border-slate-200 rounded-lg">
                           <div className="mb-2">
                             <h5 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Client</h5>
-                            <p className="text-base text-slate-800 bg-slate-50 p-2 rounded">{obj.client}</p>
+                            <p className="text-base md:text-sm sm:text-[13px] text-slate-800 bg-slate-50 p-2 rounded">{obj.client}</p>
                           </div>
                           <div>
                             <h5 className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-1">Suggested Reply</h5>
-                            <p className="text-base text-slate-800 bg-green-50 p-2 rounded">{obj.reply}</p>
+                            <p className="text-base md:text-sm sm:text-[13px] text-slate-800 bg-green-50 p-2 rounded">{obj.reply}</p>
                           </div>
                         </div>
                       ))
@@ -1199,33 +1199,33 @@ export default function AIAnalysisPage() {
                 </div>
 
                 {/* Closing Strategy */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-green-700" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-green-100 flex items-center justify-center">
+                      <CheckCircle2 className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-green-700" />
                     </div>
                     Closing Strategy
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <p className="text-base text-slate-800">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <p className="text-base md:text-sm sm:text-[13px] text-slate-800">
                       {salesCoach?.closing_strategy || 'Sir, thank you for your time. Aaj humne discuss kiya ki kaise aapki online presence improve ho sakti hai aur leads badh sakti hain. Main aapko ek free 15-minute ka demo dekar dikhata hoon ki hum kaise kaam karte hain. Kya aapke paas Thursday ya Friday koi time hai?'}
                     </p>
                   </div>
                 </div>
 
                 {/* Next Follow-up */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#0B132B] mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Clock className="w-3.5 h-3.5 text-purple-700" />
+                <div className="mb-6 md:mb-5 sm:mb-4">
+                  <h3 className="text-lg md:text-base sm:text-sm font-semibold text-[#0B132B] mb-3 md:mb-2.5 sm:mb-2 flex items-center gap-2">
+                    <div className="w-6 h-6 md:w-5 md:h-5 sm:w-4.5 sm:h-4.5 rounded-lg bg-purple-100 flex items-center justify-center">
+                      <Clock className="w-3.5 h-3.5 md:w-3 md:h-3 sm:w-2.5 sm:h-2.5 text-purple-700" />
                     </div>
                     Next Follow-up
                   </h3>
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <ul className="space-y-2">
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-4 md:p-3 sm:p-2.5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <ul className="space-y-2 md:space-y-1.5 sm:space-y-1">
                       {salesCoach?.follow_up_recommendations?.length > 0 ? (
                         salesCoach.follow_up_recommendations.map((rec: string, index: number) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-purple-500 mt-1">•</span>
                             {rec}
                           </li>
@@ -1236,7 +1236,7 @@ export default function AIAnalysisPage() {
                           'After 3 days: Follow up call to check if they have any questions.',
                           'After 7 days: Send a personalized email with case studies of similar businesses.'
                         ].map((rec, index) => (
-                          <li key={index} className="text-base text-slate-800 flex items-start gap-2">
+                          <li key={index} className="text-base md:text-sm sm:text-[13px] text-slate-800 flex items-start gap-2">
                             <span className="text-purple-500 mt-1">•</span>
                             {rec}
                           </li>
