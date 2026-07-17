@@ -216,8 +216,10 @@ export default function AIAnalysisPage() {
                   <p className="text-slate-500 mt-1">Complete details about {client?.business_name || 'the client'}</p>
                 </div>
                 
-                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-5">
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                {/* Main grid container */}
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 md:gap-5">
+                  {/* Business Information Card - Always full width below xl screens */}
+                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 xl:col-span-1">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#EAB308] to-orange-500 flex items-center justify-center shrink-0">
                         <Building2 className="w-5 h-5 text-white" />
@@ -240,72 +242,77 @@ export default function AIAnalysisPage() {
                     </div>
                   </div>
 
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
-                        <Phone className="w-5 h-5 text-green-700" />
+                  {/* Bottom row for Contact and Address */}
+                  <div className="grid grid-cols-1 min-[320px]:grid-cols-2 gap-3 md:gap-5 xl:col-span-2">
+                    {/* Contact Information Card */}
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
+                          <Phone className="w-5 h-5 text-green-700" />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Contact Information</span>
                       </div>
-                      <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Contact Information</span>
-                    </div>
-                    <div className="space-y-3">
-                      <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400 mb-1">Phone Number</p>
-                      {client?.owner_contact_number ? (
-                        <div className="flex items-center justify-between gap-3">
-                          <a
-                            href={`tel:${client.owner_contact_number}`}
-                            className="text-lg md:text-xl font-bold text-[#0B132B] hover:text-green-700 transition-colors break-all"
-                          >
-                            {client.owner_contact_number}
-                          </a>
-                          <div className="flex items-center gap-2 shrink-0">
+                      <div className="space-y-3">
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400 mb-1">Phone Number</p>
+                        {client?.owner_contact_number ? (
+                          <div className="flex items-center justify-between gap-3">
                             <a
                               href={`tel:${client.owner_contact_number}`}
-                              className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all shadow-sm hover:shadow-md"
-                              title="Call"
-                              aria-label="Call client"
+                              className="text-lg md:text-xl font-bold text-[#0B132B] hover:text-green-700 transition-colors break-all"
                             >
-                              <Phone className="w-5 h-5" />
+                              {client.owner_contact_number}
                             </a>
-                            <a
-                              href={`https://wa.me/${client.owner_contact_number.replace(/\D/g, '')}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all shadow-sm hover:shadow-md"
-                              title="WhatsApp"
-                              aria-label="Open WhatsApp chat"
-                            >
-                              <WhatsAppIcon className="w-5 h-5" />
-                            </a>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <a
+                                href={`tel:${client.owner_contact_number}`}
+                                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all shadow-sm hover:shadow-md"
+                                title="Call"
+                                aria-label="Call client"
+                              >
+                                <Phone className="w-5 h-5" />
+                              </a>
+                              <a
+                                href={`https://wa.me/${client.owner_contact_number.replace(/\D/g, '')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all shadow-sm hover:shadow-md"
+                                title="WhatsApp"
+                                aria-label="Open WhatsApp chat"
+                              >
+                                <WhatsAppIcon className="w-5 h-5" />
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <p className="text-lg md:text-xl font-bold text-slate-400">-</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-6 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 md:col-span-2 xl:col-span-1">
-                    <div className="flex items-center gap-3 mb-4 md:mb-3 sm:mb-2">
-                      <div className="w-10 h-10 md:w-8 md:h-8 sm:w-7 sm:h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-                        <MapPin className="w-5 h-5 md:w-4 md:h-4 sm:w-3.5 sm:h-3.5 text-slate-600" />
+                        ) : (
+                          <p className="text-lg md:text-xl font-bold text-slate-400">-</p>
+                        )}
                       </div>
-                      <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Address</span>
                     </div>
-                    <div className="space-y-3 md:space-y-2 sm:space-y-1.5">
-                      <p className="text-sm md:text-xs sm:text-[11px] font-medium text-[#0B132B] leading-relaxed break-words">
-                        {client?.address_name || '-'}
-                      </p>
-                      {client?.google_maps_link && (
-                        <a
-                          href={client.google_maps_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm md:text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 md:px-2.5 md:py-1.5 sm:px-2 sm:py-1 rounded-lg transition-all duration-200"
-                        >
-                          <MapPin className="w-4 h-4 md:w-3.5 md:h-3.5" />
-                          View Location
-                        </a>
-                      )}
+
+                    {/* Address Card */}
+                    <div className="bg-white border-2 border-[#EAB308]/70 hover:border-[#EAB308] rounded-2xl p-3 md:p-4 sm:p-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                      <div className="flex items-center gap-3 mb-4 md:mb-3 sm:mb-2">
+                        <div className="w-10 h-10 md:w-8 md:h-8 sm:w-7 sm:h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                          <MapPin className="w-5 h-5 md:w-4 md:h-4 sm:w-3.5 sm:h-3.5 text-slate-600" />
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Address</span>
+                      </div>
+                      <div className="space-y-3 md:space-y-2 sm:space-y-1.5">
+                        <p className="text-sm md:text-xs sm:text-[11px] font-medium text-[#0B132B] leading-relaxed break-words">
+                          {client?.address_name || '-'}
+                        </p>
+                        {client?.google_maps_link && (
+                          <a
+                            href={client.google_maps_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm md:text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-2 md:px-2.5 md:py-1.5 sm:px-2 sm:py-1 rounded-lg transition-all duration-200"
+                          >
+                            <MapPin className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                            View Location
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
