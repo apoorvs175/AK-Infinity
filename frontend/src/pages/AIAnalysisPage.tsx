@@ -255,14 +255,14 @@ export default function AIAnalysisPage() {
                       <div className="space-y-3">
                         <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400 mb-1">Phone Number</p>
                         {client?.owner_contact_number ? (
-                          <div className="flex items-center justify-between gap-2 md:gap-3">
+                          <div className="space-y-3">
                             <a
                               href={`tel:${client.owner_contact_number}`}
-                              className="text-sm md:text-lg lg:text-xl font-bold text-[#0B132B] hover:text-green-700 transition-colors whitespace-nowrap overflow-hidden text-ellipsis flex-1 min-w-0"
+                              className="text-sm md:text-lg lg:text-xl font-bold text-[#0B132B] hover:text-green-700 transition-colors whitespace-nowrap"
                             >
                               {client.owner_contact_number}
                             </a>
-                            <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+                            <div className="flex items-center gap-2 md:gap-3">
                               <a
                                 href={`tel:${client.owner_contact_number}`}
                                 className="p-1.5 md:p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all shadow-sm hover:shadow-md"
